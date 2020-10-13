@@ -1,0 +1,321 @@
+body {
+    background-color: #000;
+    color: #eee;
+    font-size: 64px; /* This is purposefully giant - we don't want anyone to not define their font size*/
+}
+p {
+    margin-block-start: 0.5em;
+    margin-block-end: 0.5em;
+}
+
+#GameWindow {
+    min-width: min(170.3vh, 95.8vw);
+    min-height: min(95.8vh, 53.9vw);
+    width: min(170.3vh, 95.8vw);
+    height: min(95.8vh, 53.9vw);
+    margin: 0.5% auto;
+    margin-bottom: 0px;
+    border: 3px solid gray;
+    padding: 5px;
+    position:absolute;
+    top: 0; bottom: 0; left: 0; right: 0;
+    font-size: min(0.4vw, 0.71vh); /* This is purposefully small - forcing every cell to pick a font size, using em */
+}
+
+#GameWindow_2Columns {
+    min-width: min(127.7vh, 95.8vw);
+    min-height: min(95.8vh, 71.85vw);
+    width: min(127.7vh, 95.8vw);
+    height: min(95.8vh, 71.85vw);
+    margin: 0.5% auto;
+    margin-bottom: 0px;
+    border: 3px solid gray;
+    padding: 5px;
+    position:absolute;
+    top: 0; bottom: 0; left: 0; right: 0;
+    font-size: min(0.5vw, 0.66vh); /* This is purposefully small - forcing every cell to pick a font size, using em */
+}
+
+.tiny_font {
+    font-size: 2.5em;
+}
+.small_font {
+    font-size: 3em;
+}
+.medium_font {
+    font-size: 3.5em;
+}
+.large_font {
+    font-size: 4.5em;
+}
+.giant_font {
+    font-size: 6em;
+}
+.standard_font {
+    font-size: 28px;
+}
+
+/* 
+SCROLL BAR
+*/
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #111;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: gray;
+    border-top: solid 3px #111;
+    border-bottom: solid 3px #111;
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/*
+CELL LAYOUT
+ */
+
+.cellContainer{
+    border: 3px solid gray;
+    box-sizing: border-box; /*These properties make the border be inside the box instead of outside*/
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    background-color: #111;
+    width: 100%;
+}
+
+#LeftColumn {
+    position:absolute;
+    left:   1%;
+    top:    1%;
+    width:  24%;
+    height: 98%;
+}
+#MiddleColumn {
+    position:absolute;
+    left:   26%;
+    top:    1%;
+    width:  48%;
+    height: 98%;
+}
+#RightColumn {
+    position:absolute;
+    left:   75%;
+    top:    1%;
+    width:  24%;
+    height: 98%;
+}
+#LeftColumn_2Columns {
+    position:absolute;
+    left:   1.67%;
+    top:    1%;
+    width:  32%;
+    height: 98%;
+}
+#MiddleColumn_2Columns {
+    position:absolute;
+    left:   35.33%;
+    top:    1%;
+    width:  63%;
+    height: 98%;
+}
+
+
+#Left_Col_Cell_Name{
+    position: absolute;
+    top: 0%;
+    height: 6%;
+    width: 100%;
+}
+#Left_Col_Cell_Top{
+    position: absolute;
+    top: 7%;
+    height: 27%;
+}
+#Left_Col_Cell_Middle{
+    position: absolute;
+    top: 35%;
+    height: 27%;
+}
+#Left_Col_Cell_Bottom{
+    position: absolute;
+    top: 63%;
+    height: 27%;
+}
+#Left_Col_Cell_Menus{
+    position: absolute;
+    top: 91%;
+    height: 9%;
+}
+
+#Center_Col_Cell_Dialog {
+    position: absolute;
+    top: 0%;
+    height: 74%;
+}
+#Center_Col_Cell_Actions {
+    /* position: absolute;
+    top: calc(100% - 150px);
+    height: 150px; */
+    position: absolute;
+    top: 75%;
+    height: 25%;
+}
+
+#Right_Col_Cell_Engine{
+    position: absolute;
+    top: 0%;
+    height: 6%;
+}
+#Right_Col_Cell_Top{
+    position: absolute;
+    top: 7%;
+    height: 28%;
+}
+#Right_Col_Cell_Middle{
+    position: absolute;
+    top: 36%;
+    height: 28%;
+}
+#Right_Col_Cell_Bottom{
+    position: absolute;
+    top: 65%;
+    height: 28%;
+}
+#Right_Col_Cell_InfoBar{
+    position: absolute;
+    top: 94%;
+    height: 6%;
+}
+
+#Left_Col_Cell_Top_BIG{
+    position: absolute;
+    top: 7%;
+    height: 42.5%;
+}
+#Left_Col_Cell_Bottom_BIG{
+    position: absolute;
+    top: 50.5%;
+    height: 42.5%;
+}
+#Right_Col_Cell_Top_BIG{
+    position: absolute;
+    top: 7%;
+    height: 42.5%;
+}
+#Right_Col_Cell_Bottom_BIG{
+    position: absolute;
+    top: 50.5%;
+    height: 42.5%;
+}
+
+/*
+From this point on, we would like to be defining CSS for specific elements instead of for just the setup
+*/
+
+/* applies to most main sections*/
+.sectionContainer {
+    margin: 2px;
+    overflow:hidden;
+}
+
+/* Left Column */
+#NameLabel {
+    text-align: center;
+    padding-top: 1%;
+}
+
+/*
+
+MAIN DIALOG
+
+*/
+#MainDialogContainer {
+    max-height: 100%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+#MainDialogScrollbar {
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: calc(100% - 4px);
+}
+#MainDialogTextHolder {
+    margin: 5px;
+    width:  98%;
+}
+
+.dialog_blank_line {
+    padding:16px;
+}
+
+/*
+Action Buttons
+ */
+#ActionsMenu {
+    width: 100%;
+    height: 100%;
+}
+.action_grid_cell {
+    -webkit-user-select: none; /* Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+    background: #444;
+    border-radius: 10px;
+    border: solid 3px #444;
+    text-align: center;
+}
+.action_grid_cell.active_action {
+    background: #686868;
+    border: solid 3px #686868;
+}
+
+.gridContainer {
+    width:99%;
+    height:99%;
+    table-layout : fixed;
+    border-spacing: 10px;
+}
+
+/* MAP */
+#NavigationMenu {
+    width: 100%;
+    height: 100%;
+    font-size: 2.8em;
+}
+.map_grid_cell {
+    -webkit-user-select: none; /* Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+}
+.map_grid_cell_in_use {
+    background: #686868;
+    border-radius: 10px;
+    border: solid 3px #686868;
+    text-align: center;
+}
+.map_grid_cell.map_grid_cell_current {
+    border: solid 3px #ccc;
+}
+
+/*
+    This is magic code that forces the cell to always size as if it has content.
+    Otherwise, I'd have to size manually in JS.
+    Of course, this means you can't use jquery to grab the cell's contents for logic purposes.
+    But storing data in the DOM is bad anyways, so don't do that.
+ */
+td:after {
+  content: "\00A0";
+}

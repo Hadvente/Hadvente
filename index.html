@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>HTML Adventure Engine</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<!-- -->
+	<script src="Libraries/jquery-3.5.1.slim.js"></script>
+	<script src="Libraries/underscore.js"></script>
+	<!--
+	<script src="Javascript/utility.js"></script>
+	<script src="Javascript/party.js"></script>
+	<script src="Javascript/menu.js"></script>
+	no need for an image cell JS file, it's too simple
+	no need for a  title cell JS file, it's too simple
+	-->
+	<script src="Javascript/HAE_Parser.js"></script>
+	<script src="Javascript/dialog.js"></script>
+	<script src="Javascript/actions.js"></script>
+	<script src="Javascript/map_grid.js"></script>
+	<script src="Javascript/game_state.js"></script>
+	<script src="Javascript/game_view.js"></script>
+	<script src="Javascript/HADVENTE.js"></script>
+	<!-- -->
+	<script src="Text/Test.hae"></script>
+</head>
+
+<body>
+
+	<div id="NoJS" style="color: red;">You must have Javascript enabled to run this program.</div>
+
+	<script>
+		document.getElementById("NoJS").remove();
+		startHADVENTE(); //this function is defined inside HADVE.js
+	</script> 
+</body>
+</html>
