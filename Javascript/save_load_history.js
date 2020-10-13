@@ -15,6 +15,7 @@ o888o   o888o o888o 8""88888P'      o888o      `Y8bood8P'  o888o  o888o     o888
 var current_history = [];
 function initializeHistory(){
     current_history = [];
+    STORAGE.initialize_storage();
 }
 
 var undo_history_count = 0;
@@ -23,14 +24,16 @@ function can_undo(){
     return false; //If the size is 5, and if count is 4, then you are looking at the oldest element, and can not undo
 }
 function undo(){
-
+    if( undo_history_count < (_.size(current_history) - 1) ) undo_history_count++;
+    //Okay, now, load the new game_state
 }
 
 function can_redo(){
     if( undo_history_count > 0 ) return true;
 }
 function redo(){
-
+    if( undo_history_count > 0 ) undo_history_count++;
+    //Okay, now, load the new game_state
 }
 
 function remove_future_history(){
@@ -67,10 +70,15 @@ oo     .d8P  .8'     `888.       `888'       888       o
 
 */
 
+function initializeSaveSystem(){
+}
+
 function auto_save(){
     if( undo_history_count ) return; //Do not autosave if you are not in the present!
 
     var currentSave = get_current_save();
+
+    STORAGE.saveData('SAVE_SLOT_AUTO', currentSave);
 
     if( H_Log_Active() ){
         //don't want to waste deepClone
@@ -114,16 +122,24 @@ o888ooooood8  `Y8bood8P'  o88o     o8888o o888bood8P'
 
  */
 
-function load_slot( _load_index ){
-
+function get_save_file(_load_index){
+    if(_load_index == 'AUTO'){
+        return STORAGE.getData( 'SAVE_SLOT_AUTO' );
+    }
+    else{
+        //load index should be a number that represents the save slot
+        return STORAGE.getData( 'SAVE_SLOT_' + ( _load_index || 0 ) );
+    }
 }
 
-function load_saved_file(){
-
-}
-
-function load_save(){
-
+function has_save_file(_load_index){
+    if(_load_index == 'AUTO'){
+        return !!STORAGE.getData( 'SAVE_SLOT_AUTO' );
+    }
+    else{
+        //load index should be a number that represents the save slot
+        return !!STORAGE.getData( 'SAVE_SLOT_' + ( _load_index || 0 ) );
+    }
 }
 
 /*
@@ -148,4 +164,6 @@ oo     .d8P      888      oo     .d8P      888       888       o  8    Y     888
 
  */
 
-//This section grabs, loads, and saves cookies, save files, and any other way a save_load can happen
+function open_save_file(){
+    //I think I would like save files to be loaded into a slot, not directly loaded
+}

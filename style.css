@@ -19,6 +19,7 @@ p {
     padding: 5px;
     position:absolute;
     top: 0; bottom: 0; left: 0; right: 0;
+    font-size: 0.36vw; /* This exists in case the browser can't handle a min inside the font-size */
     font-size: min(0.4vw, 0.71vh); /* This is purposefully small - forcing every cell to pick a font size, using em */
 }
 
@@ -33,6 +34,7 @@ p {
     padding: 5px;
     position:absolute;
     top: 0; bottom: 0; left: 0; right: 0;
+    font-size: 0.45vw; /* This exists in case the browser can't handle a min inside the font-size */
     font-size: min(0.5vw, 0.66vh); /* This is purposefully small - forcing every cell to pick a font size, using em */
 }
 

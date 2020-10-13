@@ -59,9 +59,11 @@ function get_HAE(){
 }
 
 var isLogging = false;
+var autoload = false;
 function checkUrlParms(){
     var urlParmString = window.location.search;
     if( urlParmString.includes('log') ) isLogging = true;
+    if( urlParmString.includes('autoload') ) autoload = true;
 }
 
 function H_Log(_log, _obj){

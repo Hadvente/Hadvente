@@ -66,6 +66,11 @@
             newMapGrid = false;
         };
 
+        MAP_GRID_FNs.restart_module = function(){
+            //This is called when the game_state is modified by the save system
+            //Anything that must be modified when a save is loaded should happen here
+        };
+    
         function getCurrentMap(){
             return get_HAE().maps[ GET_CELL_DATA('MAP_GRID').map_name ];
         }

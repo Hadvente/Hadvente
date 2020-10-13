@@ -90,6 +90,12 @@ var DIALOG = (function () {
         //does nothing for now
         hasNewDialog = false;
     };
+
+    DIALOG_FNs.restart_module = function(){
+        //This is called when the game_state is modified by the save system
+        //Anything that must be modified when a save is loaded should happen here
+    };
+
     /*
     
     ooooo   ooooo ooooooooooooo ooo        ooooo ooooo        

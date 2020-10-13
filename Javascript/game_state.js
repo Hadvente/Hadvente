@@ -23,6 +23,10 @@ function GET_GAME_STATE(){
     return GAME_STATE;
 }
 
+function loadNewState( _state ){
+    GAME_STATE = _state;
+}
+
 function INIT_ALL_CELL_DATA(){
     GAME_STATE.CELL__DATA = {}; //CELL__DATA IS SOMETHING CELLS USE, IT SHOULD NEVER BE OVERWRITTEN BY THE HAE GAME
     GAME_STATE.CELL__DATA.DIALOG = {};
@@ -35,7 +39,6 @@ function INIT_ALL_CELL_DATA(){
 function GET_CELL_DATA( _name ){
     return GAME_STATE.CELL__DATA[_name];
 }
-
 
 //Random note: This doesn't mean anything to history since every scene sets this
 //But.. SCENE_LOCKED is set to the currently displayed scene, yet DIALOG.CURRENT_SCENE is set to the upcoming scene.

@@ -11,8 +11,10 @@ game_view
  */
 
 function initializeGameStateEngine(){
-    initializeGameState(); //who owns gamedata?
+    initializeGameState();
     initializeHistory();
+    initializeSaveSystem();
+    //initializeSettings(); //This asks for the settings from load_save_data, or makes a new default settings if there isn't one
 
     createModulesIfNeeded();
     checkFunctionListForModules();
@@ -28,6 +30,8 @@ function initializeGameStateEngine(){
     });
 
     initializeGameHtml(); //Right now the game has to make it's own start menu as a dialog scene, but I could rework this to have actual start menus
+
+    if( autoload && has_save_file('AUTO') ) loadNewState( get_save_file('AUTO') );
 
     _.delay(runGameUpdate, 50);
 }
@@ -94,7 +98,7 @@ function checkFunctionListForModules(){
     });
 }
 
-var requiredFunctions = ['initialize', 'update_module', 'init_HTML', 'update_HTML', 'finished_draw'];
+var requiredFunctions = ['initialize', 'update_module', 'init_HTML', 'update_HTML', 'finished_draw', 'restart_module'];
 function checkFunctionListForSingleModule(_module, _name){
     _.each(requiredFunctions, function(_fn){
         if( !_module[_fn] ){

@@ -5,25 +5,29 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>HTML Adventure Engine</title>
 	<link rel="stylesheet" type="text/css" href="style.css">
-	<!-- -->
+	<!-- Libraries -->
 	<script src="Libraries/jquery-3.5.1.slim.js"></script>
 	<script src="Libraries/underscore.js"></script>
+	<!--
+	<script src="Libraries/lodash.js"></script>
+	-->
 	<script src="Javascript/utility.js"></script>
+	<script>
+		//Window is global space, "MODULES" is accessible as a global variable in all other scripts
+	    window.ENGINE = {};  //functions used by the engine go in here
+	    window.MODULES = {}; //this contains all objects that define a module. MAP_GRID, PARTY, etc.
+	</script>
 	<!--
 	<script src="Javascript/party.js"></script>
 	<script src="Javascript/menu.js"></script>
 	-->
-	<script>
-		//Window is global space, "MODULES" is accessible as a global variable in all other scripts
-	    window.MODULES = {};
-	    window.PUBLIC = {}; //Should this be used? Or banned?
-	</script>
 	<script src="Javascript/HAE_Parser.js"></script>
 	<script src="Javascript/dialog.js"></script>
 	<script src="Javascript/actions.js"></script>
 	<script src="Javascript/map_grid.js"></script>
 
 	<script src="Javascript/save_load_history.js"></script>
+	<script src="Javascript/load_save_data.js"></script>
 	<script src="Javascript/game_view.js"></script>
 	<script src="Javascript/game_state.js"></script>
 	<script src="Javascript/run_engine.js"></script>
