@@ -28,34 +28,47 @@ var DIALOG = (function () {
     DIALOG_FNs.initialize = function(){
         //I have no idea what dialog would need to initiate, shouldn't it just read from things
         //and not actually manipulate anything else?
-        ////Maybe the history system??
-        var parsedScene = parseScene( 'START' );
-        if( !parsedScene ){
-            console.error('You cannot have a valid game without a scene named "START"!');
-        }
-        dialogHTML = parsedScene.html;
-        hasNewDialog = true;
-        setNewActions(parsedScene.actions);
-        setSceneLocked(parsedScene.sceneLocked);
+        
+        GET_CELL_DATA('DIALOG').CURRENT_SCENE = 'START';
+
         //Actually, one really good use for the initialize:
         //Convert the human-readable info in get_HAE() into code-readable data structures
-        //For example, location_scenes is hard to parse in code, we don't want to do that each time
     };
     DIALOG_FNs.update_module = function(){
-        var newScene = getNewScene();
+        var newScene = GET_CELL_DATA('DIALOG').CURRENT_SCENE;
 
         if(newScene){
             var parsedScene = parseScene(newScene);
             if(parsedScene){
                 dialogHTML = parsedScene.html;
                 hasNewDialog = true;
-                setNewActions(parsedScene.actions);
-                setSceneLocked(parsedScene && parsedScene.sceneLocked);
+                ACTIONS.SET_NEW_ACTIONS(parsedScene.actions);
+                SET_SCENE_LOCKED(parsedScene && parsedScene.sceneLocked);
             }
             else{
-                setNewActions([]);
-                setSceneLocked(false);
+                ACTIONS.SET_NEW_ACTIONS([]);
+                SET_SCENE_LOCKED(false);
+
+                if(GET_GAME_STATE().CELL__DATA.CURRENT_SCENE == 'START'){
+                    console.error('You cannot have a valid game without a scene named "START"!');
+                }
+                else{
+                    console.error('Your game references the scene "' + GET_GAME_STATE().CELL__DATA.CURRENT_SCENE +
+                                        '" but it does not exist to be parsed!');
+                }
             }
+        }
+        else{
+
+            //PROBLEM: WHAT IF SOMEONE WANTS TO DO A GUI UPDATE THAT DOES NOT INVOLVE CHANGING OR PARSING DIALOG AT ALL?
+            // if(GET_GAME_STATE().CELL__DATA.CURRENT_SCENE == '<<NONE>>'){
+            //     return;
+            //     //THE SCENE SHOULD NOT BE UPDATED?
+            //     //Actually this is a horrible way to do it
+            //     //I could see a scene deciding it needs to happen multiple times in a row with IF statements, so I can't check for no change
+            //     //maybe the modules should call a function like DIALOG.useSameDialog()? Or maybe it's a special case for SET_NEW_SCENE()?
+            //     //Or maybe the "recalculate scene" is a special action? So the inverse of the above line
+            // }
         }
     };
     DIALOG_FNs.hasNewDialog = function(){
@@ -64,10 +77,19 @@ var DIALOG = (function () {
     DIALOG_FNs.getDialogHtml = function(){
         return dialogHTML;
     };
-    DIALOG_FNs.confirmDialogUpdated = function(){
-        hasNewDialog = false;
+
+    DIALOG_FNs.SET_NEW_SCENE = function(_newScene){
+
+        //NOTICE: No one should call SET_NEW_SCENE with the expectation for things to happen before the scene starts
+        
+        GET_CELL_DATA('DIALOG').CURRENT_SCENE = _newScene;
+        runGameUpdate();
     };
 
+    DIALOG_FNs.finished_draw = function(){
+        //does nothing for now
+        hasNewDialog = false;
+    };
     /*
     
     ooooo   ooooo ooooooooooooo ooo        ooooo ooooo        
@@ -141,6 +163,7 @@ var DIALOG = (function () {
         var actions = [];
         var sceneLocked = false;
 
+        //Random note: this format is not good. I need to think of a better way to make the command list easily modifiable and extensible.
         _.each(_parsedArr, function(_command){
             if( _.isArray(_command) ){
                 //This part is logic control!
@@ -164,44 +187,61 @@ var DIALOG = (function () {
             }
             if(_command.type == 'DISABLE_CELLS'){
                 sceneLocked = true;
+                return;
             }
             if(_command.type == 'FN' || _command.type == 'FUNCTION'){
                 processFunctionStatement( _command.value );
+                return;
             }
             if(_command.type == 'SET'){
                 processSetStatement( _command.value );
+                return;
             }
             if(_command.type == 'INSERT_EVENT'){
                 //event adds a random scene from a given object def for events
                 //need to parse the scene and then call processHAEScript to get html and actions
                 console.error('INSERT_EVENT is unimplemented');
+                return;
             }
             if(_command.type == 'INSERT_SCENE'){
                 //scene adds a specific scene to the dialog
                 //need to parse the scene and then call processHAEScript to get html and actions
                 console.error('INSERT_SCENE is unimplemented');
+                return;
             }
             /* ACTION */
             if(_command.type == 'ACTION'){
                 actions.push( getActionFromStatement(_command.value) );
+                return;
             }
             if(_command.type == 'GOTO'){ //action shortcut for scenechange
                 actions.push( getActionFromStatement(_command.type + ' ' + _command.value) );
+                return;
             }
             if(_command.type == 'SCENE'){
                 //SCENE is just a shortcut for ACTION SCENE
                 //I was going to make it be like EVENT but with a specific scene, but that could lead to confusion
                 actions.push('SCENE ' + _command.value);
+                return;
             }
             /* IMAGE/IMG */
             if(_command.type == 'IMAGE' || _command.type == 'IMG'){
                 html += getImageHTML(_command.value);
+                return;
             }
 
             /* TEXT */
             if(_command.type == 'TEXT'){
                 html += processTextStatement(_command.value) || '';
+                return;
             }
+
+            if(_command.type == 'COMMENT'){
+                //It's a comment, don't do anything
+                return;
+            }
+
+            console.error('Command type unknown:' + _command.type);
         });
 
         return {html, actions, sceneLocked};
@@ -259,7 +299,7 @@ var DIALOG = (function () {
             }
             var value = '';
             try{
-                value = get_HAE().FN[ spaceSplit[1] ]( get_GAME_STATE(), get_HAE() );
+                value = get_HAE().FN[ spaceSplit[1] ]( GET_GAME_STATE(), get_HAE() );
             }catch(e) {
                 console.error('There is an error when you call the  logic function ' + spaceSplit[1], e);
             }
@@ -297,7 +337,7 @@ var DIALOG = (function () {
         }
         var value = '';
         try{
-            value = get_HAE().FN[ spaceSplit[0] ]( get_GAME_STATE(), get_HAE() );
+            value = get_HAE().FN[ spaceSplit[0] ]( GET_GAME_STATE(), get_HAE() );
         }catch(e) {
             console.error('There is an error when you call the function ' + spaceSplit[0], e);
         }
@@ -330,7 +370,7 @@ var DIALOG = (function () {
             if(spaceSplit[1] !== '='){
                 console.error('Need to have = sign inbetween variable name and value, ie <<[SET money = 5]>>');
             }
-            get_GAME_STATE()[spaceSplit[0]] = spaceSplit[2];
+            GET_GAME_STATE()[spaceSplit[0]] = spaceSplit[2];
         }
         return value;
     };

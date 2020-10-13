@@ -198,11 +198,6 @@ var setRequiredMenus = {
         ACTIONS.init_HTML($Cell.Actions);
     },
 };
-var setDesiredMenus = {
-    Nav: function(){
-        MODULES.MAP_GRID.init_HTML($Cell.Actions);
-    },
-};
 
 /*
 

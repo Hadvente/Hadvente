@@ -20,11 +20,9 @@
        
         var newMapGrid = false;
         var mapIsDisabled = false;
-        var currentLocation;
         var previousLocation;
-        var currentMap;
         MAP_GRID_FNs.initialize = function(){
-            if( !get_HAE().cells.Nav ) return; //there is no NAV
+            if( !get_HAE().cells.MAP_GRID ) return; //there is no NAV
             if( !get_HAE().maps ){
                 console.error('If you have a NAV cell, you need a maps key');
                 return;
@@ -40,115 +38,40 @@
                 return;
             }
 
-            currentMap = get_HAE().maps[ get_HAE().maps.starting_map ];
+            GET_CELL_DATA('MAP_GRID').map_name = get_HAE().maps.starting_map;
+            GET_CELL_DATA('MAP_GRID').location = getCurrentMap().start;
 
-            currentLocation = currentMap.start;
             newMapGrid = true;
         };
-        MAP_GRID_FNs.clickedGrid = function(_y, _x){
-            //if( mapIsDisabled ) return; //Clicking on the map while it is disabled is an illegal action :V
-            if( !currentMap.grid[_y][_x] ) return; //no cell to click on
-            if( currentLocation[0] == _y && currentLocation[1] == _x) return; //Clicking on the current cell should do nothing
-            if( getSceneLocked() ) return; //The map is locked
-
-            H_Log('clicked on cell ' + _y + ', ' + _x + ' - which has the value of ' + currentMap.grid[_y][_x]);
-
-            previousLocation = currentLocation;
-            currentLocation = [_y, _x];
-
-            var newLocationID = MAP_GRID_FNs.getLocationID();
-            var newScene = MAP_GRID_FNs.getLocationScene(newLocationID);
-            setNewScene(newScene);
-
-            runGameUpdate();
-        };
-        MAP_GRID_FNs.getNewGrid = function(){
-            //if grid has not changed, we do not want to update the location on the screen
-            if( !newMapGrid ) return;
-            return currentMap.grid;
-        };
-        MAP_GRID_FNs.getNewLocation = function(){
-            //If our location hasn't changed, we do not want to update the location in the html
-            if(previousLocation && previousLocation[0] == currentLocation[0] && previousLocation[1] == currentLocation[1]) return;
-            return currentLocation;
-        };
-        MAP_GRID_FNs.getPreviousLocation = function(){
-            return previousLocation;
-        };
-        MAP_GRID_FNs.getGridSize = function(){
-            return currentMap.grid_size;
-        };
-        MAP_GRID_FNs.getLocationID = function(){
-            var loc = currentMap.grid[currentLocation[0]][currentLocation[1]];
-            return _.isObject(loc)? loc.ID : loc;
-        };
-        MAP_GRID_FNs.getCurrentLocationScenes = function(_location_ID){
-            if( !currentMap.locations ){
-                console.error('Why dont you have a locations key for figuring out what scenes belong to a location?');
-                return '';
-            }
-            if( !currentMap.locations[ _location_ID ] ){
-                console.error('locations is missing a location!' + _location_ID, currentMap.locations);
-                return '';
-            }
-            if( !currentMap.locations[ _location_ID ].scenes ){
-                console.error('locations is missing the scenes key!' + _location_ID, currentMap.locations);
-                return '';
-            }
-            return currentMap.locations[ _location_ID ].scenes;
-        };
-        MAP_GRID_FNs.getNameForLocation = function(_y, _x){
-            if( !currentMap.grid[_y][_x] ) return ''; //empty cell
-            if( !currentMap.locations ){
-                console.error('Why dont you have a locations key for figuring out what scenes belong to a location?');
-                return '';
-            }
-            if( !currentMap.locations ){
-                console.error('Why dont you have a locations key for figuring out what scenes belong to a location?');
-                return '';
-            }
-            if( !currentMap.locations[ currentMap.grid[_y][_x] ] ){
-                console.error('Locations key missing specific location: ' + currentMap.grid[_y][_x]);
-                return '';
-            }
-            if( !currentMap.locations[ currentMap.grid[_y][_x] ].Name ){
-                console.error('Locations key missing Name: ' + currentMap.grid[_y][_x]);
-                return '';
-            }
-            return currentMap.locations[ currentMap.grid[_y][_x] ].Name;
-        };
-        MAP_GRID_FNs.getLocationScene = function(_location_ID){
-            var locScenesArr = MAP_GRID_FNs.getCurrentLocationScenes(_location_ID);
-            //need to filter the list for anything that doesn't pass requirements
-            locScenesArr = _.filter(locScenesArr, function(_LocScene){
-                if(_LocScene.requirements === true) return true;
-                if( _.isFunction(_LocScene.requirements) ){
-                    return _LocScene.requirements( get_GAME_STATE(), get_HAE() ); //Requirements gets handed the game state for calculating whether it's currently valid
-                }
-                console.error('The requirements for all scenes based on a location must be either true or a function', locScenesArr);
-            });
-            //locScenesArr is now an array of scenes, need to pick one at random weighed by probability
-            var randomElementIndex = Math.floor(Math.random() * locScenesArr.length);
-            var locScene = locScenesArr[randomElementIndex];
-            //The location_scenes is not complete, plus we will not reference it directly from the get_HAE()
-            return locScene.scene;
-        };
         MAP_GRID_FNs.forceLocationScene = function(){
-            var newLocationID = MAP_GRID_FNs.getLocationID();
-            var newScene = MAP_GRID_FNs.getLocationScene(newLocationID);
-            setNewScene(newScene);
+            if( !get_HAE().cells.MAP_GRID ){
+                console.error('Your HAE Script tried to force a MAP_GRID location scene when it does not have the MAP_GRID cell!');
+                return;
+            }
+            var newLocationID = getLocationID();
+            var newScene = getLocationScene(newLocationID);
+            return DIALOG.SET_NEW_SCENE(newScene);
         };
         MAP_GRID_FNs.changeMapGrid = function(_map_id){
+            if( !get_HAE().cells.MAP_GRID ) return;
             //Not called yet, but could be an action attached to a scene that sends you to a new map grid
+        };
+        MAP_GRID_FNs.update_module = function(_map_id){
+            if( !get_HAE().cells.MAP_GRID ) return;
+            //Not used yet, but could be an action attached to a scene that sends you to a new map grid
         };
         //Is this really the correct way to do it?
         MAP_GRID_FNs.finished_draw = function(){
-            previousLocation = currentLocation;
+            previousLocation = GET_CELL_DATA('MAP_GRID').location;
             newMapGrid = false;
         };
-        MAP_GRID_FNs.update_module = function(_map_id){
-            //Not used yet, but could be an action attached to a scene that sends you to a new map grid
-        };
+
+        function getCurrentMap(){
+            return get_HAE().maps[ GET_CELL_DATA('MAP_GRID').map_name ];
+        }
+        function getCurrentLocation(){
+            return GET_CELL_DATA('MAP_GRID').location;
+        }
 
         /*
         
@@ -164,8 +87,8 @@
 
         var $Nav;
         MAP_GRID_FNs.init_HTML = function(_$Cell){
-            if( !get_HAE().cells.Nav ) return;
-            $Cell[ get_HAE().cells.Nav ].append('<div id="NavigationMenu" class="sectionContainer small_font"></div>');
+            if( !get_HAE().cells.MAP_GRID ) return;
+            $Cell[ get_HAE().cells.MAP_GRID ].append('<div id="NavigationMenu" class="sectionContainer small_font"></div>');
             $Nav = $('#NavigationMenu');
             //there are 3 aspects to Nav
             //The grid, which shows parts of the map that can be clicked and navigated
@@ -181,7 +104,7 @@
         //need to figure out how to design to account for the arrow buttons once we have those
         function getMapGridHtml(){
             //We want to grab the grid html. every game, or at least every grid, has a grid size defined
-            var gridSize = currentMap.grid_size;
+            var gridSize = getCurrentMap().grid_size;
             var html = '<table class="gridContainer">';
             _.times(gridSize[0], function(_y){
                 //height has to be set like this because of the indeterminate amount of rows
@@ -197,9 +120,9 @@
 
         var $Cells;
         MAP_GRID_FNs.update_HTML = function(){
-            if( !get_HAE().cells.Nav ) return;
+            if( !get_HAE().cells.MAP_GRID ) return;
             
-            if( getSceneLocked() ){
+            if( GET_SCENE_LOCKED() ){
                 if( !$Nav.hasClass('mapDisabled') ){
                     $Nav.addClass('mapDisabled');
                 }
@@ -209,16 +132,16 @@
             }
             
             //At this point we should check if anything has changed, because there is no reason to redraw if we have no map change
-            var newGrid = MAP_GRID_FNs.getNewGrid();
-            var newLocation = MAP_GRID_FNs.getNewLocation();
+            var newGrid = getNewGrid();
+            var newLocation = getNewLocation();
             if(!newGrid && !newLocation) return;
 
             //Initialize cells
             ////This part is inside Update because we want ot eventually rework this to handle changing grid sizes
             if( !$Cells ){ // || newGrid
                 $Cells = {};
-                _.times(currentMap.grid_size[0], function(_y){
-                    _.times(currentMap.grid_size[1], function(_x){
+                _.times(getCurrentMap().grid_size[0], function(_y){
+                    _.times(getCurrentMap().grid_size[1], function(_x){
                         $Cells['Grid_'+ _y + '_'+ _x] = $('#Grid_'+ _y + '_'+ _x);
                         $Cells['Grid_'+ _y + '_'+ _x].click(function(){
                             mapGridClick(_y, _x);
@@ -229,10 +152,10 @@
 
             //Initialize cell
             if( newGrid ){
-                _.times(currentMap.grid_size[0], function(_y){
-                    _.times(currentMap.grid_size[1], function(_x){
+                _.times(getCurrentMap().grid_size[0], function(_y){
+                    _.times(getCurrentMap().grid_size[1], function(_x){
                         if(newGrid[_y][_x]){
-                            $Cells['Grid_'+ _y + '_'+ _x].html(MAP_GRID_FNs.getNameForLocation(_y, _x));
+                            $Cells['Grid_'+ _y + '_'+ _x].html( getNameForLocation(_y, _x) );
                             if( !$Cells['Grid_'+ _y + '_'+ _x].hasClass('map_grid_cell_in_use') ){
                                 $Cells['Grid_'+ _y + '_'+ _x].addClass('map_grid_cell_in_use');
                             }
@@ -263,8 +186,93 @@
         };
 
         function mapGridClick(_y, _x){
-            MAP_GRID_FNs.clickedGrid(_y, _x);
+            if( !getCurrentMap().grid[_y][_x] ) return; //no cell to click on
+            if( getCurrentLocation()[0] == _y && getCurrentLocation()[1] == _x) return; //Clicking on the current cell should do nothing
+            if( GET_SCENE_LOCKED() ) return; //The map is locked
+
+            H_Log('clicked on cell ' + _y + ', ' + _x + ' - which has the value of ' + getCurrentMap().grid[_y][_x]);
+
+            previousLocation = getCurrentLocation();
+            GET_CELL_DATA('MAP_GRID').location = [_y, _x];
+
+            var newLocationID = getLocationID();
+            var newScene = getLocationScene(newLocationID);
+            return DIALOG.SET_NEW_SCENE(newScene);
         }
+
+        function getNewGrid(){
+            //if grid has not changed, we do not want to update the location on the screen
+            if( !newMapGrid ) return;
+            return getCurrentMap().grid;
+        }
+
+        function getNewLocation(){
+            //If our location hasn't changed, we do not want to update the location in the html
+            if(previousLocation && previousLocation[0] == getCurrentLocation()[0] && previousLocation[1] == getCurrentLocation()[1]) return;
+            return getCurrentLocation();
+        }
+
+        function getLocationID(){
+            var y = getCurrentLocation()[0];
+            var x = getCurrentLocation()[1];
+            var loc = getCurrentMap().grid[y][x];
+            return _.isObject(loc)? loc.ID : loc;
+        }
+
+        function getCurrentLocationScenes(_location_ID){
+            if( !getCurrentMap().locations ){
+                console.error('Why dont you have a locations key for figuring out what scenes belong to a location?');
+                return '';
+            }
+            if( !getCurrentMap().locations[ _location_ID ] ){
+                console.error('locations is missing a location!' + _location_ID, getCurrentMap().locations);
+                return '';
+            }
+            if( !getCurrentMap().locations[ _location_ID ].scenes ){
+                console.error('locations is missing the scenes key!' + _location_ID, getCurrentMap().locations);
+                return '';
+            }
+            return getCurrentMap().locations[ _location_ID ].scenes;
+        }
+
+        function getNameForLocation(_y, _x){
+            if( !getCurrentMap().grid[_y][_x] ) return ''; //empty cell
+            if( !getCurrentMap().locations ){
+                console.error('Why dont you have a locations key for figuring out what scenes belong to a location?');
+                return '';
+            }
+            if( !getCurrentMap().locations ){
+                console.error('Why dont you have a locations key for figuring out what scenes belong to a location?');
+                return '';
+            }
+            if( !getCurrentMap().locations[ getCurrentMap().grid[_y][_x] ] ){
+                console.error('Locations key missing specific location: ' + getCurrentMap().grid[_y][_x]);
+                return '';
+            }
+            if( !getCurrentMap().locations[ getCurrentMap().grid[_y][_x] ].Name ){
+                console.error('Locations key missing Name: ' + getCurrentMap().grid[_y][_x]);
+                return '';
+            }
+            return getCurrentMap().locations[ getCurrentMap().grid[_y][_x] ].Name;
+        }
+
+        function getLocationScene(_location_ID){
+            var locScenesArr = getCurrentLocationScenes(_location_ID);
+            //need to filter the list for anything that doesn't pass requirements
+            locScenesArr = _.filter(locScenesArr, function(_LocScene){
+                if(_LocScene.requirements === true) return true;
+                if( _.isFunction(_LocScene.requirements) ){
+                    return _LocScene.requirements( GET_GAME_STATE(), get_HAE() ); //Requirements gets handed the game state for calculating whether it's currently valid
+                }
+                console.error('The requirements for all scenes based on a location must be either true or a function', locScenesArr);
+            });
+            //locScenesArr is now an array of scenes, need to pick one at random weighed by probability
+            var randomElementIndex = Math.floor(Math.random() * locScenesArr.length);
+            var locScene = locScenesArr[randomElementIndex];
+            //The location_scenes is not complete, plus we will not reference it directly from the get_HAE()
+            return locScene.scene;
+        }
+
         /*
         
         ooooooooo.   ooooooooo.   ooooo oooooo     oooo       .o.       ooooooooooooo oooooooooooo 
@@ -283,7 +291,6 @@
 
         //Returns public functions into the variable
         return MAP_GRID_FNs;
-    
-    }();
+    };
 
 }).call();

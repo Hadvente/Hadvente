@@ -36,16 +36,14 @@ var ACTIONS = (function () {
         H_Log('clicked on action cell ' + _y + ', ' + _x + ' - which has the value of ', actionGrid[_y][_x]);
 
         if( actionGrid[_y][_x].location ){
-            MODULES.MAP_GRID.forceLocationScene();
+            return MODULES.MAP_GRID.forceLocationScene();
         }
         else if( actionGrid[_y][_x].scene ){
-            setNewScene( actionGrid[_y][_x].scene ); 
+            return DIALOG.SET_NEW_SCENE( actionGrid[_y][_x].scene );
         }
         else{
             console.error('action button does not have scene!');
         }
-
-        runGameUpdate();
     };
     ACTION_FNs.getGridSize = function(){
         return actionsGridSize;
@@ -59,20 +57,28 @@ var ACTIONS = (function () {
     };
     ACTION_FNs.update_module = function(){
         //this is the main function that gets called each time an update event is called
-        var actionList = getCurrentActions();
-
+        
         //convert action list into an actionGrid array
-        if(_.size(actionList) > maxActions){
+        if(_.size(actionsList) > maxActions){
             console.error('We can currently only handle ' + maxActions + ' actions per scene');
         }
 
         var index = 0;
         _.each(actionGrid, function(_actionRow, _indRow){
             _.each(_actionRow, function(_action, _indCell){
-                actionGrid[_indRow][_indCell] = parseActionString(actionList[index] || '');
+                actionGrid[_indRow][_indCell] = parseActionString(actionsList[index] || '');
                 index++;
             });
         });
+    };
+
+    var actionsList = [];
+    ACTION_FNs.SET_NEW_ACTIONS = function(_new_actions){
+        actionsList = _new_actions;
+    };
+
+    ACTION_FNs.finished_draw = function(){
+        //does nothing for now? Can't clear actionsList because clicking the action actually references the list!
     };
 
     /*

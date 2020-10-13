@@ -69,3 +69,12 @@ function H_Log(_log, _obj){
     if(_obj) console.log(_log, _obj);
     else console.log(_log);
 }
+
+function H_Log_Active(){
+    return isLogging;
+}
+
+function H_ERROR(_log, _obj){
+    if(_obj) console.error(_log, _obj);
+    else console.error(_log);
+}
