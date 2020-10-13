@@ -2,7 +2,7 @@
 
 var ACTIONS = (function () {
     
-    var ACTION_FNs = {};
+    var ACTION_FNs = {NAME: 'ACTIONS'}; //NOTE: ACTIONS and DIALOG are not normal modules, they are required, so they are not put in the system
 
     /*
 
@@ -36,7 +36,7 @@ var ACTIONS = (function () {
         H_Log('clicked on action cell ' + _y + ', ' + _x + ' - which has the value of ', actionGrid[_y][_x]);
 
         if( actionGrid[_y][_x].location ){
-            MAP_GRID.forceLocationScene();
+            MODULES.MAP_GRID.forceLocationScene();
         }
         else if( actionGrid[_y][_x].scene ){
             setNewScene( actionGrid[_y][_x].scene ); 
@@ -57,7 +57,7 @@ var ACTIONS = (function () {
         //This returns the strings that belongs to the actions
         return actionGrid;
     };
-    ACTION_FNs.update_system = function(){
+    ACTION_FNs.update_module = function(){
         //this is the main function that gets called each time an update event is called
         var actionList = getCurrentActions();
 
@@ -75,6 +75,81 @@ var ACTIONS = (function () {
         });
     };
 
+    /*
+    
+    ooooo   ooooo ooooooooooooo ooo        ooooo ooooo        
+    `888'   `888' 8'   888   `8 `88.       .888' `888'        
+     888     888       888       888b     d'888   888         
+     888ooooo888       888       8 Y88. .P  888   888         
+     888     888       888       8  `888'   888   888         
+     888     888       888       8    Y     888   888       o 
+    o888o   o888o     o888o     o8o        o888o o888ooooood8 
+    
+     */
+
+    var $Actions = {};
+    ACTION_FNs.init_HTML = function(_$Cell){
+        _$Cell.append('<div id="ActionsMenu" class="sectionContainer small_font">' + getActionsGridHtml() + '</div>');
+        
+        _.times(ACTIONS.getGridSize()[0], function(_y){
+            _.times(ACTIONS.getGridSize()[1], function(_x){
+                $Actions['Action_'+ _y + '_'+ _x] = $('#Action_'+ _y + '_'+ _x);
+                $Actions['Action_'+ _y + '_'+ _x].click(function(){
+                    actionGridClick(_y, _x);
+                });
+            });
+        });
+    };
+
+    //need to figure out how to design to account for the arrow buttons once we have those
+    function getActionsGridHtml(){
+        //We want to grab the grid html. every game, or at least every grid, has a grid size defined
+        var gridSize = ACTIONS.getGridSize();
+        var html = '<table class="gridContainer">';
+        _.times(gridSize[0], function(_y){
+            //height has to be set like this because of the indeterminate amount of rows
+            html +='<tr class="action_grid_row">';
+            _.times(gridSize[1], function(_x){
+                html += '<td id="Action_'+ _y + '_'+ _x + '" class="action_grid_cell actionButton"></div>';
+            });
+            html += '</tr>';
+        });
+        html +='</table>';
+        return html;
+    }
+
+    ACTION_FNs.update_HTML = function(){
+        var newGrid = ACTIONS.getGrid();
+        //Every time the screen is updated, we want to redraw all the action cells
+        //Even if the actions didn't update, since it should update 99% of the time,
+        //The added protection against not redrawing is just wasted code complexity
+        _.times(ACTIONS.getGridSize()[0], function(_y){
+            _.times(ACTIONS.getGridSize()[1], function(_x){
+                var actionVal = newGrid[_y][_x];
+                if(actionVal){
+                    $Actions['Action_'+ _y + '_'+ _x].html(actionVal.text);
+                    if( !$Actions['Action_'+ _y + '_'+ _x].hasClass('active_action') ){
+                        $Actions['Action_'+ _y + '_'+ _x].addClass('active_action');
+                    }
+                    $Actions['Action_'+ _y + '_'+ _x].prop('title', actionVal.tooltip);
+                }
+                else{
+                    $Actions['Action_'+ _y + '_'+ _x].html('');
+                    if( $Actions['Action_'+ _y + '_'+ _x].hasClass('active_action') ){
+                        $Actions['Action_'+ _y + '_'+ _x].removeClass('active_action');
+                    }
+                    $Actions['Action_'+ _y + '_'+ _x].prop('title', '');
+                }
+            });
+        });
+    };
+
+    function actionGridClick(_y, _x){
+        ACTIONS.clickedGrid(_y, _x);
+    }
+
+    //private is not a valid label, it means nothing. Public is valid because there should be very few things anyone asks for
+    //but private means nothing to the contents of the section other than the fact people outside of the singleton
     /*
     
     ooooooooo.   ooooooooo.   ooooo oooooo     oooo       .o.       ooooooooooooo oooooooooooo 

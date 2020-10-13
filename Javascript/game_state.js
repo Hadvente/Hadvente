@@ -12,9 +12,21 @@ game_view
 
 function initializeGameStateEngine(){
     initializeGameState(); //who owns gamedata?
+
+    checkFunctionListForModules();
+    
+    //initialize required cells
     DIALOG.initialize();
     ACTIONS.initialize();
-    MAP_GRID.initialize();
+    //NAME.initialize();
+    //MENU.initialize();
+
+    _.each(MODULES, function(_module, _name){
+        _module.initialize();
+    });
+
+    initializeAllModules();
+
     initializeGameHtml(); //Right now the game has to make it's own start menu as a dialog scene, but I could rework this to have actual start menus
 
     _.delay(runGameUpdate, 50);
@@ -73,18 +85,52 @@ function runGameUpdate(){
     H_Log('game updating');
     
     //required systems
-    DIALOG.update_system();
-    ACTIONS.update_system();
+    DIALOG.update_module();
+    ACTIONS.update_module();
     
     //mods
-    //Is there any way we could literally make this mods? Make it so the list of cells is in the HAE,
-    //And literally have users be able to delete specific cell types if they so desire
-    //Which means that the file that processes the cells logic also processes the HTML, the HTML stuff isn't insude game_view.js
-    MAP_GRID.update_system(); //Location seems such a universal concept of adventure games that it might make sense to not have that be optional
-    
+    _.each(MODULES, function(_module, _name){
+        _module.update_module();
+    });
+
     //html (required)
     updateScreen();
 
+    _.each(MODULES, function(_module, _name){
+        _module.finished_draw();
+    });
+
     newScene = '';
     cells_disabled = false;
+}
+
+var moduleList = {};
+function addModuleToHADVANTE(_module){
+    var name = _module.NAME;
+    if( !name ){
+        console.error('The module must have a key "NAME"');
+    }
+    if(moduleList[name]){
+        console.error('We have multiple modules with the name ' + name);
+    }
+    moduleList[name] = _module;
+}
+
+function initializeAllModules(){
+    _.each(moduleList, function(_module, _module_name){
+        _module.initialize();
+    });
+}
+
+function checkFunctionListForModules(){
+    var requiredFunctions = ['initialize', 'update_module', 'init_HTML', 'update_HTML', 'finished_draw'];
+
+    _.each(MODULES, function(_module, _name){
+        _.each(requiredFunctions, function(_fn){
+            if( !_module[_fn] ){
+                console.error('WARNING: The module ' + _name + ' is missing the function\n\n"' + _fn + '"\n\n' +
+                                    'Each module must have these public functions:\n    ' + requiredFunctions.join('\n    '));
+            }
+        });
+    });
 }

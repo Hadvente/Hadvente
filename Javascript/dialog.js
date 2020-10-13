@@ -41,7 +41,7 @@ var DIALOG = (function () {
         //Convert the human-readable info in get_HAE() into code-readable data structures
         //For example, location_scenes is hard to parse in code, we don't want to do that each time
     };
-    DIALOG_FNs.update_system = function(){
+    DIALOG_FNs.update_module = function(){
         var newScene = getNewScene();
 
         if(newScene){
@@ -68,6 +68,34 @@ var DIALOG = (function () {
         hasNewDialog = false;
     };
 
+    /*
+    
+    ooooo   ooooo ooooooooooooo ooo        ooooo ooooo        
+    `888'   `888' 8'   888   `8 `88.       .888' `888'        
+     888     888       888       888b     d'888   888         
+     888ooooo888       888       8 Y88. .P  888   888         
+     888     888       888       8  `888'   888   888         
+     888     888       888       8    Y     888   888       o 
+    o888o   o888o     o888o     o8o        o888o o888ooooood8 
+    
+     */
+    
+    var $Dialog = {};
+    DIALOG_FNs.init_HTML = function(_$Cell){
+        _$Cell.append(`<div id="MainDialogContainer">
+            <div id="MainDialogScrollbar">
+                <div id="MainDialogTextHolder" class="standard_font">
+                </div>
+            </div>
+        </div>`);
+        $Dialog = $('#MainDialogTextHolder');
+    };
+
+    DIALOG_FNs.update_HTML = function(){
+        if(DIALOG.hasNewDialog()){
+            $Dialog.html(DIALOG.getDialogHtml());
+        }
+    };
     /*
     
     ooooooooo.   ooooooooo.   ooooo oooooo     oooo       .o.       ooooooooooooo oooooooooooo 

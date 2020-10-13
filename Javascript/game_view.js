@@ -30,13 +30,13 @@ function clearGameView(){
 }
 
 function initializeGameHtml(){
-    if(get_HAE().cells.NO_RIGHT_COLUMN){
-        $("body").append('<div id="GameWindow_2Columns"></div>');
-        $gameScreenDiv = $('#GameWindow_2Columns');
+    if(get_HAE().cells.HAS_RIGHT_COLUMN){
+        $("body").append('<div id="GameWindow_3Columns"></div>');
+        $gameScreenDiv = $('#GameWindow_3Columns');
     }
     else{
-        $("body").append('<div id="GameWindow"></div>');
-        $gameScreenDiv = $('#GameWindow');
+        $("body").append('<div id="GameWindow_2Columns"></div>');
+        $gameScreenDiv = $('#GameWindow_2Columns');
     }
 
 
@@ -65,11 +65,9 @@ var cellDefinitions = [
         {html: '<div id="Center_Col_Cell_Actions" class="cellContainer"></div>'},
     ],
     [
-        {html: '<div id="Right_Col_Cell_Engine" class="cellContainer"></div>'},
         {html: '<div id="Right_Col_Cell_Top" class="cellContainer"></div>'},
         {html: '<div id="Right_Col_Cell_Middle" class="cellContainer"></div>'},
         {html: '<div id="Right_Col_Cell_Bottom" class="cellContainer"></div>'},
-        {html: '<div id="Right_Col_Cell_InfoBar" class="cellContainer"></div>'},
 
         {html: '<div id="Right_Col_Cell_Top_BIG" class="cellContainer"></div>'},
         {html: '<div id="Right_Col_Cell_Bottom_BIG" class="cellContainer"></div>'}
@@ -79,14 +77,14 @@ var cellDefinitions = [
 
 function createCells(){
     _.each(cellDefinitions, function(_columns, _col){
-        if( _col == 2 && get_HAE().cells.NO_RIGHT_COLUMN ) return; //We don't want the third column
+        if( _col == 2 && !get_HAE().cells.HAS_RIGHT_COLUMN ) return; //We don't want the third column
         var currentY = 0;
         var colHtml;
-        if( get_HAE().cells.NO_RIGHT_COLUMN ){
-            colHtml = '<div id="' + ((_col == 0)? 'LeftColumn_2Columns': 'MiddleColumn_2Columns') + '">';
+        if( get_HAE().cells.HAS_RIGHT_COLUMN ){
+            colHtml = '<div id="' + ((_col == 0)? 'LeftColumn_3Columns': (_col == 1)? 'MiddleColumn_3Columns' : 'RightColumn_3Columns') + '">';
         }
         else{
-            colHtml = '<div id="' + ((_col == 0)? 'LeftColumn': (_col == 1)? 'MiddleColumn' : 'RightColumn') + '">';
+            colHtml = '<div id="' + ((_col == 0)? 'LeftColumn_2Columns': 'MiddleColumn_2Columns') + '">';
         }
         _.each(_columns, function(_arr, _not_first_row){
 
@@ -104,12 +102,19 @@ function createCells(){
 
 function initAllCells(){
     setEachCellSelector();
-    _.each(initRequiredCells, (_fn) => _fn());
-    _.each(initDesiredCells, (_fn) => _fn());
     deleteUnusedCells();
     _.each(setRequiredMenus, (_fn) => _fn());
-    _.each(setDesiredMenus, (_fn) => _fn());
-    updateScreen();
+    _.each(MODULES, function(_module, _name){
+        if(_module.init_HTML){
+            _module.init_HTML();
+        }
+        else{
+            //You'll have to delete this line of code if you make something labelled a module that isn't part of the GUI
+            //in which case, why is it a module? If your mod is called by other modules but isn't a module itself it shouldn't be part of modules
+            ////Though I haven't actually set up a system for non-module mods, sooo...
+            console.error('Why does this module not have an init_HTML? ' + _name);
+        }
+    });
 }
 
 var $Cell = {};
@@ -119,8 +124,6 @@ function setEachCellSelector(){
     $Cell.Menu         = $('#Left_Col_Cell_Menus');
     $Cell.Dialog       = $('#Center_Col_Cell_Dialog');
     $Cell.Actions      = $('#Center_Col_Cell_Actions');
-    $Cell.Engine       = $('#Right_Col_Cell_Engine');
-    $Cell.InfoBar      = $('#Right_Col_Cell_InfoBar');
 
     //
     //Left Column
@@ -175,169 +178,31 @@ function deleteUnusedCells(){
     }
 }
 
-//This is only for the initial state, it's okay that they don't read specific data
-var initRequiredCells = {
-    //left column
-    Name: function(){
-        $Cell.Name.append('<div id="NameLabel" class="sectionContainer giant_font"></div>');
-    },
-    Menu: function(){
-        $Cell.Menu.append('<div id="GameMenu" class="sectionContainer small_font">Inventory and other game menus</div>');
-    },
-    Engine: function(){
-        if(get_HAE().cells.NO_RIGHT_COLUMN) return;
-        $Cell.Engine.append('<div id="EngineMenu" class="sectionContainer small_font">☼ This contains save/options/engine menus</div>');
-    },
-    InfoBar: function(){
-        if(get_HAE().cells.NO_RIGHT_COLUMN) return;
-        $Cell.InfoBar.append('<div id="InfoBar" class="sectionContainer small_font">This contains a status update</div>');
-    },
-    //middle column
-    Dialog: function(){
-        $Cell.Dialog.append(`<div id="MainDialogContainer">
-            <div id="MainDialogScrollbar">
-                <div id="MainDialogTextHolder" class="standard_font">
-                </div>
-            </div>
-        </div>`);
-    },
-    Actions: function(){
-        $Cell.Actions.append('<div id="ActionsMenu" class="sectionContainer small_font"></div>');
-    },
-};
-var initDesiredCells = {
-    //The remaining 6 items are all optional and may appear in any of the 6 slots!
-    Status: function(){
-        if( !get_HAE().cells.Status ) return;
-        $Cell[ get_HAE().cells.Status ].append('<div id="AreaStatus" class="sectionContainer small_font">This is the area status and notifications window</div>');
-    },
-    PartyMembers: function(){
-        if( !get_HAE().cells.PartyMembers ) return;
-        $Cell[ get_HAE().cells.PartyMembers ].append('<div id="PartyMemberMenu" class="sectionContainer small_font">This shows the basic info for each party member</div>');
-    },
-    MemberView: function(){
-        if( !get_HAE().cells.MemberView ) return;
-        $Cell[ get_HAE().cells.MemberView ].append('<div id="MemberViewMenu" class="sectionContainer small_font">This shows a single party member, lets you talk to them, and see stats about them</div>');
-    },
-    Player: function(){
-        if( !get_HAE().cells.Player ) return;
-        $Cell[ get_HAE().cells.Player ].append('<div id="PlayerStatus" class="sectionContainer small_font">This contains the player status</div>');
-    },
-    Image: function(){
-        if( !get_HAE().cells.Image ) return;
-        $Cell[ get_HAE().cells.Image ].append('<div id="ImageViewer" class="sectionContainer small_font">This will show an image maybe</div>');
-    },
-    Nav: function(){
-        if( !get_HAE().cells.Nav ) return;
-        $Cell[ get_HAE().cells.Nav ].append('<div id="NavigationMenu" class="sectionContainer small_font"></div>');
-    },
-};
 var $Menu = {}; //has same keys as above. jquery elements, though Actions is an object, look above for object keys.
 
 var setRequiredMenus = {
     Name: function(){
+        $Cell.Name.append('<div id="NameLabel" class="sectionContainer giant_font"></div>');
         $Menu.Name = $('#NameLabel');
-        $Menu.Name.html('HADVENTE');
+        $Menu.Name.html(get_HAE().title || 'HADVENTE');
     },
     Menu: function(){
+        $Cell.Menu.append('<div id="GameMenu" class="sectionContainer small_font">Inventory and other game menus</div>');
         $Menu.Menu = $('#GameMenu');
     },
     //middle column
     Dialog: function(){
-        $Menu.Dialog = $('#MainDialogTextHolder');
+        DIALOG.init_HTML($Cell.Dialog);
     },
     Actions: function(){
-        $Menu.Actions = $('#ActionsMenu');
-        $Menu.Actions.append(getActionsGridHtml());
-        
-        $CellDivs.Actions = {};
-        _.times(MAP_GRID.getGridSize()[0], function(_y){
-            _.times(MAP_GRID.getGridSize()[1], function(_x){
-                $CellDivs.Actions['Action_'+ _y + '_'+ _x] = $('#Action_'+ _y + '_'+ _x);
-                $CellDivs.Actions['Action_'+ _y + '_'+ _x].click(function(){
-                    actionGridClick(_y, _x);
-                });
-            });
-        });
-    },
-    Engine: function(){
-        if(get_HAE().cells.NO_RIGHT_COLUMN) return;
-        $Menu.Engine = $('#EngineMenu');
-    },
-    InfoBar: function(){
-        if(get_HAE().cells.NO_RIGHT_COLUMN) return;
-        $Menu.InfoBar = $('#InfoBar');
+        ACTIONS.init_HTML($Cell.Actions);
     },
 };
 var setDesiredMenus = {
-    Status: function(){
-        if( !get_HAE().cells.Status ) return;
-        $Menu.Status = $('#AreaStatus');
-    },
-    PartyMembers: function(){
-        if( !get_HAE().cells.PartyMembers ) return;
-        $Menu.PartyMembers = $('#PartyMemberMenu');
-    },
-    MemberView: function(){
-        if( !get_HAE().cells.MemberView ) return;
-        $Menu.MemberView = $('#MemberViewMenu');
-    },
-    Player: function(){
-        if( !get_HAE().cells.Player ) return;
-        $Menu.Player = $('#PlayerStatus');
-    },
-    Image: function(){
-        if( !get_HAE().cells.Image ) return;
-        $Menu.Image = $('#ImageViewer');
-    },
     Nav: function(){
-        if( !get_HAE().cells.Nav ) return;
-        $Menu.Nav = $('#NavigationMenu');
-        //there are 3 aspects to Nav
-        //The grid, which shows parts of the map that can be clicked and navigated
-        //Nav Arrows, which you can click instead to move left right up down
-        //Special Buttons, like the world map popup button
-        //Some games have only the first element, because they choose to have so few locations
-        //you should check the game .hae file to figure this out
-        
-        //FOR NOW: this map contains the grid and nothing more. Just draw first_grid and nothing else
-        $Menu.Nav.append(getMapGridHtml());
+        MODULES.MAP_GRID.init_HTML($Cell.Actions);
     },
 };
-
-//need to figure out how to design to account for the arrow buttons once we have those
-function getMapGridHtml(){
-    //We want to grab the grid html. every game, or at least every grid, has a grid size defined
-    var gridSize = MAP_GRID.getGridSize();
-    var html = '<table class="gridContainer">';
-    _.times(gridSize[0], function(_y){
-        //height has to be set like this because of the indeterminate amount of rows
-        html +='<tr class="map_grid_row">';
-        _.times(gridSize[1], function(_x){
-            html += '<td id="Grid_'+ _y + '_'+ _x + '" class="map_grid_cell"></div>';
-        });
-        html += '</tr>';
-    });
-    html +='</table>';
-    return html;
-}
-
-//need to figure out how to design to account for the arrow buttons once we have those
-function getActionsGridHtml(){
-    //We want to grab the grid html. every game, or at least every grid, has a grid size defined
-    var gridSize = ACTIONS.getGridSize();
-    var html = '<table class="gridContainer">';
-    _.times(gridSize[0], function(_y){
-        //height has to be set like this because of the indeterminate amount of rows
-        html +='<tr class="action_grid_row">';
-        _.times(gridSize[1], function(_x){
-            html += '<td id="Action_'+ _y + '_'+ _x + '" class="action_grid_cell actionButton"></div>';
-        });
-        html += '</tr>';
-    });
-    html +='</table>';
-    return html;
-}
 
 /*
 
@@ -351,144 +216,27 @@ ooooo     ooo ooooooooo.   oooooooooo.         .o.       ooooooooooooo ooooooooo
 
  */
 function updateScreen(){
-    _.each(updateMenus, (_fn) => _fn());
+    _.each(updateRequiredMenus, (_fn) => _fn());
+    _.each(MODULES, function(_module, _name){
+        if(_module.update_HTML){
+            _module.update_HTML();
+        }
+        else{
+            //You'll have to delete this line of code if you make something labelled a module that isn't part of the GUI
+            //in which case, why is it a module? If your mod is called by other modules but isn't a module itself it shouldn't be part of modules
+            ////Though I haven't actually set up a system for non-module mods, sooo...
+            console.error('Why does this module not have an update_HTML? ' + _name);
+        }
+    });
 }
 //these contain menus that can be updated
 //Some menus, like Name, never update after load
 var $CellDivs = {};
-var updateMenus = {
+var updateRequiredMenus = {
     Dialog: function(){
-        if(DIALOG.hasNewDialog()){
-            $Menu.Dialog.html(DIALOG.getDialogHtml());
-        }
+        DIALOG.update_HTML();
     },
     Actions: function(){
-        var newGrid = ACTIONS.getGrid();
-        //Every time the screen is updated, we want to redraw all the action cells
-        //Even if the actions didn't update, since it should update 99% of the time,
-        //The added protection against not redrawing is just wasted code complexity
-        _.times(ACTIONS.getGridSize()[0], function(_y){
-            _.times(ACTIONS.getGridSize()[1], function(_x){
-                var actionVal = newGrid[_y][_x];
-                if(actionVal){
-                    $CellDivs.Actions['Action_'+ _y + '_'+ _x].html(actionVal.text);
-                    if( !$CellDivs.Actions['Action_'+ _y + '_'+ _x].hasClass('active_action') ){
-                        $CellDivs.Actions['Action_'+ _y + '_'+ _x].addClass('active_action');
-                    }
-                    $CellDivs.Actions['Action_'+ _y + '_'+ _x].prop('title', actionVal.tooltip);
-                }
-                else{
-                    $CellDivs.Actions['Action_'+ _y + '_'+ _x].html('');
-                    if( $CellDivs.Actions['Action_'+ _y + '_'+ _x].hasClass('active_action') ){
-                        $CellDivs.Actions['Action_'+ _y + '_'+ _x].removeClass('active_action');
-                    }
-                    $CellDivs.Actions['Action_'+ _y + '_'+ _x].prop('title', '');
-                }
-            });
-        });
-    },
-
-    Nav: function(){
-        if( !get_HAE().cells.Nav ) return;
-        
-        if( getSceneLocked() ){
-            if( !$Menu.Nav.hasClass('mapDisabled') ){
-                $Menu.Nav.addClass('mapDisabled');
-            }
-        }
-        else if( $Menu.Nav.hasClass('mapDisabled') ){
-            $Menu.Nav.removeClass('mapDisabled');
-        }
-        
-        //At this point we should check if anything has changed, because there is no reason to redraw if we have no map change
-        var newGrid = MAP_GRID.getNewGrid();
-        var newLocation = MAP_GRID.getNewLocation();
-        if(!newGrid && !newLocation) return;
-
-        //Initialize cells
-        ////This part is inside Update because we want ot eventually rework this to handle changing grid sizes
-        if( !$CellDivs.Nav ){ // || newGrid
-            $CellDivs.Nav = {};
-            _.times(MAP_GRID.getGridSize()[0], function(_y){
-                _.times(MAP_GRID.getGridSize()[1], function(_x){
-                    $CellDivs.Nav['Grid_'+ _y + '_'+ _x] = $('#Grid_'+ _y + '_'+ _x);
-                    $CellDivs.Nav['Grid_'+ _y + '_'+ _x].click(function(){
-                        mapGridClick(_y, _x);
-                    });
-                });
-            });
-        }
-
-        //Initialize cell
-        if( newGrid ){
-            _.times(MAP_GRID.getGridSize()[0], function(_y){
-                _.times(MAP_GRID.getGridSize()[1], function(_x){
-                    if(newGrid[_y][_x]){
-                        $CellDivs.Nav['Grid_'+ _y + '_'+ _x].html(MAP_GRID.getNameForLocation(_y, _x));
-                        if( !$CellDivs.Nav['Grid_'+ _y + '_'+ _x].hasClass('map_grid_cell_in_use') ){
-                            $CellDivs.Nav['Grid_'+ _y + '_'+ _x].addClass('map_grid_cell_in_use');
-                        }
-                    }
-                    else{
-                        $CellDivs.Nav['Grid_'+ _y + '_'+ _x].html('');
-                        if( $CellDivs.Nav['Grid_'+ _y + '_'+ _x].hasClass('map_grid_cell_in_use') ){
-                            $CellDivs.Nav['Grid_'+ _y + '_'+ _x].removeClass('map_grid_cell_in_use');
-                        }
-                    }
-                });
-            });
-        }
-
-        var previousLocation = MAP_GRID.getPreviousLocation();
-
-        //Print out errors if neccessary, add and remove classes as needed
-        if( previousLocation){
-            if(!$CellDivs.Nav['Grid_'+ previousLocation[0] + '_'+ previousLocation[1]].hasClass('map_grid_cell_current') ){
-                console.error('Grid missing class it expected to have?');
-            }
-            $CellDivs.Nav['Grid_'+ previousLocation[0] + '_'+ previousLocation[1]].removeClass('map_grid_cell_current');
-        }
-        if(!$CellDivs.Nav['Grid_'+ newLocation[0] + '_'+ newLocation[1]]){
-            console.error('Grid does not have the cell of the new location! Why? Did things initialize out of order?', newLocation);
-        }
-        if( $CellDivs.Nav['Grid_'+ newLocation[0] + '_'+ newLocation[1]].hasClass('map_grid_cell_current') )  {
-            console.error('Grid has class it was not expected to have?');
-        }
-        $CellDivs.Nav['Grid_'+ newLocation[0] + '_'+ newLocation[1]].addClass('map_grid_cell_current');
-
-        //Is this even a good system?
-        MAP_GRID.confirmMapUpdated();
+        ACTIONS.update_HTML();
     }
 };
-
-/*
-
-oooooooooooo oooooo     oooo oooooooooooo ooooo      ooo ooooooooooooo 
-`888'     `8  `888.     .8'  `888'     `8 `888b.     `8' 8'   888   `8 
- 888           `888.   .8'    888          8 `88b.    8       888      
- 888oooo8       `888. .8'     888oooo8     8   `88b.  8       888      
- 888    "        `888.8'      888    "     8     `88b.8       888      
- 888       o      `888'       888       o  8       `888       888      
-o888ooooood8       `8'       o888ooooood8 o8o        `8      o888o     
-                                                                       
-                                                                       
-                                                                       
-ooooo   ooooo       .o.       ooooo      ooo oooooooooo.   ooooo        oooooooooooo ooooooooo.    .oooooo..o 
-`888'   `888'      .888.      `888b.     `8' `888'   `Y8b  `888'        `888'     `8 `888   `Y88. d8P'    `Y8 
- 888     888      .8"888.      8 `88b.    8   888      888  888          888          888   .d88' Y88bo.      
- 888ooooo888     .8' `888.     8   `88b.  8   888      888  888          888oooo8     888ooo88P'   `"Y8888o.  
- 888     888    .88ooo8888.    8     `88b.8   888      888  888          888    "     888`88b.         `"Y88b 
- 888     888   .8'     `888.   8       `888   888     d88'  888       o  888       o  888  `88b.  oo     .d8P 
-o888o   o888o o88o     o8888o o8o        `8  o888bood8P'   o888ooooood8 o888ooooood8 o888o  o888o 8""88888P'  
-
- */
-/*
-    This section should not actually handle data logic! It should instead just pass information into the correct files
- */
-function mapGridClick(_y, _x){
-    MAP_GRID.clickedGrid(_y, _x);
-}
-
-function actionGridClick(_y, _x){
-    ACTIONS.clickedGrid(_y, _x);
-}

@@ -1,8 +1,9 @@
 /*jshint esversion: 6 */ 
 
 HAE = {
+    title: 'HADVENTE Test',
     cells:{
-        NO_RIGHT_COLUMN : 'NO_RIGHT_COLUMN', //this tells the GUI to only draw the left and center columns, it also means you can onl have 3 cells, no others
+        //HAS_RIGHT_COLUMN : 'HAS_RIGHT_COLUMN', //this tells the GUI to draw a third column to the right of the text, in case you want lots of cells
         Nav             : 'Bottom_Left'
     },
     actions:{
@@ -65,9 +66,9 @@ Note: Use the map on the left to navigate.
 --START RNG--
 \
 <<[IF FN Random_10]>>This has a 10% chance of happening.
-<<[ELSEIF FN Random_50]>>This has a 50% chance of happening.
-<<[ELSEIF FN Random_50]>>This has another 50% chance of happening.
-<<[ELSE]>>This happens if nothing else happens
+<<[ELSEIF FN Random_50]>>This has a 45% chance of happening.
+<<[ELSEIF FN Random_50]>>This has a 22.5% chance of happening.
+<<[ELSE]>>This happens if nothing else happens (22.5%)
 <<[ENDIF]>>\
 --RNG ended--
 <<[ACTION CONTINUE]>>
