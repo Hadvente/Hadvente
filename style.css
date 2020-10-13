@@ -309,6 +309,11 @@ Action Buttons
 .map_grid_cell.map_grid_cell_current {
     border: solid 3px #ccc;
 }
+#NavigationMenu.mapDisabled .map_grid_cell_in_use {
+    background: #444;
+    border: solid 3px #444;
+    color: #888;
+}
 
 /*
     This is magic code that forces the cell to always size as if it has content.

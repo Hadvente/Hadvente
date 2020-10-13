@@ -391,6 +391,15 @@ var updateMenus = {
     Nav: function(){
         if( !get_HAE().cells.Nav ) return;
         
+        if( getSceneLocked() ){
+            if( !$Menu.Nav.hasClass('mapDisabled') ){
+                $Menu.Nav.addClass('mapDisabled');
+            }
+        }
+        else if( $Menu.Nav.hasClass('mapDisabled') ){
+            $Menu.Nav.removeClass('mapDisabled');
+        }
+        
         //At this point we should check if anything has changed, because there is no reason to redraw if we have no map change
         var newGrid = MAP_GRID.getNewGrid();
         var newLocation = MAP_GRID.getNewLocation();

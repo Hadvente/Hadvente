@@ -12,9 +12,9 @@ game_view
 
 function initializeGameStateEngine(){
     initializeGameState(); //who owns gamedata?
-    initializeDialogEngine();
-    initializeActionEngine();
-    initializeMapEngine();
+    DIALOG.initialize();
+    ACTIONS.initialize();
+    MAP_GRID.initialize();
     initializeGameHtml(); //Right now the game has to make it's own start menu as a dialog scene, but I could rework this to have actual start menus
 
     _.delay(runGameUpdate, 50);
@@ -59,20 +59,28 @@ function getCellsDisabled(){
     return !!cells_disabled;
 }
 
+var sceneLocked = false;
+function setSceneLocked(_sceneLocked){
+    sceneLocked = !!_sceneLocked;
+}
+function getSceneLocked(){
+    return sceneLocked;
+}
+
 //All event handlers that cause game state updates should call this
 //Inversely, it would be nice if nothing after initialization called this except the event handlers
 function runGameUpdate(){
     H_Log('game updating');
     
     //required systems
-    updateDialog();
-    updateActionGrid();
+    DIALOG.update_system();
+    ACTIONS.update_system();
     
     //mods
     //Is there any way we could literally make this mods? Make it so the list of cells is in the HAE,
     //And literally have users be able to delete specific cell types if they so desire
     //Which means that the file that processes the cells logic also processes the HTML, the HTML stuff isn't insude game_view.js
-    updateMapGrid(); //Location seems such a universal concept of adventure games that it might make sense to not have that be optional
+    MAP_GRID.update_system(); //Location seems such a universal concept of adventure games that it might make sense to not have that be optional
     
     //html (required)
     updateScreen();

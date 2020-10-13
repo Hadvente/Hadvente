@@ -64,9 +64,9 @@ Note: Use the map on the left to navigate.
 
 --START RNG--
 \
-<<[IF FN Random_50]>>This has a 50% chance of happening.
+<<[IF FN Random_10]>>This has a 10% chance of happening.
+<<[ELSEIF FN Random_50]>>This has a 50% chance of happening.
 <<[ELSEIF FN Random_50]>>This has another 50% chance of happening.
-<<[ELSEIF FN Random_10]>>This has a 10% chance of happening.
 <<[ELSE]>>This happens if nothing else happens
 <<[ENDIF]>>\
 --RNG ended--
@@ -97,7 +97,16 @@ There is a screwdriver sitting on the table.
 <<[ENDIF]>>
 `,
 Art:`
+Art
+<<[GOTO art||ART]>>
+`,
+ART:`
 ART
+<<[GOTO Art||art]>>
+`,
+art:`
+art
+<<[GOTO ART||Art]>>
 `,
 Bath:`
 It's a bathroom.
@@ -113,13 +122,16 @@ Wait a second! the door handle has screw holes!
 Living:`
 Back in the living room! Still dark. Still destroyed.
 `,
-'piano_playing_1':`
+piano_playing_1:`
+<<[DISABLE_CELLS]>>\
+<<[ACTION CONTINUE]>>\
 Wow, You played the piano! :)
 `,
 get_screwdriver: `
+<<[DISABLE_CELLS]>>\
+<<[ACTION CONTINUE]>>\
 <<[FN pickup_screwdriver]>>\
 You pick up the screwdriver and look at it. Maybe you can open something with it...
-<<[ACTION CONTINUE]>>
 `,
 THE_END: `
 <<[DISABLE_CELLS]>>
