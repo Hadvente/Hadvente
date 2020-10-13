@@ -52,7 +52,7 @@ function remove_old_history(){
 
 function history_update(){
     remove_future_history();
-    current_history.push( _.deepClone( GET_GAME_STATE() ) );
+    current_history.push( _.deepClone( STATE.GET_STATE() ) );
     remove_old_history();
     auto_save();
 }

@@ -14,7 +14,7 @@ function startHADVENTE(){
 
     checkUrlParms();
 
-    initializeGameStateEngine();
+    initializeEngine();
 }
 
 var HAE_GAME;

@@ -2,7 +2,7 @@
 
 var ACTIONS = (function () {
     
-    var ACTION_FNs = {NAME: 'ACTIONS'}; //NOTE: ACTIONS and DIALOG are not normal modules, they are required, so they are not put in the system
+    var ACTION_FNs = {}; //NOTE: ACTIONS and DIALOG are not normal modules, they are required, so they are not put in the system
 
     /*
 

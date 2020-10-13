@@ -29,13 +29,13 @@ var DIALOG = (function () {
         //I have no idea what dialog would need to initiate, shouldn't it just read from things
         //and not actually manipulate anything else?
         
-        GET_CELL_DATA('DIALOG').CURRENT_SCENE = 'START';
+        STATE.GET_STATE().CURRENT_SCENE = 'START';
 
         //Actually, one really good use for the initialize:
         //Convert the human-readable info in get_HAE() into code-readable data structures
     };
     DIALOG_FNs.update_module = function(){
-        var newScene = GET_CELL_DATA('DIALOG').CURRENT_SCENE;
+        var newScene = STATE.GET_STATE().CURRENT_SCENE;
 
         if(newScene){
             var parsedScene = parseScene(newScene);
@@ -43,17 +43,17 @@ var DIALOG = (function () {
                 dialogHTML = parsedScene.html;
                 hasNewDialog = true;
                 ACTIONS.SET_NEW_ACTIONS(parsedScene.actions);
-                SET_SCENE_LOCKED(parsedScene && parsedScene.sceneLocked);
+                STATE.SET_SCENE_LOCKED(parsedScene && parsedScene.sceneLocked);
             }
             else{
                 ACTIONS.SET_NEW_ACTIONS([]);
-                SET_SCENE_LOCKED(false);
+                STATE.SET_SCENE_LOCKED(false);
 
-                if(GET_GAME_STATE().CELL__DATA.CURRENT_SCENE == 'START'){
+                if(STATE.GET_STATE().CURRENT_SCENE == 'START'){
                     console.error('You cannot have a valid game without a scene named "START"!');
                 }
                 else{
-                    console.error('Your game references the scene "' + GET_GAME_STATE().CELL__DATA.CURRENT_SCENE +
+                    console.error('Your game references the scene "' + STATE.GET_STATE().CURRENT_SCENE +
                                         '" but it does not exist to be parsed!');
                 }
             }
@@ -61,7 +61,7 @@ var DIALOG = (function () {
         else{
 
             //PROBLEM: WHAT IF SOMEONE WANTS TO DO A GUI UPDATE THAT DOES NOT INVOLVE CHANGING OR PARSING DIALOG AT ALL?
-            // if(GET_GAME_STATE().CELL__DATA.CURRENT_SCENE == '<<NONE>>'){
+            // if(STATE.GET_STATE().CURRENT_SCENE == '<<NONE>>'){
             //     return;
             //     //THE SCENE SHOULD NOT BE UPDATED?
             //     //Actually this is a horrible way to do it
@@ -69,6 +69,7 @@ var DIALOG = (function () {
             //     //maybe the modules should call a function like DIALOG.useSameDialog()? Or maybe it's a special case for SET_NEW_SCENE()?
             //     //Or maybe the "recalculate scene" is a special action? So the inverse of the above line
             // }
+            console.error('Someone set the current scene value to an empty string!');
         }
     };
     DIALOG_FNs.hasNewDialog = function(){
@@ -82,7 +83,7 @@ var DIALOG = (function () {
 
         //NOTICE: No one should call SET_NEW_SCENE with the expectation for things to happen before the scene starts
         
-        GET_CELL_DATA('DIALOG').CURRENT_SCENE = _newScene;
+        STATE.GET_STATE().CURRENT_SCENE = _newScene;
         runGameUpdate();
     };
 
@@ -305,7 +306,7 @@ var DIALOG = (function () {
             }
             var value = '';
             try{
-                value = get_HAE().FN[ spaceSplit[1] ]( GET_GAME_STATE(), get_HAE() );
+                value = get_HAE().FN[ spaceSplit[1] ]( GET_GAME_DATA(), GET_CELL_DATA(), get_HAE() );
             }catch(e) {
                 console.error('There is an error when you call the  logic function ' + spaceSplit[1], e);
             }
@@ -343,7 +344,7 @@ var DIALOG = (function () {
         }
         var value = '';
         try{
-            value = get_HAE().FN[ spaceSplit[0] ]( GET_GAME_STATE(), get_HAE() );
+            value = get_HAE().FN[ spaceSplit[0] ]( GET_GAME_DATA(), GET_CELL_DATA(), get_HAE() );
         }catch(e) {
             console.error('There is an error when you call the function ' + spaceSplit[0], e);
         }
@@ -376,7 +377,7 @@ var DIALOG = (function () {
             if(spaceSplit[1] !== '='){
                 console.error('Need to have = sign inbetween variable name and value, ie <<[SET money = 5]>>');
             }
-            GET_GAME_STATE()[spaceSplit[0]] = spaceSplit[2];
+            GET_GAME_DATA()[spaceSplit[0]] = spaceSplit[2];
         }
         return value;
     };

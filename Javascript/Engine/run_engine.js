@@ -10,8 +10,8 @@ map
 game_view
  */
 
-function initializeGameStateEngine(){
-    initializeGameState();
+function initializeEngine(){
+    STATE.initializeGameState();
     initializeHistory();
     initializeSaveSystem();
     //initializeSettings(); //This asks for the settings from load_save_data, or makes a new default settings if there isn't one
@@ -31,7 +31,7 @@ function initializeGameStateEngine(){
 
     initializeGameHtml(); //Right now the game has to make it's own start menu as a dialog scene, but I could rework this to have actual start menus
 
-    if( autoload && has_save_file('AUTO') ) loadNewState( get_save_file('AUTO') );
+    if( autoload && has_save_file('AUTO') ) STATE.LOAD_STATE( get_save_file('AUTO') );
 
     _.delay(runGameUpdate, 50);
 }

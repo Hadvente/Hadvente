@@ -1,7 +1,5 @@
 /*jshint esversion: 6 */ 
 
-/*Other dialog functions not in test: FUNCTION_CALL, INSERT_SCENE*/
-
 /*
 HAE_Parser.js
 This file takes in a string that represents an HAE dialog scene and converts into an array

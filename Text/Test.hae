@@ -85,8 +85,9 @@ Note: Use the map on the left to navigate.
 `,
 
 BedroomA:`
-The room is also messy and destroyed, just like all the others. You see a pink bed in one corner,\
-with a large wardrobe in the other.
+The room is also messy and destroyed, just like all the others.
+You see a pink bed in one corner, with a large wardrobe in the other.
+<<[GOTO Look In Wardrobe||get_nothing]>>
 `,
 Kitchen:`
 Wow, it's a kitchen?
@@ -137,6 +138,10 @@ piano_playing_1:`
 <<[DISABLE_CELLS]>>\
 <<[ACTION CONTINUE]>>\
 Wow, You played the piano! :)
+`,
+get_nothing:`
+There is nothing but dust in here.
+<<[ACTION CONTINUE]>>
 `,
 get_screwdriver: `
 <<[DISABLE_CELLS]>>\
