@@ -1,6 +1,6 @@
 /*jshint esversion: 6 */ 
 
-var ACTIONS = (function () {
+MODULES.ACTIONS = function () {
     
     var ACTION_FNs = {}; //NOTE: ACTIONS and DIALOG are not normal modules, they are required, so they are not put in the system
 
@@ -39,7 +39,7 @@ var ACTIONS = (function () {
             return MODULES.MAP_GRID.forceLocationScene();
         }
         else if( actionGrid[_y][_x].scene ){
-            return DIALOG.SET_NEW_SCENE( actionGrid[_y][_x].scene );
+            return MODULES.DIALOG.SET_NEW_SCENE( actionGrid[_y][_x].scene );
         }
         else{
             console.error('action button does not have scene!');
@@ -100,10 +100,11 @@ var ACTIONS = (function () {
 
     var $Actions = {};
     ACTION_FNs.init_HTML = function(_$Cell){
-        _$Cell.append('<div id="ActionsMenu" class="sectionContainer small_font">' + getActionsGridHtml() + '</div>');
+        if( !get_HAE().cells.ACTIONS ) return;
+        _$Cell[ get_HAE().cells.ACTIONS ].append('<div id="ActionsMenu" class="sectionContainer small_font">' + getActionsGridHtml() + '</div>');
         
-        _.times(ACTIONS.getGridSize()[0], function(_y){
-            _.times(ACTIONS.getGridSize()[1], function(_x){
+        _.times(MODULES.ACTIONS.getGridSize()[0], function(_y){
+            _.times(MODULES.ACTIONS.getGridSize()[1], function(_x){
                 $Actions['Action_'+ _y + '_'+ _x] = $('#Action_'+ _y + '_'+ _x);
                 $Actions['Action_'+ _y + '_'+ _x].click(function(){
                     actionGridClick(_y, _x);
@@ -115,7 +116,7 @@ var ACTIONS = (function () {
     //need to figure out how to design to account for the arrow buttons once we have those
     function getActionsGridHtml(){
         //We want to grab the grid html. every game, or at least every grid, has a grid size defined
-        var gridSize = ACTIONS.getGridSize();
+        var gridSize = MODULES.ACTIONS.getGridSize();
         var html = '<table class="gridContainer">';
         _.times(gridSize[0], function(_y){
             //height has to be set like this because of the indeterminate amount of rows
@@ -130,12 +131,13 @@ var ACTIONS = (function () {
     }
 
     ACTION_FNs.update_HTML = function(){
-        var newGrid = ACTIONS.getGrid();
+        if( !get_HAE().cells.ACTIONS ) return;
+        var newGrid = MODULES.ACTIONS.getGrid();
         //Every time the screen is updated, we want to redraw all the action cells
         //Even if the actions didn't update, since it should update 99% of the time,
         //The added protection against not redrawing is just wasted code complexity
-        _.times(ACTIONS.getGridSize()[0], function(_y){
-            _.times(ACTIONS.getGridSize()[1], function(_x){
+        _.times(MODULES.ACTIONS.getGridSize()[0], function(_y){
+            _.times(MODULES.ACTIONS.getGridSize()[1], function(_x){
                 var actionVal = newGrid[_y][_x];
                 if(actionVal){
                     $Actions['Action_'+ _y + '_'+ _x].html(actionVal.text);
@@ -156,7 +158,7 @@ var ACTIONS = (function () {
     };
 
     function actionGridClick(_y, _x){
-        ACTIONS.clickedGrid(_y, _x);
+        MODULES.ACTIONS.clickedGrid(_y, _x);
     }
 
     //private is not a valid label, it means nothing. Public is valid because there should be very few things anyone asks for
@@ -212,4 +214,4 @@ var ACTIONS = (function () {
 
     //Returns public functions into the variable
     return ACTION_FNs;
-})();
+};

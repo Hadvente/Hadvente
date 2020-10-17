@@ -7,7 +7,7 @@ What it does is interprets both HAE_GAME and GAME_STATE and convert it into the 
 appear in the main dialog box. It also will find the set of action buttons
 */
 
-var DIALOG = (function () {
+MODULES.DIALOG = function () {
     
     var DIALOG_FNs = {};
 
@@ -42,11 +42,11 @@ var DIALOG = (function () {
             if(parsedScene){
                 dialogHTML = parsedScene.html;
                 hasNewDialog = true;
-                ACTIONS.SET_NEW_ACTIONS(parsedScene.actions);
+                MODULES.ACTIONS.SET_NEW_ACTIONS(parsedScene.actions);
                 STATE.SET_SCENE_LOCKED(parsedScene && parsedScene.sceneLocked);
             }
             else{
-                ACTIONS.SET_NEW_ACTIONS([]);
+                MODULES.ACTIONS.SET_NEW_ACTIONS([]);
                 STATE.SET_SCENE_LOCKED(false);
 
                 if(STATE.GET_STATE().CURRENT_SCENE == 'START'){
@@ -111,7 +111,8 @@ var DIALOG = (function () {
     
     var $Dialog = {};
     DIALOG_FNs.init_HTML = function(_$Cell){
-        _$Cell.append(`<div id="MainDialogContainer">
+        if( !get_HAE().cells.DIALOG ) return;
+        _$Cell[ get_HAE().cells.DIALOG ].append(`<div id="MainDialogContainer">
             <div id="MainDialogScrollbar">
                 <div id="MainDialogTextHolder" class="standard_font">
                 </div>
@@ -121,8 +122,9 @@ var DIALOG = (function () {
     };
 
     DIALOG_FNs.update_HTML = function(){
-        if(DIALOG.hasNewDialog()){
-            $Dialog.html(DIALOG.getDialogHtml());
+        if( !get_HAE().cells.DIALOG ) return;
+        if(DIALOG_FNs.hasNewDialog()){
+            $Dialog.html(DIALOG_FNs.getDialogHtml());
         }
     };
     /*
@@ -429,4 +431,4 @@ var DIALOG = (function () {
 
     //Returns public functions into the variable
     return DIALOG_FNs;
-})();
+};

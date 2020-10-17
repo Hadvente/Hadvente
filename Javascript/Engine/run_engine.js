@@ -20,8 +20,8 @@ function initializeEngine(){
     checkFunctionListForModules();
     
     //initialize required cells
-    DIALOG.initialize();
-    ACTIONS.initialize();
+    HAE_PROCESSOR.initialize();
+
     //NAME.initialize();
     //MENU.initialize();
 
@@ -43,6 +43,10 @@ function runGameUpdate(){
 
     history_update();
 
+    pre_scene_update_modules();
+
+    HAE_PROCESSOR.update_scene();
+
     update_modules();
 
     updateScreen();
@@ -53,14 +57,19 @@ function runGameUpdate(){
     cells_disabled = false;
 }
 
+function pre_scene_update_modules(){
+
+    H_Log('game preprocessing modules');
+
+    _.each(MODULES, function(_module, _name){
+        if(_module.optional_pre_scene_update) _module.optional_pre_scene_update();
+    });
+}
+
 function update_modules(){
 
     H_Log('game updating modules');
 
-    DIALOG.update_module();
-    ACTIONS.update_module();
-    //NAME.update_module();
-    //MENU.update_module();
     _.each(MODULES, function(_module, _name){
         _module.update_module();
     });
@@ -70,10 +79,6 @@ function finished_draw_modules(){
 
     H_Log('game finished drawing modules');
 
-    DIALOG.finished_draw();
-    ACTIONS.finished_draw();
-    //NAME.finished_draw();
-    //MENU.finished_draw();
     _.each(MODULES, function(_module, _name){
         _module.finished_draw();
     });
@@ -89,10 +94,6 @@ function createModulesIfNeeded(){
 }
 
 function checkFunctionListForModules(){
-
-    checkFunctionListForSingleModule(DIALOG,  'DIALOG');
-    checkFunctionListForSingleModule(ACTIONS, 'ACTIONS');
-
     _.each(MODULES, function(_module, _name){
         checkFunctionListForSingleModule(_module, _name);
     });

@@ -1,6 +1,6 @@
 /*jshint esversion: 6 */ 
 
-MODULES.MAP_GRID =  function() { 
+MODULES.MAP_GRID = function() { 
 
     var MAP_GRID_FNs = {};
 
@@ -48,7 +48,7 @@ MODULES.MAP_GRID =  function() {
         }
         var newLocationID = getLocationID();
         var newScene = getLocationScene(newLocationID);
-        return DIALOG.SET_NEW_SCENE(newScene);
+        return MODULES.DIALOG.SET_NEW_SCENE(newScene);
     };
     MAP_GRID_FNs.changeMapGrid = function(_map_id){
         if( !get_HAE().cells.MAP_GRID ) return;
@@ -91,7 +91,7 @@ MODULES.MAP_GRID =  function() {
     var $Nav;
     MAP_GRID_FNs.init_HTML = function(_$Cell){
         if( !get_HAE().cells.MAP_GRID ) return;
-        $Cell[ get_HAE().cells.MAP_GRID ].append('<div id="NavigationMenu" class="sectionContainer small_font"></div>');
+        _$Cell[ get_HAE().cells.MAP_GRID ].append('<div id="NavigationMenu" class="sectionContainer small_font"></div>');
         $Nav = $('#NavigationMenu');
         //there are 3 aspects to Nav
         //The grid, which shows parts of the map that can be clicked and navigated
@@ -200,7 +200,7 @@ MODULES.MAP_GRID =  function() {
 
         var newLocationID = getLocationID();
         var newScene = getLocationScene(newLocationID);
-        return DIALOG.SET_NEW_SCENE(newScene);
+        return MODULES.DIALOG.SET_NEW_SCENE(newScene);
     }
 
     function getNewGrid(){
@@ -240,6 +240,9 @@ MODULES.MAP_GRID =  function() {
 
     function getNameForLocation(_y, _x){
         if( !getCurrentMap().grid[_y][_x] ) return ''; //empty cell
+        if( _.isObject(getCurrentMap().grid[_y][_x]) ){
+            return getCurrentMap().grid[_y][_x].Name || getCurrentMap().grid[_y][_x].scene;
+        }
         if( !getCurrentMap().locations ){
             console.error('Why dont you have a locations key for figuring out what scenes belong to a location?');
             return '';

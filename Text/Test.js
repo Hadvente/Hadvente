@@ -4,7 +4,10 @@ HAE = {
     title: 'HADVENTE Test',
     cells:{
         //HAS_RIGHT_COLUMN : 'HAS_RIGHT_COLUMN', //this tells the GUI to draw a third column to the right of the text, in case you want lots of cells
-        MAP_GRID   : 'Bottom_Left'
+
+        DIALOG   : 'Dialog',
+        ACTIONS  : 'Actions',
+        MAP_GRID : 'Bottom_Left'
     },
     actions:{
         grid_size: [3, 3],

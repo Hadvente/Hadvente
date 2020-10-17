@@ -4,21 +4,7 @@
 game_view.js
 This file draws the GUI itself.
 It should be the only file with access to jquery if at all possible.
-The GUI is designed in what are called "CELLS"
-
-There are 4 required cells:
-Dialog  - The main way the game is played is as a text adventure, this is where the text is shown 
-Actions - Instead of having the actions listed inside the text dialog, There is instead a button list
-Title   - Top left area for drawing the banner or logo of the game
-Menu    - Has buttons that open popups like "Options", "Save/Load", "Inventory", etc
-
-There are 6 optional cells:
-Map/Nav -
-Party   -
-Member  -
-Image   -
-Player  -
-Status  -
+The GUI is designed in what are called "CELLS", which show each individual aspect of the GUI
 */
 
 //
@@ -38,7 +24,6 @@ function initializeGameHtml(){
         $("body").append('<div id="GameWindow_2Columns"></div>');
         $gameScreenDiv = $('#GameWindow_2Columns');
     }
-
 
     //Make the cells
     createCells();
@@ -103,18 +88,7 @@ function createCells(){
 function initAllCells(){
     setEachCellSelector();
     deleteUnusedCells();
-    _.each(setRequiredMenus, (_fn) => _fn());
-    _.each(MODULES, function(_module, _name){
-        if(_module.init_HTML){
-            _module.init_HTML();
-        }
-        else{
-            //You'll have to delete this line of code if you make something labelled a module that isn't part of the GUI
-            //in which case, why is it a module? If your mod is called by other modules but isn't a module itself it shouldn't be part of modules
-            ////Though I haven't actually set up a system for non-module mods, sooo...
-            console.error('Why does this module not have an init_HTML? ' + _name);
-        }
-    });
+    initCellHtml();
 }
 
 var $Cell = {};
@@ -145,6 +119,19 @@ function setEachCellSelector(){
 
 function deleteUnusedCells(){
     var usedCells = _.invert(get_HAE().cells);
+    if(!usedCells.Name){
+        $Cell.Name.remove();
+    }
+    if(!usedCells.Menu){
+        $Cell.Menu.remove();
+    }
+    if(!usedCells.Dialog){
+        $Cell.Dialog.remove();
+    }
+    if(!usedCells.Actions){
+        $Cell.Actions.remove();
+    }
+
     if(!usedCells.Top_Left){
         $Cell.Top_Left.remove();
     }
@@ -178,26 +165,22 @@ function deleteUnusedCells(){
     }
 }
 
-var $Menu = {}; //has same keys as above. jquery elements, though Actions is an object, look above for object keys.
+function initCellHtml(){
 
-var setRequiredMenus = {
-    Name: function(){
-        $Cell.Name.append('<div id="NameLabel" class="sectionContainer giant_font"></div>');
-        $Menu.Name = $('#NameLabel');
-        $Menu.Name.html(get_HAE().title || 'HADVENTE');
-    },
-    Menu: function(){
-        $Cell.Menu.append('<div id="GameMenu" class="sectionContainer small_font">Inventory and other game menus</div>');
-        $Menu.Menu = $('#GameMenu');
-    },
-    //middle column
-    Dialog: function(){
-        DIALOG.init_HTML($Cell.Dialog);
-    },
-    Actions: function(){
-        ACTIONS.init_HTML($Cell.Actions);
-    },
-};
+    //temporary calls
+    $Cell.Name.append('<div id="NameLabel" class="sectionContainer giant_font">' + (get_HAE().title || 'HADVENTE') + '</div>');
+    $Cell.Menu.append('<div id="GameMenu" class="sectionContainer small_font">Inventory and other game menus</div>');
+
+    _.each(MODULES, function(_module, _name){
+        if(_module.NO_HTML) return;
+        if(_module.init_HTML){
+            _module.init_HTML($Cell);
+        }
+        else{
+            console.error('Why does this module not have an init_HTML? ' + _name);
+        }
+    });
+}
 
 /*
 
@@ -211,8 +194,8 @@ ooooo     ooo ooooooooo.   oooooooooo.         .o.       ooooooooooooo ooooooooo
 
  */
 function updateScreen(){
-    _.each(updateRequiredMenus, (_fn) => _fn());
     _.each(MODULES, function(_module, _name){
+        if(_module.NO_HTML) return;
         if(_module.update_HTML){
             _module.update_HTML();
         }
@@ -224,14 +207,3 @@ function updateScreen(){
         }
     });
 }
-//these contain menus that can be updated
-//Some menus, like Name, never update after load
-var $CellDivs = {};
-var updateRequiredMenus = {
-    Dialog: function(){
-        DIALOG.update_HTML();
-    },
-    Actions: function(){
-        ACTIONS.update_HTML();
-    }
-};
