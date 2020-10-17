@@ -3,7 +3,6 @@
 /*
 game_view.js
 This file draws the GUI itself.
-It should be the only file with access to jquery if at all possible.
 The GUI is designed in what are called "CELLS", which show each individual aspect of the GUI
 */
 

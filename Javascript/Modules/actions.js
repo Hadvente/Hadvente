@@ -39,7 +39,7 @@ MODULES.ACTIONS = function () {
             return MODULES.MAP_GRID.forceLocationScene();
         }
         else if( actionGrid[_y][_x].scene ){
-            return MODULES.DIALOG.SET_NEW_SCENE( actionGrid[_y][_x].scene );
+            return HAE_SCENE.SET_NEW_SCENE( actionGrid[_y][_x].scene );
         }
         else{
             console.error('action button does not have scene!');
@@ -70,11 +70,6 @@ MODULES.ACTIONS = function () {
                 index++;
             });
         });
-    };
-
-    var actionsList = [];
-    ACTION_FNs.SET_NEW_ACTIONS = function(_new_actions){
-        actionsList = _new_actions;
     };
 
     ACTION_FNs.finished_draw = function(){
@@ -211,6 +206,25 @@ MODULES.ACTIONS = function () {
             return '';
         }
     };
+
+    //THIS SECTION DEALS WITH HOW A SCENE MAKES AN ACTIONS LIST
+    var actionsList = [];
+    var getActionFromStatement = function(_action){
+        var spaceSplit = _action.split(/\s+/);
+        var actionType = spaceSplit.shift();
+        spaceSplit = spaceSplit.join(' ');
+        var values = spaceSplit.split('||');
+        return { actionType, values };
+    };
+    ACTION_FNs.optional_pre_scene_update = function(){
+        actionsList = [];
+    };
+    HAE_PROCESSOR.ADD(['ACTION'], function(_value){
+        actionsList.push( getActionFromStatement(_value) );
+    });
+    HAE_PROCESSOR.ADD(['GOTO'], function(_value){
+        actionsList.push( getActionFromStatement('GOTO ' + _value) );
+    });
 
     //Returns public functions into the variable
     return ACTION_FNs;

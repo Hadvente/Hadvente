@@ -48,7 +48,7 @@ MODULES.MAP_GRID = function() {
         }
         var newLocationID = getLocationID();
         var newScene = getLocationScene(newLocationID);
-        return MODULES.DIALOG.SET_NEW_SCENE(newScene);
+        return HAE_SCENE.SET_NEW_SCENE(newScene);
     };
     MAP_GRID_FNs.changeMapGrid = function(_map_id){
         if( !get_HAE().cells.MAP_GRID ) return;
@@ -200,7 +200,7 @@ MODULES.MAP_GRID = function() {
 
         var newLocationID = getLocationID();
         var newScene = getLocationScene(newLocationID);
-        return MODULES.DIALOG.SET_NEW_SCENE(newScene);
+        return HAE_SCENE.SET_NEW_SCENE(newScene);
     }
 
     function getNewGrid(){

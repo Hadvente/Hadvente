@@ -20,7 +20,7 @@ function initializeEngine(){
     checkFunctionListForModules();
     
     //initialize required cells
-    HAE_PROCESSOR.initialize();
+    HAE_SCENE.initialize();
 
     //NAME.initialize();
     //MENU.initialize();
@@ -45,7 +45,7 @@ function runGameUpdate(){
 
     pre_scene_update_modules();
 
-    HAE_PROCESSOR.update_scene();
+    HAE_SCENE.update_scene();
 
     update_modules();
 
