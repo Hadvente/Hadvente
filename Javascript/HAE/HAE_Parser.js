@@ -10,18 +10,6 @@ It only returns a data structure that represents the possibilities of the scene
 */
 
 var HAE_PARSER = (function () {
-    
-    /*
-
-    ooooooooo.   ooooo     ooo oooooooooo.  ooooo        ooooo   .oooooo.   
-    `888   `Y88. `888'     `8' `888'   `Y8b `888'        `888'  d8P'  `Y8b  
-     888   .d88'  888       8   888     888  888          888  888          
-     888ooo88P'   888       8   888oooo888'  888          888  888          
-     888          888       8   888    `88b  888          888  888          
-     888          `88.    .8'   888    .88P  888       o  888  `88b    ooo  
-    o888o           `YbodP'    o888bood8P'  o888ooooood8 o888o  `Y8bood8P'  
-
-    */
    
     var PARSER_FNs = {
         parseHAE(_str){
@@ -33,50 +21,24 @@ var HAE_PARSER = (function () {
             return parsedScene;
         }
     };
-
-    /*
-    
-    ooooooooo.   ooooooooo.   ooooo oooooo     oooo       .o.       ooooooooooooo oooooooooooo 
-    `888   `Y88. `888   `Y88. `888'  `888.     .8'       .888.      8'   888   `8 `888'     `8 
-     888   .d88'  888   .d88'  888    `888.   .8'       .8"888.          888       888         
-     888ooo88P'   888ooo88P'   888     `888. .8'       .8' `888.         888       888oooo8    
-     888          888`88b.     888      `888.8'       .88ooo8888.        888       888    "    
-     888          888  `88b.   888       `888'       .8'     `888.       888       888       o 
-    o888o        o888o  o888o o888o       `8'       o88o     o8888o     o888o     o888ooooood8 
-
-     */
     
     //The way this system works is to first parse the commands and text into a flat array (SPLIT_HAE)
     //And then convert that array into a nested representation of the scene to help process IF logic and text/commands (PARSE_HAE)
-    var infiniblocker = 5000;
     var SPLIT_HAE = function(_string){
-        var message = _string;
         var current_list = [];
-        
-        while(infiniblocker && message && message.indexOf('<<[') != -1){
-            if( message.indexOf('<<[') !== 0 ){
-                //there was basic text at the beginning of the script!
-                var splitForFirst = message.split('<<['); 
-                current_list.push( { type:'TEXT', value: splitForFirst.shift() } );
-                message = '<<[' + splitForFirst.join('<<[');
+        var split = _string.split(/<<\[|]>>/g);
+        _.each(split, function(_msg, _ind){
+            if( (_ind%2) === 0 ){
+                //even indices are text
+                current_list.push( { type:'TEXT', value: _msg } );
             }
-
-            var splitForCommand = message.split(']>>');
-            var command = splitForCommand.shift().substr(3).split(' ');
-            var cmdType = command.shift();
-            var cmdVal = command.join(' ');
-            current_list.push( { type: cmdType, value: cmdVal } );
-            message = splitForCommand.join(']>>');
-
-            infiniblocker--;
-        }
-        if( infiniblocker < 2 ){
-            console.error('Do you have an infinite loop in your script?', _string);
-        }
-        //There is still remaining stuff to put in the game!
-        if(message){
-            current_list.push( { type:'TEXT', value: message } );
-        }
+            else{
+                var command = _msg.split(' ');
+                var cmdType = command.shift();
+                var cmdVal = command.join(' ');
+                current_list.push( { type: cmdType, value: cmdVal } );
+            }
+        });
         return current_list;
     };
     var testLogicCount = function(_split_HAE){
@@ -134,7 +96,6 @@ var HAE_PARSER = (function () {
     //Returns public functions into the variable
     return PARSER_FNs;
 })();
-
 
 /*
 This is a way to parse without using recursion

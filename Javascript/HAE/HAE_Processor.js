@@ -93,80 +93,90 @@ var HAE_PROCESSOR = (function () {
         });
     };
 
+    /*
+
+      .oooooo.     .oooooo.   ooo        ooooo ooo        ooooo       .o.       ooooo      ooo oooooooooo.    .oooooo..o 
+     d8P'  `Y8b   d8P'  `Y8b  `88.       .888' `88.       .888'      .888.      `888b.     `8' `888'   `Y8b  d8P'    `Y8 
+    888          888      888  888b     d'888   888b     d'888      .8"888.      8 `88b.    8   888      888 Y88bo.      
+    888          888      888  8 Y88. .P  888   8 Y88. .P  888     .8' `888.     8   `88b.  8   888      888  `"Y8888o.  
+    888          888      888  8  `888'   888   8  `888'   888    .88ooo8888.    8     `88b.8   888      888      `"Y88b 
+    `88b    ooo  `88b    d88'  8    Y     888   8    Y     888   .8'     `888.   8       `888   888     d88' oo     .d8P 
+     `Y8bood8P'   `Y8bood8P'  o8o        o888o o8o        o888o o88o     o8888o o8o        `8  o888bood8P'   8""88888P'  
+
+     */
+
+    PROCESSOR_FNs.ADD(['TEXT'], function(_value){
+        var textSplit = _value.split(/[ \t]*\r?\n|[ \t]*\r(?!\n)/g);
+        if( !textSplit[0] ) textSplit.shift(); //we don't want the first newline, it's only there for json readability
+        if( !_.last(textSplit) ) textSplit.pop(); //we don't want the last newline, it's only there for json readability
+        textSplit = _.map(textSplit,function(_str){
+            if( !_str ){
+                //How should we handle blank lines?
+                return ' <div class="dialog_blank_line"> </div> ';
+            }
+            return '<p>' + _str + '</p>';
+        });
+        H_Log('Text section became:', textSplit);
+        return textSplit.join('');
+    });
+
+    var processFunctionStatement = function(_value){
+        var spaceSplit = _value.split(/\s+/);
+
+        if( !get_HAE().functions ){
+            console.error('Cannot use FN/FUNCTION if you do not have a functions key inside the HAE def');
+        }
+        if( !spaceSplit[0] ){
+            console.error('Cannot use FN/FUNCTION without a function name afterwards');
+        }
+        if( !get_HAE().FN[ spaceSplit[0] ] ){
+            console.error('Cannot use FN/FUNCTION with undefined function name ' + spaceSplit[1]);
+        }
+        var value = '';
+        try{
+            value = get_HAE().FN[ spaceSplit[0] ]( STATE.GET_GAME_DATA(), STATE.GET_STATE(), get_HAE() );
+        }catch(e) {
+            console.error('There is an error when you call the function ' + spaceSplit[0], e);
+        }
+
+        return value;
+    };
+
+    PROCESSOR_FNs.ADD(['SET'], function(_value){
+        var spaceSplit = _value.split(/\s+/);
+
+        if(spaceSplit[0] == 'FN' || spaceSplit[0] == 'FUNCTION'){
+            spaceSplit.shift();
+            processFunctionStatement(spaceSplit.join(' '));
+        }
+        else{
+            if(spaceSplit[1] !== '='){
+                console.error('Need to have = sign inbetween variable name and value, ie <<[SET money = 5]>>');
+            }
+            STATE.GET_GAME_DATA()[spaceSplit[0]] = spaceSplit[2];
+        }
+        return value;
+    });
+
+    PROCESSOR_FNs.ADD(['FN', 'FUNCTION'], function(_value){
+        return processFunctionStatement(_value);
+    });
+
+    PROCESSOR_FNs.ADD(['INSERT_EVENT'], function(_value){
+        //TODO
+        console.error('INSERT_EVENT is unimplemented');
+    });
+
+    PROCESSOR_FNs.ADD(['INSERT_SCENE'], function(_value){
+        //TODO
+        console.error('INSERT_SCENE is unimplemented');
+    });
+
+    PROCESSOR_FNs.ADD(['COMMENT', '//'], function(_value){
+        //It's a comment, don't do anything
+    });
+
     //Returns public functions into the variable
     return PROCESSOR_FNs;
 })();
 
-/*
-
-  .oooooo.     .oooooo.   ooo        ooooo ooo        ooooo       .o.       ooooo      ooo oooooooooo.    .oooooo..o 
- d8P'  `Y8b   d8P'  `Y8b  `88.       .888' `88.       .888'      .888.      `888b.     `8' `888'   `Y8b  d8P'    `Y8 
-888          888      888  888b     d'888   888b     d'888      .8"888.      8 `88b.    8   888      888 Y88bo.      
-888          888      888  8 Y88. .P  888   8 Y88. .P  888     .8' `888.     8   `88b.  8   888      888  `"Y8888o.  
-888          888      888  8  `888'   888   8  `888'   888    .88ooo8888.    8     `88b.8   888      888      `"Y88b 
-`88b    ooo  `88b    d88'  8    Y     888   8    Y     888   .8'     `888.   8       `888   888     d88' oo     .d8P 
- `Y8bood8P'   `Y8bood8P'  o8o        o888o o8o        o888o o88o     o8888o o8o        `8  o888bood8P'   8""88888P'  
-
- */
-
-HAE_PROCESSOR.ADD(['TEXT'], function(_value){
-    var textSplit = _value.split(/[ \t]*\r?\n|[ \t]*\r(?!\n)/g);
-    if( !textSplit[0] ) textSplit.shift(); //we don't want the first newline, it's only there for json readability
-    if( !_.last(textSplit) ) textSplit.pop(); //we don't want the last newline, it's only there for json readability
-    textSplit = _.map(textSplit,function(_str){
-        if( !_str ){
-            //How should we handle blank lines?
-            return ' <div class="dialog_blank_line"> </div> ';
-        }
-        return '<p>' + _str + '</p>';
-    });
-    H_Log('Text section became:', textSplit);
-    return textSplit.join('');
-});
-
-HAE_PROCESSOR.ADD(['SET'], function(_value){
-    var spaceSplit = _value.split(/\s+/);
-
-    if(spaceSplit[0] == 'FN' || spaceSplit[0] == 'FUNCTION'){
-        spaceSplit.shift();
-        processFunctionStatement(spaceSplit.join(' '));
-    }
-    else{
-        if(spaceSplit[1] !== '='){
-            console.error('Need to have = sign inbetween variable name and value, ie <<[SET money = 5]>>');
-        }
-        STATE.GET_GAME_DATA()[spaceSplit[0]] = spaceSplit[2];
-    }
-    return value;
-});
-HAE_PROCESSOR.ADD(['FN', 'FUNCTION'], function(_value){
-    var spaceSplit = _value.split(/\s+/);
-
-    if( !get_HAE().functions ){
-        console.error('Cannot use FN/FUNCTION if you do not have a functions key inside the HAE def');
-    }
-    if( !spaceSplit[0] ){
-        console.error('Cannot use FN/FUNCTION without a function name afterwards');
-    }
-    if( !get_HAE().FN[ spaceSplit[0] ] ){
-        console.error('Cannot use FN/FUNCTION with undefined function name ' + spaceSplit[1]);
-    }
-    var value = '';
-    try{
-        value = get_HAE().FN[ spaceSplit[0] ]( STATE.GET_GAME_DATA(), STATE.GET_STATE(), get_HAE() );
-    }catch(e) {
-        console.error('There is an error when you call the function ' + spaceSplit[0], e);
-    }
-
-    return value;
-});
-HAE_PROCESSOR.ADD(['INSERT_EVENT'], function(_value){
-    console.error('INSERT_EVENT is unimplemented');
-});
-HAE_PROCESSOR.ADD(['INSERT_SCENE'], function(_value){
-    console.error('INSERT_SCENE is unimplemented');
-});
-
-HAE_PROCESSOR.ADD(['COMMENT', '//'], function(_value){
-    //It's a comment, don't do anything
-});

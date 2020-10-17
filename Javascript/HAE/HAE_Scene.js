@@ -29,22 +29,27 @@ var HAE_SCENE = (function () {
         return dialogHTML;
     };
 
+    var hasNewDialog = false;
+    PARSER_FNs.hasNewDialog = function(){
+        return hasNewDialog;
+    };
+
     PARSER_FNs.update_scene = function(){
         hasNewDialog = false;
 
         var newScene = STATE.GET_STATE().CURRENT_SCENE;
 
         if(newScene){
-            var parsedScene = parseScene(newScene);
+            var parsedScene = parseScene( newScene );
             if(parsedScene){
                 dialogHTML = parsedScene.html;
                 hasNewDialog = true;
-                STATE.SET_SCENE_DATA(parsedScene.SCENE_DATA);
-                STATE.SET_SCENE_LOCKED(parsedScene && parsedScene.sceneLocked);
+                STATE.SET_SCENE_DATA( parsedScene.SCENE_DATA );
+                STATE.SET_SCENE_LOCKED( parsedScene.sceneLocked );
             }
             else{
-                STATE.SET_SCENE_LOCKED(false);
-                STATE.SET_SCENE_DATA({});
+                STATE.SET_SCENE_LOCKED( false );
+                STATE.SET_SCENE_DATA( {} );
 
                 if(STATE.GET_STATE().CURRENT_SCENE == 'START'){
                     console.error('You cannot have a valid game without a scene named "START"!');
@@ -81,11 +86,6 @@ var HAE_SCENE = (function () {
         var processedHAEScript = HAE_PROCESSOR.PROCESS_SCENE(parsedScene);
 
         return processedHAEScript;
-    };
-
-    var hasNewDialog = false;
-    PARSER_FNs.hasNewDialog = function(){
-        return hasNewDialog;
     };
     
     //Returns public functions into the variable

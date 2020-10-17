@@ -1,6 +1,6 @@
 /*jshint esversion: 6 */ 
 
-MENUS = (function () {
+MODULES.MENU = (function () {
     
     var PUBLIC_FNs = {};
 
@@ -34,6 +34,7 @@ MENUS = (function () {
         //This is called when the game_state is modified by the save system
         //Anything that must be modified when a save is loaded should happen here
     };
+
     /*
 
     ooooo     ooo ooooooooo.   oooooooooo.         .o.       ooooooooooooo oooooooooooo 
@@ -45,6 +46,13 @@ MENUS = (function () {
        `YbodP'    o888o        o888bood8P'   o88o     o8888o     o888o     o888ooooood8 
 
      */
+    
+    PUBLIC_FNs.optional_pre_scene_update = function(){
+        //This function is OPTIONAL, and it happens before the current scene is processed
+        //Do not use it for your main scene code, because the scene does not exist yet!
+        //You would mostly use it if you expect your current scene to need info about the cell
+    };
+
     PUBLIC_FNs.update_module = function(){
         //this is the main function that gets called each time an update event is called
     };

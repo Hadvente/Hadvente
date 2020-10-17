@@ -10,32 +10,41 @@ MODULES.DIALOG = function () {
     var DIALOG_FNs = {};
 
     /*
+    
+    ooooo ooooo      ooo ooooo ooooooooooooo 
+    `888' `888b.     `8' `888' 8'   888   `8 
+     888   8 `88b.    8   888       888      
+     888   8   `88b.  8   888       888      
+     888   8     `88b.8   888       888      
+     888   8       `888   888       888      
+    o888o o8o        `8  o888o     o888o     
 
-    ooooooooo.   ooooo     ooo oooooooooo.  ooooo        ooooo   .oooooo.   
-    `888   `Y88. `888'     `8' `888'   `Y8b `888'        `888'  d8P'  `Y8b  
-     888   .d88'  888       8   888     888  888          888  888          
-     888ooo88P'   888       8   888oooo888'  888          888  888          
-     888          888       8   888    `88b  888          888  888          
-     888          `88.    .8'   888    .88P  888       o  888  `88b    ooo  
-    o888o           `YbodP'    o888bood8P'  o888ooooood8 o888o  `Y8bood8P'  
+     */
+    DIALOG_FNs.initialize = function(){};
+    /*
+        
+    ooooooooo.   oooooooooooo  .oooooo..o ooooooooooooo       .o.       ooooooooo.   ooooooooooooo 
+    `888   `Y88. `888'     `8 d8P'    `Y8 8'   888   `8      .888.      `888   `Y88. 8'   888   `8 
+     888   .d88'  888         Y88bo.           888          .8"888.      888   .d88'      888      
+     888ooo88P'   888oooo8     `"Y8888o.       888         .8' `888.     888ooo88P'       888      
+     888`88b.     888    "         `"Y88b      888        .88ooo8888.    888`88b.         888      
+     888  `88b.   888       o oo     .d8P      888       .8'     `888.   888  `88b.       888      
+    o888o  o888o o888ooooood8 8""88888P'      o888o     o88o     o8888o o888o  o888o     o888o     
+
+     */
+    DIALOG_FNs.restart_module = function(){};
+    /*
+
+    ooooo     ooo ooooooooo.   oooooooooo.         .o.       ooooooooooooo oooooooooooo 
+    `888'     `8' `888   `Y88. `888'   `Y8b       .888.      8'   888   `8 `888'     `8 
+     888       8   888   .d88'  888      888     .8"888.          888       888         
+     888       8   888ooo88P'   888      888    .8' `888.         888       888oooo8    
+     888       8   888          888      888   .88ooo8888.        888       888    "    
+     `88.    .8'   888          888     d88'  .8'     `888.       888       888       o 
+       `YbodP'    o888o        o888bood8P'   o88o     o8888o     o888o     o888ooooood8 
 
     */
-   
-    var dialogHTML = '';
-    DIALOG_FNs.initialize = function(){
-    };
-    DIALOG_FNs.update_module = function(){
-    };
-
-    DIALOG_FNs.finished_draw = function(){
-        //does nothing for now
-    };
-
-    DIALOG_FNs.restart_module = function(){
-        //This is called when the game_state is modified by the save system
-        //Anything that must be modified when a save is loaded should happen here
-    };
-
+    DIALOG_FNs.update_module = function(){};
     /*
     
     ooooo   ooooo ooooooooooooo ooo        ooooo ooooo        
@@ -46,8 +55,7 @@ MODULES.DIALOG = function () {
      888     888       888       8    Y     888   888       o 
     o888o   o888o     o888o     o8o        o888o o888ooooood8 
     
-     */
-    
+     */ 
     var $Dialog = {};
     DIALOG_FNs.init_HTML = function(_$Cell){
         if( !get_HAE().cells.DIALOG ) return;
@@ -59,13 +67,36 @@ MODULES.DIALOG = function () {
         </div>`);
         $Dialog = $('#MainDialogTextHolder');
     };
+    /*
+    
+    oooooooooo.   ooooooooo.         .o.       oooooo   oooooo     oooo 
+    `888'   `Y8b  `888   `Y88.      .888.       `888.    `888.     .8'  
+     888      888  888   .d88'     .8"888.       `888.   .8888.   .8'   
+     888      888  888ooo88P'     .8' `888.       `888  .8'`888. .8'    
+     888      888  888`88b.      .88ooo8888.       `888.8'  `888.8'     
+     888     d88'  888  `88b.   .8'     `888.       `888'    `888'      
+    o888bood8P'   o888o  o888o o88o     o8888o       `8'      `8'       
 
+     */
     DIALOG_FNs.update_HTML = function(){
         if( !get_HAE().cells.DIALOG ) return;
         if( HAE_SCENE.hasNewDialog() ){
             $Dialog.html( HAE_SCENE.getDialog() );
         }
     };
+    /*
+
+    ooooooooo.     .oooooo.    .oooooo..o ooooooooooooo    oooooooooo.   ooooooooo.         .o.    oooooo   oooooo     oooo 
+    `888   `Y88.  d8P'  `Y8b  d8P'    `Y8 8'   888   `8    `888'   `Y8b  `888   `Y88.      .888.    `888.    `888.     .8'  
+     888   .d88' 888      888 Y88bo.           888          888      888  888   .d88'     .8"888.    `888.   .8888.   .8'   
+     888ooo88P'  888      888  `"Y8888o.       888          888      888  888ooo88P'     .8' `888.    `888  .8'`888. .8'    
+     888         888      888      `"Y88b      888          888      888  888`88b.      .88ooo8888.    `888.8'  `888.8'     
+     888         `88b    d88' oo     .d8P      888          888     d88'  888  `88b.   .8'     `888.    `888'    `888'      
+    o888o         `Y8bood8P'  8""88888P'      o888o        o888bood8P'   o888o  o888o o88o     o8888o    `8'      `8'         
+
+     */
+    DIALOG_FNs.finished_draw = function(){};
+
 
     //Add processors here for specific HTML Commands
 
