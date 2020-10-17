@@ -57,7 +57,8 @@ MODULES.ACTIONS = function () {
     };
     ACTION_FNs.update_module = function(){
         //this is the main function that gets called each time an update event is called
-        
+        var actionsList = STATE.GET_SCENE_DATA().ACTIONS || [];
+
         //convert action list into an actionGrid array
         if(_.size(actionsList) > maxActions){
             console.error('We can currently only handle ' + maxActions + ' actions per scene');
@@ -156,6 +157,26 @@ MODULES.ACTIONS = function () {
         MODULES.ACTIONS.clickedGrid(_y, _x);
     }
 
+    ///////////////
+    //ACTION LIST//
+    ///////////////
+    
+    //THIS SECTION DEALS WITH HOW A SCENE MAKES AN ACTIONS LIST
+    var getActionFromStatement = function(_action){
+        var spaceSplit = _action.split(/\s+/);
+        var actionType = spaceSplit.shift();
+        spaceSplit = spaceSplit.join(' ');
+        var values = spaceSplit.split('||');
+        return { actionType, values };
+    };
+    HAE_PROCESSOR.ADD(['ACTION'], function(_value, _scene_data){
+        if( !_scene_data.ACTIONS ) _scene_data.ACTIONS = [];
+        _scene_data.ACTIONS.push( getActionFromStatement(_value) );
+    });
+    HAE_PROCESSOR.ADD(['GOTO'], function(_value, _scene_data){
+        if( !_scene_data.ACTIONS ) _scene_data.ACTIONS = [];
+        _scene_data.ACTIONS.push( getActionFromStatement('GOTO ' + _value) );
+    });
     //private is not a valid label, it means nothing. Public is valid because there should be very few things anyone asks for
     //but private means nothing to the contents of the section other than the fact people outside of the singleton
     /*
@@ -206,25 +227,6 @@ MODULES.ACTIONS = function () {
             return '';
         }
     };
-
-    //THIS SECTION DEALS WITH HOW A SCENE MAKES AN ACTIONS LIST
-    var actionsList = [];
-    var getActionFromStatement = function(_action){
-        var spaceSplit = _action.split(/\s+/);
-        var actionType = spaceSplit.shift();
-        spaceSplit = spaceSplit.join(' ');
-        var values = spaceSplit.split('||');
-        return { actionType, values };
-    };
-    ACTION_FNs.optional_pre_scene_update = function(){
-        actionsList = [];
-    };
-    HAE_PROCESSOR.ADD(['ACTION'], function(_value){
-        actionsList.push( getActionFromStatement(_value) );
-    });
-    HAE_PROCESSOR.ADD(['GOTO'], function(_value){
-        actionsList.push( getActionFromStatement('GOTO ' + _value) );
-    });
 
     //Returns public functions into the variable
     return ACTION_FNs;

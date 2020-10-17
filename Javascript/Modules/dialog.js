@@ -2,9 +2,7 @@
 
 /*
 dialog.js
-This could be the biggest file in the system
-What it does is interprets both HAE_GAME and GAME_STATE and convert it into the html string that will
-appear in the main dialog box. It also will find the set of action buttons
+draws the current scene's html in a dialog box
 */
 
 MODULES.DIALOG = function () {
@@ -69,10 +67,16 @@ MODULES.DIALOG = function () {
         }
     };
 
+    //Add processors here for specific HTML Commands
+
     HAE_PROCESSOR.ADD(['IMAGE', 'IMG'], function(_value){
         var html = '<img src="' + _value + '.jpg">';
         return html;
     });
+
+    //Add new system for <{Inline Commands}>, which work differently.
+    //Alternatively, Inline Commands could have their own processor
+    //It could also make sense to have IMG/IMAGE be an inline command since all it does it make html
 
     //Returns public functions into the variable
     return DIALOG_FNs;

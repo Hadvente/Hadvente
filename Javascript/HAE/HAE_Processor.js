@@ -12,9 +12,10 @@ var HAE_PROCESSOR = (function () {
 
     var PROCESSOR_FNs = {};
     //Everything after this is about the individual processor methods
-    PROCESSOR_FNs.PROCESS_SCENE = function( _parsedArr ){
+    PROCESSOR_FNs.PROCESS_SCENE = function( _parsedArr, _SCENE_DATA ){
         var html = '';
         var sceneLocked = false;
+        var SCENE_DATA = _SCENE_DATA || {}; 
 
         //Arrays are meant for logic flow, like if statements
         _.each(_parsedArr, function(_command){
@@ -30,7 +31,7 @@ var HAE_PROCESSOR = (function () {
                         var isValid = processIfStatement(_logic.value);
                         if( !isValid ) return;
                     }
-                    contents = PROCESSOR_FNs.PROCESS_SCENE(_logic.list);
+                    contents = PROCESSOR_FNs.PROCESS_SCENE(_logic.list, SCENE_DATA);
                     html += contents.html;
                     sceneLocked = sceneLocked || contents.sceneLocked;
                     return true;
@@ -43,7 +44,7 @@ var HAE_PROCESSOR = (function () {
             }
             else{
                 if( Processors[_command.type] ){
-                    var value = Processors[_command.type](_command.value);
+                    var value = Processors[_command.type]( _command.value, SCENE_DATA );
                     if( value && _.isString(value) ){
                         html += value;
                     }
@@ -54,7 +55,7 @@ var HAE_PROCESSOR = (function () {
             }
         });
 
-        return {html, sceneLocked};
+        return {html, sceneLocked, SCENE_DATA};
     };
 
     //It would be cool if we could force IF functions to not be able to modify the game state, but it looks like that would require a clone to freeze, which isn't performant
@@ -72,7 +73,7 @@ var HAE_PROCESSOR = (function () {
             }
             var value = '';
             try{
-                value = get_HAE().FN[ spaceSplit[1] ]( GET_GAME_DATA(), GET_CELL_DATA(), get_HAE() );
+                value = get_HAE().FN[ spaceSplit[1] ]( STATE.GET_GAME_DATA(), STATE.GET_STATE(), get_HAE() );
             }catch(e) {
                 console.error('There is an error when you call the  logic function ' + spaceSplit[1], e);
             }
@@ -84,7 +85,6 @@ var HAE_PROCESSOR = (function () {
         }
     };
 
-    //Everything after this is about the individual processor methods
     var Processors = {};
     PROCESSOR_FNs.ADD = function( _names, _function){
         if( _.isString(_names) ) _names = [_names]; 
@@ -96,6 +96,18 @@ var HAE_PROCESSOR = (function () {
     //Returns public functions into the variable
     return PROCESSOR_FNs;
 })();
+
+/*
+
+  .oooooo.     .oooooo.   ooo        ooooo ooo        ooooo       .o.       ooooo      ooo oooooooooo.    .oooooo..o 
+ d8P'  `Y8b   d8P'  `Y8b  `88.       .888' `88.       .888'      .888.      `888b.     `8' `888'   `Y8b  d8P'    `Y8 
+888          888      888  888b     d'888   888b     d'888      .8"888.      8 `88b.    8   888      888 Y88bo.      
+888          888      888  8 Y88. .P  888   8 Y88. .P  888     .8' `888.     8   `88b.  8   888      888  `"Y8888o.  
+888          888      888  8  `888'   888   8  `888'   888    .88ooo8888.    8     `88b.8   888      888      `"Y88b 
+`88b    ooo  `88b    d88'  8    Y     888   8    Y     888   .8'     `888.   8       `888   888     d88' oo     .d8P 
+ `Y8bood8P'   `Y8bood8P'  o8o        o888o o8o        o888o o88o     o8888o o8o        `8  o888bood8P'   8""88888P'  
+
+ */
 
 HAE_PROCESSOR.ADD(['TEXT'], function(_value){
     var textSplit = _value.split(/[ \t]*\r?\n|[ \t]*\r(?!\n)/g);
@@ -123,7 +135,7 @@ HAE_PROCESSOR.ADD(['SET'], function(_value){
         if(spaceSplit[1] !== '='){
             console.error('Need to have = sign inbetween variable name and value, ie <<[SET money = 5]>>');
         }
-        GET_GAME_DATA()[spaceSplit[0]] = spaceSplit[2];
+        STATE.GET_GAME_DATA()[spaceSplit[0]] = spaceSplit[2];
     }
     return value;
 });
@@ -141,7 +153,7 @@ HAE_PROCESSOR.ADD(['FN', 'FUNCTION'], function(_value){
     }
     var value = '';
     try{
-        value = get_HAE().FN[ spaceSplit[0] ]( GET_GAME_DATA(), GET_CELL_DATA(), get_HAE() );
+        value = get_HAE().FN[ spaceSplit[0] ]( STATE.GET_GAME_DATA(), STATE.GET_STATE(), get_HAE() );
     }catch(e) {
         console.error('There is an error when you call the function ' + spaceSplit[0], e);
     }

@@ -36,8 +36,8 @@ MODULES.MAP_GRID = function() {
             return;
         }
 
-        GET_CELL_DATA('MAP_GRID').map_name = get_HAE().maps.starting_map;
-        GET_CELL_DATA('MAP_GRID').location = getCurrentMap().start;
+        STATE.GET_CELL_DATA('MAP_GRID').map_name = get_HAE().maps.starting_map;
+        STATE.GET_CELL_DATA('MAP_GRID').location = getCurrentMap().start;
 
         newMapGrid = true;
     };
@@ -60,7 +60,7 @@ MODULES.MAP_GRID = function() {
     };
     //Is this really the correct way to do it?
     MAP_GRID_FNs.finished_draw = function(){
-        previousLocation = GET_CELL_DATA('MAP_GRID').location;
+        previousLocation = STATE.GET_CELL_DATA('MAP_GRID').location;
         newMapGrid = false;
     };
 
@@ -70,10 +70,10 @@ MODULES.MAP_GRID = function() {
     };
 
     function getCurrentMap(){
-        return get_HAE().maps[ GET_CELL_DATA('MAP_GRID').map_name ];
+        return get_HAE().maps[ STATE.GET_CELL_DATA('MAP_GRID').map_name ];
     }
     function getCurrentLocation(){
-        return GET_CELL_DATA('MAP_GRID').location;
+        return STATE.GET_CELL_DATA('MAP_GRID').location;
     }
 
     /*
@@ -196,7 +196,7 @@ MODULES.MAP_GRID = function() {
         H_Log('clicked on cell ' + _y + ', ' + _x + ' - which has the value of ' + getCurrentMap().grid[_y][_x]);
 
         previousLocation = getCurrentLocation();
-        GET_CELL_DATA('MAP_GRID').location = [_y, _x];
+        STATE.GET_CELL_DATA('MAP_GRID').location = [_y, _x];
 
         var newLocationID = getLocationID();
         var newScene = getLocationScene(newLocationID);
@@ -268,7 +268,7 @@ MODULES.MAP_GRID = function() {
         locScenesArr = _.filter(locScenesArr, function(_LocScene){
             if(_LocScene.requirements === true) return true;
             if( _.isFunction(_LocScene.requirements) ){
-                return _LocScene.requirements( GET_GAME_DATA(), GET_CELL_DATA(), get_HAE() ); //Requirements gets handed the game state for calculating whether it's currently valid
+                return _LocScene.requirements( STATE.GET_GAME_DATA(), STATE.GET_STATE(), get_HAE() ); //Requirements gets handed the game state for calculating whether it's currently valid
             }
             console.error('The requirements for all scenes based on a location must be either true or a function', locScenesArr);
         });
