@@ -15,6 +15,9 @@
 		//Window is global space, "MODULES" is accessible as a global variable in all other scripts
 	    window.ENGINE  = {}; //This contains all engine functions that belong specifically to the engine
 	    window.MODULES = {}; //This contains all objects that define a module. MAP_GRID, PARTY, etc.
+	    window.HISTORY = {}; //This contains all functions that run the history engine
+	    window.STORAGE = {}; //This contains all functions that run the save system
+	    window.STATE   = {}; //This contains all functions that run the state system, for things like CELL_DATA, GAME_DATA, etc.
 	    window.HAE     = {}; //This contains the game itself. When someone makes a game, it's info goes in here.
 	</script>
 

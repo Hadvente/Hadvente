@@ -27,7 +27,6 @@ var HAE_PROCESSOR = (function () {
 
     function processScene( _parsedArr, _SCENE_DATA ){
         var html = '';
-        var sceneLocked = false;
         var SCENE_DATA = _SCENE_DATA || {}; 
 
         //Arrays are meant for logic flow, like if statements
@@ -46,14 +45,13 @@ var HAE_PROCESSOR = (function () {
                     }
                     contents = processScene(_logic.list, SCENE_DATA);
                     html += contents.html;
-                    sceneLocked = sceneLocked || contents.sceneLocked;
                     return true;
                 });
             }
 
             //This is also a required built-in command, since we want commands to only return strings
             else if(_command.type == 'DISABLE_CELLS'){
-                sceneLocked = true; //Maybe we should move this into SCENE_DATA?
+                SCENE_DATA.SCENE_LOCKED = true; //Maybe we should move this into SCENE_DATA?
             }
             else{
                 if( Processors[_command.type] ){
@@ -68,7 +66,7 @@ var HAE_PROCESSOR = (function () {
             }
         });
 
-        return {html, sceneLocked, SCENE_DATA};
+        return {html, SCENE_DATA};
     }
 
     //It would be cool if we could force IF functions to not be able to modify the game state, but it looks like that would require a clone to freeze, which isn't performant

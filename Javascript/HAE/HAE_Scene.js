@@ -45,10 +45,8 @@ var HAE_SCENE = (function () {
                 dialogHTML = parsedScene.html;
                 hasNewDialog = true;
                 STATE.SET_SCENE_DATA( parsedScene.SCENE_DATA );
-                STATE.SET_SCENE_LOCKED( parsedScene.sceneLocked );
             }
             else{
-                STATE.SET_SCENE_LOCKED( false );
                 STATE.SET_SCENE_DATA( {} );
 
                 if(STATE.GET_STATE().CURRENT_SCENE == 'START'){

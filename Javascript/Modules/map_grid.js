@@ -125,7 +125,7 @@ MODULES.MAP_GRID = function() {
     MAP_GRID_FNs.update_HTML = function(){
         if( !get_HAE().cells.MAP_GRID ) return;
         
-        if( STATE.GET_SCENE_LOCKED() ){
+        if( STATE.GET_SCENE_DATA().SCENE_LOCKED ){
             if( !$Nav.hasClass('mapDisabled') ){
                 $Nav.addClass('mapDisabled');
             }
@@ -189,9 +189,9 @@ MODULES.MAP_GRID = function() {
     };
 
     function mapGridClick(_y, _x){
+        if( STATE.GET_SCENE_DATA().SCENE_LOCKED ) return; //The map is locked
         if( !getCurrentMap().grid[_y][_x] ) return; //no cell to click on
         if( getCurrentLocation()[0] == _y && getCurrentLocation()[1] == _x) return; //Clicking on the current cell should do nothing
-        if( STATE.GET_SCENE_LOCKED() ) return; //The map is locked
 
         H_Log('clicked on cell ' + _y + ', ' + _x + ' - which has the value of ' + getCurrentMap().grid[_y][_x]);
 

@@ -12,8 +12,8 @@ game_view
 
 function initializeEngine(){
     STATE.initializeGameState();
-    initializeHistory();
-    initializeSaveSystem();
+    HISTORY.initializeHistory();
+    STORAGE.initializeSaveSystem();
     //initializeSettings(); //This asks for the settings from load_save_data, or makes a new default settings if there isn't one
 
     createModulesIfNeeded();
@@ -31,7 +31,7 @@ function initializeEngine(){
 
     initializeGameHtml(); //Right now the game has to make it's own start menu as a dialog scene, but I could rework this to have actual start menus
 
-    if( autoload && has_save_file('AUTO') ) STATE.LOAD_STATE( get_save_file('AUTO') );
+    if( autoload && STORAGE.has_save_file('AUTO') ) STATE.LOAD_STATE( STORAGE.get_save_file('AUTO') );
 
     _.delay(runGameUpdate, 50);
 }
@@ -41,7 +41,7 @@ function initializeEngine(){
 function runGameUpdate(){
     H_Log('about to update game, making autosave');
 
-    history_update();
+    HISTORY.history_update();
 
     pre_scene_update_modules();
 
@@ -52,6 +52,8 @@ function runGameUpdate(){
     updateScreen();
 
     finished_draw_modules();
+
+    STATE.finished_update();
 
     newScene = '';
     cells_disabled = false;
