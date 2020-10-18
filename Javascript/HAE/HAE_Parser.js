@@ -41,17 +41,6 @@ var HAE_PARSER = (function () {
         });
         return current_list;
     };
-    var testLogicCount = function(_split_HAE){
-        var ifCount = 0;
-        var endIfCount = 0;
-        _.each(_split_HAE, function(_thing){
-            if(_thing.type == "IF") ifCount++;
-            else if(_thing.type == "ENDIF") endIfCount++;
-        });
-        if( ifCount !== endIfCount ){
-            console.error('The IF Count of this scene does not line up with the ENDIF count!');
-        }
-    };
     var PARSE_HAE = function(_split_HAE){
         var stack = [];
         var current_list = [];
@@ -93,6 +82,18 @@ var HAE_PARSER = (function () {
         return current_list;
     };
 
+    var testLogicCount = function(_split_HAE){
+        var ifCount = 0;
+        var endIfCount = 0;
+        _.each(_split_HAE, function(_thing){
+            if(_thing.type == "IF") ifCount++;
+            else if(_thing.type == "ENDIF") endIfCount++;
+        });
+        if( ifCount !== endIfCount ){
+            console.error('The IF Count of this scene does not line up with the ENDIF count!');
+        }
+    };
+    
     //Returns public functions into the variable
     return PARSER_FNs;
 })();

@@ -100,7 +100,7 @@ MODULES.DIALOG = function () {
 
     //Add processors here for specific HTML Commands
 
-    HAE_PROCESSOR.ADD(['IMAGE', 'IMG'], function(_value){
+    HAE_PROCESSOR.ADD_TYPE(['IMAGE', 'IMG'], function(_value){
         var html = '<img src="' + _value + '.jpg">';
         return html;
     });

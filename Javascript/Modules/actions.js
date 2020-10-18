@@ -169,11 +169,11 @@ MODULES.ACTIONS = function () {
         var values = spaceSplit.split('||');
         return { actionType, values };
     };
-    HAE_PROCESSOR.ADD(['ACTION'], function(_value, _scene_data){
+    HAE_PROCESSOR.ADD_TYPE(['ACTION'], function(_value, _scene_data){
         if( !_scene_data.ACTIONS ) _scene_data.ACTIONS = [];
         _scene_data.ACTIONS.push( getActionFromStatement(_value) );
     });
-    HAE_PROCESSOR.ADD(['GOTO'], function(_value, _scene_data){
+    HAE_PROCESSOR.ADD_TYPE(['GOTO'], function(_value, _scene_data){
         if( !_scene_data.ACTIONS ) _scene_data.ACTIONS = [];
         _scene_data.ACTIONS.push( getActionFromStatement('GOTO ' + _value) );
     });

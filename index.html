@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>HTML Adventure Engine</title>
-	<link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="stylesheet" type="text/css" href="CSS/style.css">
 	<!-- Libraries -->
 	<script src="Javascript/Libraries/jquery-3.5.1.slim.min.js"></script>
 	<script src="Javascript/Libraries/underscore-min.js"></script>
@@ -13,7 +13,9 @@
 	-->
 	<script>
 		//Window is global space, "MODULES" is accessible as a global variable in all other scripts
-	    window.MODULES = {}; //this contains all objects that define a module. MAP_GRID, PARTY, etc.
+	    window.ENGINE  = {}; //This contains all engine functions that belong specifically to the engine
+	    window.MODULES = {}; //This contains all objects that define a module. MAP_GRID, PARTY, etc.
+	    window.HAE     = {}; //This contains the game itself. When someone makes a game, it's info goes in here.
 	</script>
 
 	<!-- Files that represent the main engine -->

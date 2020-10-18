@@ -44,19 +44,19 @@ HAE = {
     //CLARIFICATION: THIS MEANS "FN" IS AN ILLEGAL KEY
     functions:{
         logic:{
-            Random_50(_STATE, _HAE){
+            Random_50(_GAME_DATA, _GAME_STATE, _HAE){
                 return Math.random() < 0.5;
             },
-            Random_10(_STATE, _HAE){
+            Random_10(_GAME_DATA, _GAME_STATE, _HAE){
                 return Math.random() < 0.1;
             },
-            has_screwdriver(_STATE, _HAE){
-                return !!_STATE.screwdriver;
+            has_screwdriver(_GAME_DATA, _GAME_STATE, _HAE){
+                return !!_GAME_DATA.screwdriver;
             }
         },
         set: {
-            pickup_screwdriver(_STATE, _HAE){
-                _STATE.screwdriver = true;
+            pickup_screwdriver(_GAME_DATA, _GAME_STATE, _HAE){
+                _GAME_DATA.screwdriver = true;
             }
         }
     },
@@ -151,7 +151,8 @@ There is nothing but dust in here.
 get_screwdriver: `
 <<[DISABLE_CELLS]>>\
 <<[ACTION CONTINUE]>>\
-<<[FN pickup_screwdriver]>>\
+<<[// FN pickup_screwdriver]>>\
+<<[SET screwdriver = true]>>\
 You pick up the screwdriver and look at it. Maybe you can open something with it...
 `,
 THE_END: `

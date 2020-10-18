@@ -11,8 +11,21 @@ HAE_PROCESSOR.AddCommand(['FN', 'FUNCTION'], function(_value){});
 var HAE_PROCESSOR = (function () {
 
     var PROCESSOR_FNs = {};
-    //Everything after this is about the individual processor methods
-    PROCESSOR_FNs.PROCESS_SCENE = function( _parsedArr, _SCENE_DATA ){
+
+    PROCESSOR_FNs.PROCESS_SCENE = function(_string){
+        var sceneText = get_HAE().text[_string];
+        if(!sceneText){
+            console.error('Scene passed in that does not exist:', _string);
+            return '';
+        }
+        var parsedScene = HAE_PARSER.parseHAE(sceneText);
+
+        var processedHAEScript = processScene(parsedScene);
+
+        return processedHAEScript;
+    };
+
+    function processScene( _parsedArr, _SCENE_DATA ){
         var html = '';
         var sceneLocked = false;
         var SCENE_DATA = _SCENE_DATA || {}; 
@@ -31,7 +44,7 @@ var HAE_PROCESSOR = (function () {
                         var isValid = processIfStatement(_logic.value);
                         if( !isValid ) return;
                     }
-                    contents = PROCESSOR_FNs.PROCESS_SCENE(_logic.list, SCENE_DATA);
+                    contents = processScene(_logic.list, SCENE_DATA);
                     html += contents.html;
                     sceneLocked = sceneLocked || contents.sceneLocked;
                     return true;
@@ -40,7 +53,7 @@ var HAE_PROCESSOR = (function () {
 
             //This is also a required built-in command, since we want commands to only return strings
             else if(_command.type == 'DISABLE_CELLS'){
-                sceneLocked = true;
+                sceneLocked = true; //Maybe we should move this into SCENE_DATA?
             }
             else{
                 if( Processors[_command.type] ){
@@ -56,7 +69,7 @@ var HAE_PROCESSOR = (function () {
         });
 
         return {html, sceneLocked, SCENE_DATA};
-    };
+    }
 
     //It would be cool if we could force IF functions to not be able to modify the game state, but it looks like that would require a clone to freeze, which isn't performant
     var processIfStatement = function(_IF){
@@ -85,14 +98,6 @@ var HAE_PROCESSOR = (function () {
         }
     };
 
-    var Processors = {};
-    PROCESSOR_FNs.ADD = function( _names, _function){
-        if( _.isString(_names) ) _names = [_names]; 
-        _.each(_names, function(_name){
-            Processors[_name] = _function;
-        });
-    };
-
     /*
 
       .oooooo.     .oooooo.   ooo        ooooo ooo        ooooo       .o.       ooooo      ooo oooooooooo.    .oooooo..o 
@@ -104,21 +109,14 @@ var HAE_PROCESSOR = (function () {
      `Y8bood8P'   `Y8bood8P'  o8o        o888o o8o        o888o o88o     o8888o o8o        `8  o888bood8P'   8""88888P'  
 
      */
-
-    PROCESSOR_FNs.ADD(['TEXT'], function(_value){
-        var textSplit = _value.split(/[ \t]*\r?\n|[ \t]*\r(?!\n)/g);
-        if( !textSplit[0] ) textSplit.shift(); //we don't want the first newline, it's only there for json readability
-        if( !_.last(textSplit) ) textSplit.pop(); //we don't want the last newline, it's only there for json readability
-        textSplit = _.map(textSplit,function(_str){
-            if( !_str ){
-                //How should we handle blank lines?
-                return ' <div class="dialog_blank_line"> </div> ';
-            }
-            return '<p>' + _str + '</p>';
+    
+    var Processors = {};
+    PROCESSOR_FNs.ADD_TYPE = function( _names, _function){
+        if( _.isString(_names) ) _names = [_names]; 
+        _.each(_names, function(_name){
+            Processors[_name] = _function;
         });
-        H_Log('Text section became:', textSplit);
-        return textSplit.join('');
-    });
+    };
 
     var processFunctionStatement = function(_value){
         var spaceSplit = _value.split(/\s+/);
@@ -142,7 +140,7 @@ var HAE_PROCESSOR = (function () {
         return value;
     };
 
-    PROCESSOR_FNs.ADD(['SET'], function(_value){
+    PROCESSOR_FNs.ADD_TYPE(['SET'], function(_value){
         var spaceSplit = _value.split(/\s+/);
 
         if(spaceSplit[0] == 'FN' || spaceSplit[0] == 'FUNCTION'){
@@ -155,25 +153,39 @@ var HAE_PROCESSOR = (function () {
             }
             STATE.GET_GAME_DATA()[spaceSplit[0]] = spaceSplit[2];
         }
-        return value;
     });
 
-    PROCESSOR_FNs.ADD(['FN', 'FUNCTION'], function(_value){
+    PROCESSOR_FNs.ADD_TYPE(['FN', 'FUNCTION'], function(_value){
         return processFunctionStatement(_value);
     });
 
-    PROCESSOR_FNs.ADD(['INSERT_EVENT'], function(_value){
+    PROCESSOR_FNs.ADD_TYPE(['INSERT_EVENT'], function(_value){
         //TODO
         console.error('INSERT_EVENT is unimplemented');
     });
 
-    PROCESSOR_FNs.ADD(['INSERT_SCENE'], function(_value){
+    PROCESSOR_FNs.ADD_TYPE(['INSERT_SCENE'], function(_value){
         //TODO
         console.error('INSERT_SCENE is unimplemented');
     });
 
-    PROCESSOR_FNs.ADD(['COMMENT', '//'], function(_value){
+    PROCESSOR_FNs.ADD_TYPE(['COMMENT', '//'], function(_value){
         //It's a comment, don't do anything
+    });
+
+    PROCESSOR_FNs.ADD_TYPE(['TEXT'], function(_value){
+        var textSplit = _value.split(/[ \t]*\r?\n|[ \t]*\r(?!\n)/g);
+        if( !textSplit[0] ) textSplit.shift(); //we don't want the first newline, it's only there for json readability
+        if( !_.last(textSplit) ) textSplit.pop(); //we don't want the last newline, it's only there for json readability
+        textSplit = _.map(textSplit,function(_str){
+            if( !_str ){
+                //How should we handle blank lines?
+                return ' <div class="dialog_blank_line"> </div> ';
+            }
+            return '<p>' + _str + '</p>';
+        });
+        H_Log('Text section became:', textSplit);
+        return textSplit.join('');
     });
 
     //Returns public functions into the variable
