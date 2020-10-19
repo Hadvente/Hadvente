@@ -5,17 +5,16 @@ MODULES.MAP_GRID = function() {
     var MAP_GRID_FNs = {};
 
     /*
+    
+    ooooo ooooo      ooo ooooo ooooooooooooo 
+    `888' `888b.     `8' `888' 8'   888   `8 
+     888   8 `88b.    8   888       888      
+     888   8   `88b.  8   888       888      
+     888   8     `88b.8   888       888      
+     888   8       `888   888       888      
+    o888o o8o        `8  o888o     o888o     
 
-    ooooooooo.   ooooo     ooo oooooooooo.  ooooo        ooooo   .oooooo.   
-    `888   `Y88. `888'     `8' `888'   `Y8b `888'        `888'  d8P'  `Y8b  
-     888   .d88'  888       8   888     888  888          888  888          
-     888ooo88P'   888       8   888oooo888'  888          888  888          
-     888          888       8   888    `88b  888          888  888          
-     888          `88.    .8'   888    .88P  888       o  888  `88b    ooo  
-    o888o           `YbodP'    o888bood8P'  o888ooooood8 o888o  `Y8bood8P'  
-
-    */
-   
+     */
     var newMapGrid = false;
     var mapIsDisabled = false;
     var previousLocation;
@@ -41,6 +40,49 @@ MODULES.MAP_GRID = function() {
 
         newMapGrid = true;
     };
+    /*
+        
+    ooooooooo.   oooooooooooo  .oooooo..o ooooooooooooo       .o.       ooooooooo.   ooooooooooooo 
+    `888   `Y88. `888'     `8 d8P'    `Y8 8'   888   `8      .888.      `888   `Y88. 8'   888   `8 
+     888   .d88'  888         Y88bo.           888          .8"888.      888   .d88'      888      
+     888ooo88P'   888oooo8     `"Y8888o.       888         .8' `888.     888ooo88P'       888      
+     888`88b.     888    "         `"Y88b      888        .88ooo8888.    888`88b.         888      
+     888  `88b.   888       o oo     .d8P      888       .8'     `888.   888  `88b.       888      
+    o888o  o888o o888ooooood8 8""88888P'      o888o     o88o     o8888o o888o  o888o     o888o     
+
+     */
+    MAP_GRID_FNs.restart_module = function(){
+        //This is called when the game_state is modified by the save system
+        //Anything that must be modified when a save is loaded should happen here
+    };
+    /*
+
+    ooooo     ooo ooooooooo.   oooooooooo.         .o.       ooooooooooooo oooooooooooo 
+    `888'     `8' `888   `Y88. `888'   `Y8b       .888.      8'   888   `8 `888'     `8 
+     888       8   888   .d88'  888      888     .8"888.          888       888         
+     888       8   888ooo88P'   888      888    .8' `888.         888       888oooo8    
+     888       8   888          888      888   .88ooo8888.        888       888    "    
+     `88.    .8'   888          888     d88'  .8'     `888.       888       888       o 
+       `YbodP'    o888o        o888bood8P'   o88o     o8888o     o888o     o888ooooood8 
+
+     */
+    MAP_GRID_FNs.update_module = function(_map_id){
+        if( !get_HAE().cells.MAP_GRID ) return;
+        //Not used yet, but could be an action attached to a scene that sends you to a new map grid
+    };
+
+    /*
+
+    ooooooooo.   ooooo     ooo oooooooooo.  ooooo        ooooo   .oooooo.   
+    `888   `Y88. `888'     `8' `888'   `Y8b `888'        `888'  d8P'  `Y8b  
+     888   .d88'  888       8   888     888  888          888  888          
+     888ooo88P'   888       8   888oooo888'  888          888  888          
+     888          888       8   888    `88b  888          888  888          
+     888          `88.    .8'   888    .88P  888       o  888  `88b    ooo  
+    o888o           `YbodP'    o888bood8P'  o888ooooood8 o888o  `Y8bood8P'  
+
+    */
+    //these public functions should not be public like this. They should instead be passed in as command and action types
     MAP_GRID_FNs.forceLocationScene = function(){
         if( !get_HAE().cells.MAP_GRID ){
             console.error('Your HAE Script tried to force a MAP_GRID location scene when it does not have the MAP_GRID cell!');
@@ -54,27 +96,6 @@ MODULES.MAP_GRID = function() {
         if( !get_HAE().cells.MAP_GRID ) return;
         //Not called yet, but could be an action attached to a scene that sends you to a new map grid
     };
-    MAP_GRID_FNs.update_module = function(_map_id){
-        if( !get_HAE().cells.MAP_GRID ) return;
-        //Not used yet, but could be an action attached to a scene that sends you to a new map grid
-    };
-    //Is this really the correct way to do it?
-    MAP_GRID_FNs.finished_draw = function(){
-        previousLocation = STATE.GET_CELL_DATA('MAP_GRID').location;
-        newMapGrid = false;
-    };
-
-    MAP_GRID_FNs.restart_module = function(){
-        //This is called when the game_state is modified by the save system
-        //Anything that must be modified when a save is loaded should happen here
-    };
-
-    function getCurrentMap(){
-        return get_HAE().maps[ STATE.GET_CELL_DATA('MAP_GRID').map_name ];
-    }
-    function getCurrentLocation(){
-        return STATE.GET_CELL_DATA('MAP_GRID').location;
-    }
 
     /*
     
@@ -87,7 +108,6 @@ MODULES.MAP_GRID = function() {
     o888o   o888o     o888o     o8o        o888o o888ooooood8 
     
      */
-
     var $Nav;
     MAP_GRID_FNs.init_HTML = function(_$Cell){
         if( !get_HAE().cells.MAP_GRID ) return;
@@ -121,6 +141,17 @@ MODULES.MAP_GRID = function() {
         return html;
     }
 
+    /*
+    
+    oooooooooo.   ooooooooo.         .o.       oooooo   oooooo     oooo 
+    `888'   `Y8b  `888   `Y88.      .888.       `888.    `888.     .8'  
+     888      888  888   .d88'     .8"888.       `888.   .8888.   .8'   
+     888      888  888ooo88P'     .8' `888.       `888  .8'`888. .8'    
+     888      888  888`88b.      .88ooo8888.       `888.8'  `888.8'     
+     888     d88'  888  `88b.   .8'     `888.       `888'    `888'      
+    o888bood8P'   o888o  o888o o88o     o8888o       `8'      `8'       
+
+     */
     var $Cells;
     MAP_GRID_FNs.update_HTML = function(){
         if( !get_HAE().cells.MAP_GRID ) return;
@@ -203,25 +234,56 @@ MODULES.MAP_GRID = function() {
         return HAE_SCENE.SET_NEW_SCENE(newScene);
     }
 
+    /*
+
+    ooooooooo.     .oooooo.    .oooooo..o ooooooooooooo    oooooooooo.   ooooooooo.         .o.    oooooo   oooooo     oooo 
+    `888   `Y88.  d8P'  `Y8b  d8P'    `Y8 8'   888   `8    `888'   `Y8b  `888   `Y88.      .888.    `888.    `888.     .8'  
+     888   .d88' 888      888 Y88bo.           888          888      888  888   .d88'     .8"888.    `888.   .8888.   .8'   
+     888ooo88P'  888      888  `"Y8888o.       888          888      888  888ooo88P'     .8' `888.    `888  .8'`888. .8'    
+     888         888      888      `"Y88b      888          888      888  888`88b.      .88ooo8888.    `888.8'  `888.8'     
+     888         `88b    d88' oo     .d8P      888          888     d88'  888  `88b.   .8'     `888.    `888'    `888'      
+    o888o         `Y8bood8P'  8""88888P'      o888o        o888bood8P'   o888o  o888o o88o     o8888o    `8'      `8'         
+
+     */
+    MAP_GRID_FNs.finished_draw = function(){
+        previousLocation = STATE.GET_CELL_DATA('MAP_GRID').location;
+        newMapGrid = false;
+    };
+    
+    //I am including the Private header because this cell has so many 'get' to deal with accessing the map
+    /*
+    
+    ooooooooo.   ooooooooo.   ooooo oooooo     oooo       .o.       ooooooooooooo oooooooooooo 
+    `888   `Y88. `888   `Y88. `888'  `888.     .8'       .888.      8'   888   `8 `888'     `8 
+     888   .d88'  888   .d88'  888    `888.   .8'       .8"888.          888       888         
+     888ooo88P'   888ooo88P'   888     `888. .8'       .8' `888.         888       888oooo8    
+     888          888`88b.     888      `888.8'       .88ooo8888.        888       888    "    
+     888          888  `88b.   888       `888'       .8'     `888.       888       888       o 
+    o888o        o888o  o888o o888o       `8'       o88o     o8888o     o888o     o888ooooood8 
+
+     */
+    function getCurrentMap(){
+        return get_HAE().maps[ STATE.GET_CELL_DATA('MAP_GRID').map_name ];
+    }
+    function getCurrentLocation(){
+        return STATE.GET_CELL_DATA('MAP_GRID').location;
+    }
     function getNewGrid(){
         //if grid has not changed, we do not want to update the location on the screen
         if( !newMapGrid ) return;
         return getCurrentMap().grid;
     }
-
     function getNewLocation(){
         //If our location hasn't changed, we do not want to update the location in the html
         if(previousLocation && previousLocation[0] == getCurrentLocation()[0] && previousLocation[1] == getCurrentLocation()[1]) return;
         return getCurrentLocation();
     }
-
     function getLocationID(){
         var y = getCurrentLocation()[0];
         var x = getCurrentLocation()[1];
         var loc = getCurrentMap().grid[y][x];
         return _.isObject(loc)? loc.ID : loc;
     }
-
     function getCurrentLocationScenes(_location_ID){
         if( !getCurrentMap().locations ){
             console.error('Why dont you have a locations key for figuring out what scenes belong to a location?');
@@ -237,7 +299,6 @@ MODULES.MAP_GRID = function() {
         }
         return getCurrentMap().locations[ _location_ID ].scenes;
     }
-
     function getNameForLocation(_y, _x){
         if( !getCurrentMap().grid[_y][_x] ) return ''; //empty cell
         if( _.isObject(getCurrentMap().grid[_y][_x]) ){
@@ -261,7 +322,6 @@ MODULES.MAP_GRID = function() {
         }
         return getCurrentMap().locations[ getCurrentMap().grid[_y][_x] ].Name;
     }
-
     function getLocationScene(_location_ID){
         var locScenesArr = getCurrentLocationScenes(_location_ID);
         //need to filter the list for anything that doesn't pass requirements
