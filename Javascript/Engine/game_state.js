@@ -53,4 +53,3 @@ game_state.js
         GAME_STATE.META_DATA.scene_count++;
     };
 }).call();
-
