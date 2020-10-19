@@ -53,7 +53,7 @@
         remove_future_history();
         current_history.push( _.deepClone( STATE.GET_STATE() ) );
         remove_old_history();
-        SAVE_LOAD.auto_save();
+        SAVES.auto_save();
     };
 
     //Getters for save data

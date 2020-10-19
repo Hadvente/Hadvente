@@ -13,11 +13,11 @@
 
     */
 
-    SAVE_LOAD.initializeSaveSystem = function(){
+    SAVES.initializeSaveSystem = function(){
         STORAGE.initialize_storage();
     };
 
-    SAVE_LOAD.auto_save = function(){
+    SAVES.auto_save = function(){
         if( !HISTORY.is_in_present() ) return; //Do not autosave if you are not in the present!
 
         var currentSave = HISTORY.get_present_state();
@@ -34,11 +34,11 @@
         }
     };
 
-    SAVE_LOAD.save_to_slot = function( _slot_index ){
+    SAVES.save_to_slot = function( _slot_index ){
         var currentSave = HISTORY.get_present_state();
     };
 
-    SAVE_LOAD.save_to_file = function(){
+    SAVES.save_to_file = function(){
         var currentSave = HISTORY.get_present_state();
     };
 
@@ -46,11 +46,11 @@
     //DELETE SAVES//
     ////////////////
 
-    SAVE_LOAD.deleteAutoSave = function(){
+    SAVES.deleteAutoSave = function(){
         //this deletes the save cookie
     };
 
-    SAVE_LOAD.deleteSaveSlot = function( _slot_index ){
+    SAVES.deleteSaveSlot = function( _slot_index ){
         //this deletes the save cookie for this slot
     };
 
@@ -66,7 +66,7 @@
 
      */
 
-    SAVE_LOAD.get_save_file = function(_load_index){
+    SAVES.get_save_file = function(_load_index){
         if(_load_index == 'AUTO'){
             return STORAGE.getData( 'SAVE_SLOT_AUTO' );
         }
@@ -76,7 +76,7 @@
         }
     };
 
-    SAVE_LOAD.has_save_file = function(_load_index){
+    SAVES.has_save_file = function(_load_index){
         if(_load_index == 'AUTO'){
             return !!STORAGE.getData( 'SAVE_SLOT_AUTO' );
         }
@@ -108,7 +108,7 @@
 
      */
 
-    SAVE_LOAD.open_save_file = function(){
+    SAVES.open_save_file = function(){
         //I think I would like save files to be loaded into a slot, not directly loaded
     };
 }).call();

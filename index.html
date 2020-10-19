@@ -16,13 +16,12 @@
 		//Window is global space, "MODULES" is accessible as a global variable in all other scripts
 		//As every member of the main engine can be described as a singleton, I put all of them up here,
 		//at the top of the HTML file, to make it easy to comprehend how the engine works.
-	    window.ENGINE    = {}; //This contains all engine functions that belong specifically to the engine
-	    window.MODULES   = {}; //This contains all objects that define a module. MAP_GRID, PARTY, etc.
-	    window.HISTORY   = {}; //This contains all functions that run the history engine
-	    window.SAVE_LOAD = {}; //This contains all functions that run the save system
-	    window.STORAGE   = {}; //This contains all functions that run the file storage system used by the saves
-	    window.STATE     = {}; //This contains all functions that run the state system, for things like CELL_DATA, GAME_DATA, etc.
-	    window.HAE       = {}; //This contains the game itself. When someone makes a game, it's info goes in here.
+	    window.MODULES = {}; //This contains all objects that define a module. MAP_GRID, PARTY, etc.
+	    window.HISTORY = {}; //This contains all functions that run the history engine
+	    window.STORAGE = {}; //This contains all functions that run the file storage system used by the saves
+	    window.SAVES   = {}; //This contains all functions that run the save system
+	    window.STATE   = {}; //This contains all functions that run the state system, for things like CELL_DATA, GAME_DATA, etc.
+	    window.HAE     = {}; //This contains the game itself. When someone makes a game, it's info goes in here.
 
 	    //Maybe I should make it so instead of having HAE point at the game, I make HAE point at the story format
 	    //And add GAME to point at the game itself
@@ -32,9 +31,9 @@
 	</script>
 
 	<!-- Files that represent the main engine -->
+	<script src="Javascript/Engine/storage.js"></script>
 	<script src="Javascript/Engine/save_load.js"></script>
 	<script src="Javascript/Engine/history.js"></script>
-	<script src="Javascript/Engine/load_save_data.js"></script>
 	<script src="Javascript/Engine/game_view.js"></script>
 	<script src="Javascript/Engine/game_state.js"></script>
 	<script src="Javascript/Engine/run_engine.js"></script>
