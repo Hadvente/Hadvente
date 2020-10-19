@@ -35,6 +35,17 @@ MODULES.MAP_GRID = function() {
             return;
         }
 
+        if(MODULES.ACTIONS){
+            MODULES.ACTIONS.ADD_TYPE(['CONTINUE', 'LOCATION'], function(_values, _type){
+                return {
+                    text: 'Continue',
+                    tooltip: 'Finish scene'
+                };
+            }, function( _button_obj ){
+                return MODULES.MAP_GRID.forceLocationScene();
+            });
+        }
+
         STATE.GET_CELL_DATA('MAP_GRID').map_name = get_HAE().maps.starting_map;
         STATE.GET_CELL_DATA('MAP_GRID').location = getCurrentMap().start;
 

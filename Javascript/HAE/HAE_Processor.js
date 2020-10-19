@@ -48,11 +48,6 @@ var HAE_PROCESSOR = (function () {
                     return true;
                 });
             }
-
-            //This is also a required built-in command, since we want commands to only return strings
-            else if(_command.type == 'DISABLE_CELLS'){
-                SCENE_DATA.SCENE_LOCKED = true; //Maybe we should move this into SCENE_DATA?
-            }
             else{
                 if( Processors[_command.type] ){
                     var value = Processors[_command.type]( _command.value, SCENE_DATA );
@@ -115,6 +110,9 @@ var HAE_PROCESSOR = (function () {
             Processors[_name] = _function;
         });
     };
+    PROCESSOR_FNs.ADD_TYPE(['DISABLE_CELLS', 'LOCKSCENE', 'LOCK_SCENE', 'SCENELOCKED', 'SCENE_LOCKED'], function(_value, _scene_data){
+        _scene_data.SCENE_LOCKED = true; //Note, the actions cell does not disable with this, it ignores it
+    });
 
     var processFunctionStatement = function(_value){
         var spaceSplit = _value.split(/\s+/);
@@ -166,7 +164,6 @@ var HAE_PROCESSOR = (function () {
         //TODO
         console.error('INSERT_SCENE is unimplemented');
     });
-
     PROCESSOR_FNs.ADD_TYPE(['COMMENT', '//'], function(_value){
         //It's a comment, don't do anything
     });
@@ -189,4 +186,3 @@ var HAE_PROCESSOR = (function () {
     //Returns public functions into the variable
     return PROCESSOR_FNs;
 })();
-

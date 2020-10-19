@@ -145,6 +145,7 @@ piano_playing_1:`
 Wow, You played the piano! :)
 `,
 get_nothing:`
+<<[DISABLE_CELLS]>>
 There is nothing but dust in here.
 <<[ACTION CONTINUE]>>
 `,

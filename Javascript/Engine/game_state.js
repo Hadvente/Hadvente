@@ -14,8 +14,6 @@ game_state.js
         ///Something that would be really nice is if runGameUpdate was all you had to call once GAME_STATE was overwritten
         ///Meaning there was nothing funky going on with the game state, GAME_STATE represents everything about the game
 
-        GAME_STATE.CELL_DATA.DIALOG = {};
-        GAME_STATE.CELL_DATA.ACTIONS = {};
         GAME_STATE.CELL_DATA.SCENE_LOCKED = false;
         _.each(MODULES, function(_module, _name){
             GAME_STATE.CELL_DATA[ _name ] = {};
