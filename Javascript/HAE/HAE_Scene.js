@@ -13,13 +13,10 @@ var HAE_SCENE = (function () {
     var SCENE_FNs = {};
 
     SCENE_FNs.initialize = function(){
-        STATE.GET_STATE().CURRENT_SCENE = 'START';
     };
 
     SCENE_FNs.SET_NEW_SCENE = function(_newScene){
-
         //NOTICE: No one should call SET_NEW_SCENE with the expectation for things to happen before the scene starts
-        
         STATE.GET_STATE().CURRENT_SCENE = _newScene;
         runGameUpdate();
     };

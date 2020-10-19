@@ -53,7 +53,7 @@
         remove_future_history();
         current_history.push( _.deepClone( STATE.GET_STATE() ) );
         remove_old_history();
-        STORAGE.auto_save();
+        SAVE_LOAD.auto_save();
     };
 
     //Getters for save data
@@ -61,6 +61,6 @@
         return( _.last( current_history ) );
     };
     HISTORY.is_in_present = function(){
-        return( undo_history_count );
+        return !undo_history_count;
     };
 }).call();

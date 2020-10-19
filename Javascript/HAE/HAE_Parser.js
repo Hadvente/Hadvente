@@ -36,7 +36,7 @@ var HAE_PARSER = (function () {
                 var command = _msg.split(' ');
                 var cmdType = command.shift();
                 var cmdVal = command.join(' ');
-                current_list.push( { type: cmdType, value: cmdVal } );
+                current_list.push( { type: cmdType, value: cmdVal.trim() } );
             }
         });
         return current_list;
