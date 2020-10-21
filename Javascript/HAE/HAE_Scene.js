@@ -18,7 +18,7 @@ var HAE_SCENE = (function () {
     SCENE_FNs.SET_NEW_SCENE = function(_newScene){
         //NOTICE: No one should call SET_NEW_SCENE with the expectation for things to happen before the scene starts
         STATE.GET_STATE().CURRENT_SCENE = _newScene;
-        runGameUpdate();
+        ENGINE.runGameUpdate();
     };
 
     var dialogHTML = '';

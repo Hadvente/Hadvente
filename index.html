@@ -1,75 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>HTML Adventure Engine</title>
-	<link rel="stylesheet" type="text/css" href="CSS/style.css">
-	<!-- Libraries -->
-	<script src="Javascript/Libraries/jquery-3.5.1.slim.min.js"></script>
-	<script src="Javascript/Libraries/underscore-min.js"></script>
-	<script src="Javascript/Libraries/utility.js"></script>
-	<!--
-	<script src="Libraries/lodash.js"></script>
-	-->
-	<script>
-		//Window is global space, "MODULES" is accessible as a global variable in all other scripts
-		//As every member of the main engine can be described as a singleton, I put all of them up here,
-		//at the top of the HTML file, to make it easy to comprehend how the engine works.
-	    window.MODULES = {}; //This contains all objects that define a module. MAP_GRID, PARTY, etc.
-	    window.HISTORY = {}; //This contains all functions that run the history engine
-	    window.STORAGE = {}; //This contains all functions that run the file storage system used by the saves
-	    window.SAVES   = {}; //This contains all functions that run the save system
-	    window.STATE   = {}; //This contains all functions that run the state system, for things like CELL_DATA, GAME_DATA, etc.
-	    window.HAE     = {}; //This contains the game itself. When someone makes a game, it's info goes in here.
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Adventure Engine</title>
+    <link rel="stylesheet" type="text/css" href="CSS/style.css">
+    <!-- Libraries -->
+    <script src="Javascript/Libraries/jquery-3.5.1.slim.min.js"></script>
+    <script src="Javascript/Libraries/underscore-min.js"></script>
+    <script src="Javascript/Libraries/utility.js"></script>
+    <!--
+    <script src="Libraries/lodash.js"></script>
+    -->
+    <script>
+        //Window is global space, each of these are accessible as a global variable in all other scripts
+        //As every member of the main engine can be described as a singleton, I put all of them up here,
+        //at the top of the HTML file, to make it easy to comprehend how the engine works.
+        
+        window.ENGINE  = {}; //all the functions that start up and run the engine itself
+        window.VIEW    = {}; //This contains all the functions for drawing in the DOM
 
-	    //Maybe I should make it so instead of having HAE point at the game, I make HAE point at the story format
-	    //And add GAME to point at the game itself
-	    //Then reformat all access to HAE_PROCESSOR/BUILDER/PARSER to be through an intermediate STORY_ACCESSOR system
-	    //So the keys become STORY and GAME, and STORY is passed "HAE" by the game, causing STORY to load HAE
-	    //All current calls to HAE inside my codebase would be replaced with STORY.has_cell() or whatever is needed
-	</script>
+        window.MODULES = {}; //This contains all objects that define a module. MAP_GRID, PARTY, etc.
 
-	<!-- Files that represent the main engine -->
-	<script src="Javascript/Engine/storage.js"></script>
-	<script src="Javascript/Engine/save_load.js"></script>
-	<script src="Javascript/Engine/history.js"></script>
-	<script src="Javascript/Engine/game_view.js"></script>
-	<script src="Javascript/Engine/game_state.js"></script>
-	<script src="Javascript/Engine/run_engine.js"></script>
-	<script src="Javascript/Engine/HADVENTE.js"></script>
+        window.HISTORY = {}; //This contains all functions that run the history engine
+        window.STORAGE = {}; //This contains all functions that run the file storage system used by the saves
+        window.SAVES   = {}; //This contains all functions that run the save system
 
-	<!-- Files used by the engine and individual modules  -->
-	<script src="Javascript/HAE/HAE_Scene.js"></script>
-	<script src="Javascript/HAE/HAE_Processor.js"></script>
-	<script src="Javascript/HAE/HAE_Parser.js"></script>
-	<script src="Javascript/HAE/HAE_Builder.js"></script>
+        //Should STATE be a part of the HAE?
+        window.STATE   = {}; //This contains all functions that run the state system, for things like CELL_DATA, GAME_DATA, etc.
+        window.HAE     = {}; //This contains the game itself. When someone makes a game, it's info goes in here.
 
-	<!-- Modules that represent each cell of the GUI -->
-	<script src="Javascript/Modules/menus.js"></script>
-	<script src="Javascript/Modules/dialog.js"></script>
-	<script src="Javascript/Modules/actions.js"></script>
-	<script src="Javascript/Modules/map_grid.js"></script>
-	<script src="Javascript/Modules/Example_Module.js"></script>
+        //Maybe I should make it so instead of having HAE point at the game, I make HAE point at the story format
+        //And add GAME to point at the game itself
+        //Then reformat all access to HAE_PROCESSOR/BUILDER/PARSER to be through an intermediate STORY_ACCESSOR system
+        //So the keys become STORY and GAME, and STORY is passed "HAE" by the game, causing STORY to load HAE
+        //All current calls to HAE inside my codebase would be replaced with STORY.has_cell() or whatever is needed
+        //
+        //TLDR:
+        //HAE becomes GAME
+        //The HAE_Files stay HAE
+        //STORY 
+    </script>
 
-	<!-- ------------- ------------- ------------- -->
-	<!-- ------------- ------------- ------------- -->
-	<!-- ------------- MAIN HAE FILE ------------- -->
-	<!-- ------------- ------------- ------------- -->
-	<!-- Replace the below file when making a game -->
-	<!-- ------------- ------------- ------------- -->
-	<!-- ------------- ------------- ------------- -->
-	<script src="Text/Test.js"></script>
+    <!-- Files that represent the main engine -->
+    <script src="Javascript/Engine/storage.js"></script>
+    <script src="Javascript/Engine/save_load.js"></script>
+    <script src="Javascript/Engine/history.js"></script>
+    <script src="Javascript/Engine/game_view.js"></script>
+    <script src="Javascript/Engine/game_state.js"></script>
+    <script src="Javascript/Engine/run_engine.js"></script>
+    <script src="Javascript/Engine/HADVENTE.js"></script>
+
+    <!-- Files used by the engine and individual modules  -->
+    <script src="Javascript/HAE/HAE_Scene.js"></script>
+    <script src="Javascript/HAE/HAE_Processor.js"></script>
+    <script src="Javascript/HAE/HAE_Parser.js"></script>
+    <script src="Javascript/HAE/HAE_Builder.js"></script>
+
+    <!-- Modules that represent each cell of the GUI -->
+    <script src="Javascript/Modules/menus.js"></script>
+    <script src="Javascript/Modules/dialog.js"></script>
+    <script src="Javascript/Modules/actions.js"></script>
+    <script src="Javascript/Modules/map_grid.js"></script>
+    <script src="Javascript/Modules/Example_Module.js"></script>
+
+    <!-- ------------- ------------- ------------- -->
+    <!-- ------------- ------------- ------------- -->
+    <!-- ------------- MAIN HAE FILE ------------- -->
+    <!-- ------------- ------------- ------------- -->
+    <!-- Replace the below file when making a game -->
+    <!-- ------------- ------------- ------------- -->
+    <!-- ------------- ------------- ------------- -->
+    <script src="Text/Test.js"></script>
 
 </head>
 
 <body>
 
-	<div id="NoJS" style="color: red;">You must have Javascript enabled to run this program.</div>
+    <div id="NoJS" style="color: red;">You must have Javascript enabled to run this program.</div>
 
-	<script>
-		document.getElementById("NoJS").remove();
-		startHADVENTE(); //this function is defined inside HADVE.js
-	</script> 
+    <script>
+        document.getElementById("NoJS").remove();
+        startHADVENTE(); //this function is defined inside HADVE.js
+    </script> 
 </body>
 </html>

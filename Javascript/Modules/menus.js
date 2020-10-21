@@ -1,6 +1,6 @@
 /*jshint esversion: 6 */ 
 
-MODULES.MENU = (function () {
+MODULES.MENU = function () {
     
     var PUBLIC_FNs = {};
 
@@ -106,4 +106,4 @@ MODULES.MENU = (function () {
     };
 
     return PUBLIC_FNs; //Returns public functions into the variable
-})();
+};

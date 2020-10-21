@@ -26,7 +26,7 @@
         use_local_storage = hasLocalStorage();
 
         if( !use_local_storage ){
-            H_Error('Your browser does not suppoer local storage. Please let the developer know which browser you are using, ' +
+            H_Error('Your browser does not support local storage. Please let the developer know which browser you are using, ' +
                         'and try using the latest firefox, chrome, or other popular browser releases.');
         }
     }
@@ -40,9 +40,9 @@
     // }
 
 
-    //NOTE: I WILL NOT USE COOKIES, COOKIES SUCK! You can't use cookies locally, so obviously you must use something else
+    //NOTE: I have no plans to use cookies. You can't use cookies locally, so obviously you must use something else
     //Cookies are kinda like cloud saves, since they're read server-side
-    //I have now plan to implement cloud saves, that seems like years of effort
+    //I have no plan to implement cloud saves
     //localStorage is super easy to use, so I will stick with that for now
 
 

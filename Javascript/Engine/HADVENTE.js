@@ -4,7 +4,8 @@
 //
 //This file loads the HAE_GAME file, which represents the text adventure itself (written in .hae file format),
 //and also starts the game_state_engine itself
-//If I rewrite HADVENTE to have a start menu, I would want that in here, not internal to the game state engine
+//If I rewrite HADVENTE to have a start menu, that might have to be in here, since I need access
+//to the story to get what belongs on the start menu (though I doubt I'm going to bother with a start menu)
 
 function startHADVENTE(){
     H_Log('Welcome to the HTML Adventure Engine, or Hadvente! Loading Now...');
@@ -14,7 +15,7 @@ function startHADVENTE(){
 
     checkUrlParms();
 
-    initializeEngine();
+    ENGINE.initializeEngine();
 }
 
 var HAE_GAME;
