@@ -13,7 +13,7 @@ styleSheet.innerText = styles;
 document.head.appendChild(styleSheet);
  */
 
-MODULES.MENU = (function () {
+MODULES.MENUS = (function () {
     
     var PUBLIC_FNs = {};
 
@@ -49,18 +49,18 @@ MODULES.MENU = (function () {
     var $Save, $Options, $Undo, $Redo;
     PUBLIC_FNs.init_HTML = function(_$Cell){
         //This is called during the initial draw, but before the first update event is fired
-        if( !get_HAE().cells.MENU ) return;
+        if( !get_HAE().cells.MENUS ) return;
 
         var html = '<table class="gridContainer">';
         html +='<tr class="menu_grid_row">';
-            html += '<td id="Menu_Button_Save"    class="menu_grid_cell menuGridButton" onmouseup="MODULES.MENU.mouseUpSave()">SAVE</br>LOAD</td>';
-            html += '<td id="Menu_Button_Options" class="menu_grid_cell menuGridButton" onmouseup="MODULES.MENU.mouseUpOptions()">MENU</td>';
-            html += '<td id="Menu_Button_Undo"    class="menu_grid_cell menuGridButton" onmouseup="MODULES.MENU.mouseUpUndo()">UNDO</td>';
-            html += '<td id="Menu_Button_Redo"    class="menu_grid_cell menuGridButton" onmouseup="MODULES.MENU.mouseUpRedo()">REDO</td>';
+            html += '<td id="Menu_Button_Save"    class="menu_grid_cell menuGridButton" onmouseup="MODULES.MENUS.mouseUpSave()">SAVE</br>LOAD</td>';
+            html += '<td id="Menu_Button_Options" class="menu_grid_cell menuGridButton" onmouseup="MODULES.MENUS.mouseUpOptions()">MENU</td>';
+            html += '<td id="Menu_Button_Undo"    class="menu_grid_cell menuGridButton" onmouseup="MODULES.MENUS.mouseUpUndo()">UNDO</td>';
+            html += '<td id="Menu_Button_Redo"    class="menu_grid_cell menuGridButton" onmouseup="MODULES.MENUS.mouseUpRedo()">REDO</td>';
         html += '</tr>';
         html +='</table>';
 
-        _$Cell[ get_HAE().cells.MENU ].append('<div id="MenusMenu" class="sectionContainer small_font">' + html + '</div>');
+        _$Cell[ get_HAE().cells.MENUS ].append('<div id="MenusMenu" class="sectionContainer small_font">' + html + '</div>');
         $Save    = $('#Menu_Button_Save');
         $Options = $('#Menu_Button_Options');
         $Undo    = $('#Menu_Button_Undo');
