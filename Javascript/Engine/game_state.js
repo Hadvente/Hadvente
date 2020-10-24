@@ -39,12 +39,12 @@ game_state.js
     STATE.GET_STATE = function(){
         return GAME_STATE;
     };
-    STATE.LOAD_STATE = function( _state ){
+    STATE.LOAD_STATE = function( _state, _no_history ){
         GAME_STATE = _state;
         _.each(MODULES, function(_module, _name){
             _module.restart_module();
         });
-        ENGINE.runGameUpdate();
+        ENGINE.runGameUpdate(_no_history);
     };
 
     STATE.finished_update = function(){

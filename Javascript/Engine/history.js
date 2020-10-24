@@ -25,7 +25,7 @@
     HISTORY.undo = function(){
         if( undo_history_count < (_.size(current_history) - 1) ){
             undo_history_count++;
-            STATE.LOAD_STATE( current_history[_.size(current_history) - 1 - undo_history_count] );
+            STATE.LOAD_STATE( current_history[_.size(current_history) - 1 - undo_history_count], 'NO AUTO SAVE OR HISTORY' );
         }
     };
 
@@ -34,8 +34,8 @@
     };
     HISTORY.redo = function(){
         if( 0 < undo_history_count ){
-            undo_history_count++;
-            STATE.LOAD_STATE( current_history[_.size(current_history) - 1 - undo_history_count] );
+            undo_history_count--;
+            STATE.LOAD_STATE( current_history[_.size(current_history) - 1 - undo_history_count], 'NO AUTO SAVE OR HISTORY' );
         }
     };
 

@@ -23,19 +23,17 @@ This file loads and runs the engine
 
         VIEW.initializeGameHtml(); //Right now the game has to make it's own start menu as a dialog scene, but I could rework this to have actual start menus
 
-        if( autoload && SAVES.has_save_file('AUTO') ){
-            STATE.LOAD_STATE( SAVES.get_save_file('AUTO') );
-        }
+        if( autoload ) SAVES.load_save_file('AUTO');
 
         _.delay(ENGINE.runGameUpdate, 50);
     };
 
     //All event handlers that cause game state updates should call this
     //Inversely, it would be nice if nothing after initialization called this except the event handlers
-    ENGINE.runGameUpdate = function(){
+    ENGINE.runGameUpdate = function( _no_history_update ){
         H_Log('about to update game, making autosave');
 
-        HISTORY.history_update();
+        if( !_no_history_update) HISTORY.history_update();
 
         pre_scene_update_modules();
 

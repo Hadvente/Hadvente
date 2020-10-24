@@ -27,11 +27,6 @@
         currentSave.META_DATA.save_time = Date.now();
 
         STORAGE.saveData('SAVE_SLOT_AUTO', currentSave);
-
-        if( H_Log_Active() ){
-            //don't want to waste deepClone
-            H_Log( 'History size: ' + _.size(current_history), _.deepClone(current_history) );
-        }
     };
 
     SAVES.save_to_slot = function( _slot_index ){
@@ -66,6 +61,13 @@
 
      */
 
+    SAVES.load_save_file = function(_load_index){
+        var currentSave = SAVES.get_save_file(_load_index);
+        if( currentSave ){
+            STATE.LOAD_STATE( currentSave );
+        }
+    };
+
     SAVES.get_save_file = function(_load_index){
         if(_load_index == 'AUTO'){
             return STORAGE.getData( 'SAVE_SLOT_AUTO' );
@@ -77,13 +79,7 @@
     };
 
     SAVES.has_save_file = function(_load_index){
-        if(_load_index == 'AUTO'){
-            return !!STORAGE.getData( 'SAVE_SLOT_AUTO' );
-        }
-        else{
-            //load index should be a number that represents the save slot
-            return !!STORAGE.getData( 'SAVE_SLOT_' + ( _load_index || 0 ) );
-        }
+        return !!SAVES.get_save_file(_load_index);
     };
 
     /*
