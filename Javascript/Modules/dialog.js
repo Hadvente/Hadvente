@@ -56,7 +56,7 @@ MODULES.DIALOG = function () {
     o888o   o888o     o888o     o8o        o888o o888ooooood8 
     
      */ 
-    var $Dialog = {};
+    var $Dialog;
     DIALOG_FNs.init_HTML = function(_$Cell){
         if( !get_HAE().cells.DIALOG ) return;
         _$Cell[ get_HAE().cells.DIALOG ].append(`<div id="MainDialogContainer">

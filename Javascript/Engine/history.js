@@ -23,16 +23,20 @@
         return false; //If the size is 5, and if count is 4, then you are looking at the oldest element, and can not undo
     };
     HISTORY.undo = function(){
-        if( undo_history_count < (_.size(current_history) - 1) ) undo_history_count++;
-        //Okay, now, load the new game_state
+        if( undo_history_count < (_.size(current_history) - 1) ){
+            undo_history_count++;
+            STATE.LOAD_STATE( current_history[_.size(current_history) - 1 - undo_history_count] );
+        }
     };
 
     HISTORY.can_redo = function(){
-        if( undo_history_count > 0 ) return true;
+        if( 0 < undo_history_count ) return true;
     };
     HISTORY.redo = function(){
-        if( undo_history_count > 0 ) undo_history_count++;
-        //Okay, now, load the new game_state
+        if( 0 < undo_history_count ){
+            undo_history_count++;
+            STATE.LOAD_STATE( current_history[_.size(current_history) - 1 - undo_history_count] );
+        }
     };
 
     function remove_future_history(){

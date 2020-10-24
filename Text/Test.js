@@ -5,10 +5,11 @@ HAE = {
     cells:{
         //HAS_RIGHT_COLUMN : 'HAS_RIGHT_COLUMN', //this tells the GUI to draw a third column to the right of the text, in case you want lots of cells
 
-        Name     : 'Name',
-        Menu     : 'Menu',
+        MENU     : 'Menu',
         DIALOG   : 'Dialog',
         ACTIONS  : 'Actions',
+        //UNUSED_1 : 'Top_Left',
+        //UNUSED_2 : 'Middle_Left',
         MAP_GRID : 'Bottom_Left'
     },
     actions:{

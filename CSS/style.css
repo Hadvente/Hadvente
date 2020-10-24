@@ -132,31 +132,25 @@ CELL LAYOUT
 }
 
 
-#Left_Col_Cell_Name{
+#Left_Col_Cell_Menus{
     position: absolute;
     top: 0%;
-    height: 6%;
-    width: 100%;
+    height: 9%;
 }
 #Left_Col_Cell_Top{
     position: absolute;
-    top: 7%;
-    height: 27%;
+    top: 10%;
+    height: 29%;
 }
 #Left_Col_Cell_Middle{
     position: absolute;
-    top: 35%;
-    height: 27%;
+    top: 40%;
+    height: 30%;
 }
 #Left_Col_Cell_Bottom{
     position: absolute;
-    top: 63%;
-    height: 27%;
-}
-#Left_Col_Cell_Menus{
-    position: absolute;
-    top: 91%;
-    height: 9%;
+    top: 71%;
+    height: 29%;
 }
 
 #Center_Col_Cell_Dialog {
@@ -230,12 +224,58 @@ From this point on, we would like to be defining CSS for specific elements inste
     overflow:hidden;
 }
 
-/* Left Column */
-#NameLabel {
-    text-align: center;
-    padding-top: 1%;
+.gridContainer {
+    width:99%;
+    height:99%;
+    table-layout : fixed;
+    border-spacing: 5px;
 }
 
+/* Menu Buttons */
+
+#MenusMenu {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    border-spacing: 10px;
+}
+#MenusMenu .gridContainer {
+    border-spacing: 5px;
+}
+.menu_grid_cell {
+    -webkit-user-select: none; /* Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+    background: #000;
+    border-radius: 20px;
+    border: solid 3px #686868;
+    text-align: center;
+}
+.menu_grid_cell:hover {
+    background: #444;
+}
+.menu_grid_cell:active {
+    background: #222;
+}
+.menu_grid_cell.menu_button_disabled {
+    background: #444;
+    border: solid 3px #444;
+    color: #888;
+}
+
+#Menu_Button_Save {
+
+}
+#Menu_Button_Options {
+
+}
+#Menu_Button_Undo {
+
+}
+#Menu_Button_Redo {
+
+}
 /*
 
 MAIN DIALOG
@@ -281,13 +321,6 @@ Action Buttons
 .action_grid_cell.active_action {
     background: #686868;
     border: solid 3px #686868;
-}
-
-.gridContainer {
-    width:99%;
-    height:99%;
-    table-layout : fixed;
-    border-spacing: 10px;
 }
 
 /* MAP */

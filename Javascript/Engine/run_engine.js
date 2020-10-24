@@ -15,11 +15,7 @@ This file loads and runs the engine
         createModulesIfNeeded();
         checkFunctionListForModules();
         
-        //initialize required cells
         HAE_SCENE.initialize();
-
-        //NAME.initialize();
-        //MENU.initialize();
 
         _.each(MODULES, function(_module, _name){
             _module.initialize();

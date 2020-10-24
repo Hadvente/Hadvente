@@ -11,8 +11,8 @@ game_state.js
     STATE.initializeGameState = function(){
         ///one important consideration is how the save and load system works, as that system directly manipulates GAME_STATE
         ///It would make sense to me for GAME_STATE to be able to receive a new GAME_STATE object from the save-load file for loading
-        ///Something that would be really nice is if ENGINE.runGameUpdate was all you had to call once GAME_STATE was overwritten
-        ///Meaning there was nothing funky going on with the game state, GAME_STATE represents everything about the game
+        ///NOTE: Game State must represent your entire save file
+        ///You cannot save any info OUTSIDE the save file! Make sure that that doesn't happen or your save will break!
 
         STATE.GET_STATE().CURRENT_SCENE = 'START'; //The Game_state creator sets this value, because having anyone else set it would break autosave load
         _.each(MODULES, function(_module, _name){

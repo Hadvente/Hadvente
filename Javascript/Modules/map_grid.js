@@ -141,10 +141,9 @@ MODULES.MAP_GRID = function() {
         var gridSize = getCurrentMap().grid_size;
         var html = '<table class="gridContainer">';
         _.times(gridSize[0], function(_y){
-            //height has to be set like this because of the indeterminate amount of rows
             html +='<tr class="map_grid_row">';
             _.times(gridSize[1], function(_x){
-                html += '<td id="Grid_'+ _y + '_'+ _x + '" class="map_grid_cell"></div>';
+                html += '<td id="Grid_'+ _y + '_'+ _x + '" class="map_grid_cell"></td>';
             });
             html += '</tr>';
         });

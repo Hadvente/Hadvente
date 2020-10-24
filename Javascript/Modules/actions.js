@@ -108,10 +108,9 @@ MODULES.ACTIONS = function () {
         var gridSize = actionGridSize;
         var html = '<table class="gridContainer">';
         _.times(gridSize[0], function(_y){
-            //height has to be set like this because of the indeterminate amount of rows
             html +='<tr class="action_grid_row">';
             _.times(gridSize[1], function(_x){
-                html += '<td id="Action_'+ _y + '_'+ _x + '" class="action_grid_cell actionButton"></div>';
+                html += '<td id="Action_'+ _y + '_'+ _x + '" class="action_grid_cell actionButton"></td>';
             });
             html += '</tr>';
         });

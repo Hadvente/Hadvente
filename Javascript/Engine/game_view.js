@@ -36,13 +36,11 @@ The GUI is designed in what are called "CELLS", which show each individual aspec
     //and the game can pick one, define a new one, or if no choice is made it will go to a default
     var cellDefinitions = [
         [
-            {html: '<div id="Left_Col_Cell_Name"></div>'},
-            {html: '<div id="Left_Col_Cell_Name_BIG"></div>'},
+            {html: '<div id="Left_Col_Cell_Menus" class=""></div>'},
 
             {html: '<div id="Left_Col_Cell_Top" class="cellContainer"></div>'},
             {html: '<div id="Left_Col_Cell_Middle" class="cellContainer"></div>'},
             {html: '<div id="Left_Col_Cell_Bottom" class="cellContainer"></div>'},
-            {html: '<div id="Left_Col_Cell_Menus" class="cellContainer"></div>'},
 
             {html: '<div id="Left_Col_Cell_Top_BIG" class="cellContainer"></div>'},
             {html: '<div id="Left_Col_Cell_Bottom_BIG" class="cellContainer"></div>'}
@@ -96,7 +94,6 @@ The GUI is designed in what are called "CELLS", which show each individual aspec
     var $Cell = {};
     function setEachCellSelector(){
         //These are all REQUIRED
-        $Cell.Name         = $('#Left_Col_Cell_Name');
         $Cell.Menu         = $('#Left_Col_Cell_Menus');
         $Cell.Dialog       = $('#Center_Col_Cell_Dialog');
         $Cell.Actions      = $('#Center_Col_Cell_Actions');
@@ -129,11 +126,6 @@ The GUI is designed in what are called "CELLS", which show each individual aspec
     }
 
     function initCellHtml(){
-
-        //temporary calls
-        $Cell.Name.append('<div id="NameLabel" class="sectionContainer giant_font">' + (get_HAE().title || 'HADVENTE') + '</div>');
-        $Cell.Menu.append('<div id="GameMenu" class="sectionContainer small_font">Inventory and other game menus</div>');
-
         _.each(MODULES, function(_module, _name){
             if(_module.NO_HTML) return;
             if(_module.init_HTML){
