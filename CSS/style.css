@@ -16,6 +16,7 @@ p {
     margin: 0.5% auto;
     margin-bottom: 0px;
     border: 3px solid gray;
+    border-radius: 10px;
     padding: 5px;
     position:absolute;
     top: 0; bottom: 0; left: 0; right: 0;
@@ -31,6 +32,7 @@ p {
     margin: 0.5% auto;
     margin-bottom: 0px;
     border: 3px solid gray;
+    border-radius: 10px;
     padding: 5px;
     position:absolute;
     top: 0; bottom: 0; left: 0; right: 0;
@@ -88,6 +90,7 @@ CELL LAYOUT
 
 .cellContainer{
     border: 3px solid gray;
+    border-radius: 10px;
     box-sizing: border-box; /*These properties make the border be inside the box instead of outside*/
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
@@ -212,6 +215,43 @@ CELL LAYOUT
     position: absolute;
     top: 50.5%;
     height: 42.5%;
+}
+
+/* Pop-up CSS */
+#PopupContainer {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+.popup_hidden{
+    display: none;
+}
+.background_obscure {
+    background: rgba(7, 7, 7, 0.7);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left:0;
+    right:0;
+}
+#PopupContentsContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height:100%;
+  font-size: 24px;
+}
+#PopupContents {
+}
+.popup_container {
+    width: 500px;
+    height: 500px;
+    border-radius: 10px;
+    border: solid 3px #686868;
+    background: #111;
 }
 
 /*

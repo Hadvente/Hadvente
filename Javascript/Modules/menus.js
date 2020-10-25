@@ -46,7 +46,7 @@ MODULES.MENUS = (function () {
 
     //PUBLIC_FNs.NO_HTML = true; //If this is true, then the functions init_HTML and update_HTML don't need to exist
     
-    var $Save, $Options, $Undo, $Redo;
+    var $Undo, $Redo;
     PUBLIC_FNs.init_HTML = function(_$Cell){
         //This is called during the initial draw, but before the first update event is fired
         if( !get_HAE().cells.MENUS ) return;
@@ -61,11 +61,8 @@ MODULES.MENUS = (function () {
         html +='</table>';
 
         _$Cell[ get_HAE().cells.MENUS ].append('<div id="MenusMenu" class="sectionContainer small_font">' + html + '</div>');
-        $Save    = $('#Menu_Button_Save');
-        $Options = $('#Menu_Button_Options');
         $Undo    = $('#Menu_Button_Undo');
         $Redo    = $('#Menu_Button_Redo');
-        
     };
 
     function getMenuButtonsHtml(){
@@ -110,6 +107,8 @@ MODULES.MENUS = (function () {
 
     PUBLIC_FNs.mouseUpSave = function(){
         H_Log('click', 'clicked save menu');
+        var $SavePopup = VIEW.openPopup();
+        $SavePopup.append('This popup will contain options for loading a save slot, saving to a save slot, deleting a save, saving to a file, and loading a file');
     };
     PUBLIC_FNs.mouseUpUndo = function(){
         if( !HISTORY.can_undo() ) return;

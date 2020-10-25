@@ -29,6 +29,7 @@ The GUI is designed in what are called "CELLS", which show each individual aspec
         //Make the cells
         createCells();
         initAllCells();
+        initPopup();
     };
 
     //I want to look into ways this can be more customizable and defined by a game
@@ -159,4 +160,26 @@ The GUI is designed in what are called "CELLS", which show each individual aspec
             }
         });
     };
+
+    function initPopup(){
+        $("body").append('<div id="PopupContainer" class="background_obscure popup_hidden"></div>');
+    }
+
+    var isOpen = false;
+    VIEW.openPopup = function(_class_list){
+        if( isOpen ) VIEW.closePopup(); //this is valid if you want to replace a popup
+        $('#PopupContainer').append(`<div id="PopupContentsContainer"><div id="PopupContents" class="${_class_list || 'popup_container'}"></div></div>`);
+        $('#PopupContainer').removeClass('popup_hidden');
+        return $('#PopupContents');
+    };
+
+    VIEW.closePopup = function(){
+        if( !isOpen ){
+            H_Error('Someone has called closePopup when the popup is already closed!');
+            return;
+        }
+        $('#PopupContainer').empty();
+        $('#PopupContainer').addClass('popup_hidden');
+    };
+
 }).call();
