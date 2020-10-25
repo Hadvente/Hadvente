@@ -61,7 +61,8 @@ HAE = {
             }
         }
     },
-    text:{
+scenes:{
+
 START: `
 <<[DISABLE_CELLS]>>
 You wake up, unsure where you are. You look around and see a dark and destroyed living room.\
@@ -164,5 +165,51 @@ You did it! You can open the door!
 FREEDOM!!!
 THE END
 `
+
 }
 }; //do not delete this line
+
+//I have no idea if I will implement this visual novel system, but it could be fun.
+
+var VN = {
+    Layout: 'VN', //I must implement the custom layout system to add a Visual Novel system
+    Cells: {VN:{LOCATION: 'VN'}, VN_DIALOG:{LOCATION: 'VN_DIALOG'}} //I must add the location tag to the cells themselves for this to work
+};
+VN.Cells.VN.Backgrounds = {
+    'snow': 'Backgrounds/snowy_field.jpg' //all images are in the Images subfolder
+};
+VN.Cells.VN.Characters = {
+    'Kyle':{Name: 'Kyle', Images:{'default': 'Characters/Kyle_smile.jpg', 'surprised': 'Characters/Kyle_surprised.jpg'}},
+    'Sarah':{Name: 'Sarah', Images:{'default': 'Characters/Sarah_smile.jpg', 'surprised': 'Characters/Sarah_surprised.jpg'}}
+};
+VN.scenes = {
+    'START':`
+        <[BG snow]>
+        
+        Fun fact: in the visual novel format, anything outside of a command is just a comment.
+        
+        <[CHAR Kyle]>
+
+        <[D Kyle  || Snow!]>
+
+        <[CHAR > Kyle]>
+        <[CHAR < Sarah]>
+
+        <[D Sarah || Wow, it sure is cold out here.
+            Kyle  || Or is it?
+            Kyle  || Hmm...
+            Sarah || What? That makes no sense.
+        ]>
+
+        <[CHAR > Kyle surprised]>
+        <[CHAR < Sarah surprised]>
+
+        <[D Everyone || AAAHHH!!!]>
+
+        <[HIDE Sarah]>
+
+        <[D Kyle || Oh no, Sarah's DEAD!]>
+
+        <[FADE]>
+    `
+};

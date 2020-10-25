@@ -23,6 +23,8 @@ This file loads and runs the engine
 
         VIEW.initializeGameHtml(); //Right now the game has to make it's own start menu as a dialog scene, but I could rework this to have actual start menus
 
+        initKeyPresses();
+
         if( autoload ) SAVES.load_save_file('AUTO');
 
         _.delay(ENGINE.runGameUpdate, 50);
@@ -104,4 +106,20 @@ This file loads and runs the engine
             }
         });
     }
+
+
+    var KeyPressFns = {};
+    function initKeyPresses(){
+        $(document).bind('keyup', function(e) {
+            _.each(KeyPressFns, function(_fn){
+                    _fn(e);
+            });
+        });
+    }
+    ENGINE.addKeyPress = function(_name, _fn){
+        KeyPressFns[_name] = _fn;
+    };
+    ENGINE.removeKeyPress = function(_name){
+        delete KeyPressFns[_name];
+    };
 }).call();

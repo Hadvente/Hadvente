@@ -76,7 +76,7 @@ function H_Log_Active(){
     return isLogging;
 }
 
-function H_ERROR(_log, _obj){
+function H_Error(_log, _obj){
     if(_obj) console.error(_log, _obj);
     else console.error(_log);
 }

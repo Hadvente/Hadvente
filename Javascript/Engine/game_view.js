@@ -165,21 +165,23 @@ The GUI is designed in what are called "CELLS", which show each individual aspec
         $("body").append('<div id="PopupContainer" class="background_obscure popup_hidden"></div>');
     }
 
-    var isOpen = false;
+    var isPopupOpen = false;
     VIEW.openPopup = function(_class_list){
-        if( isOpen ) VIEW.closePopup(); //this is valid if you want to replace a popup
+        if( isPopupOpen ) VIEW.closePopup(); //this is valid if you want to replace a popup
         $('#PopupContainer').append(`<div id="PopupContentsContainer"><div id="PopupContents" class="${_class_list || 'popup_container'}"></div></div>`);
         $('#PopupContainer').removeClass('popup_hidden');
+        isPopupOpen = true;
         return $('#PopupContents');
     };
 
     VIEW.closePopup = function(){
-        if( !isOpen ){
+        if( !isPopupOpen ){
             H_Error('Someone has called closePopup when the popup is already closed!');
             return;
         }
         $('#PopupContainer').empty();
         $('#PopupContainer').addClass('popup_hidden');
+        isPopupOpen = false;
     };
 
 }).call();

@@ -54,7 +54,7 @@ MODULES.MENUS = (function () {
         var html = '<table class="gridContainer">';
         html +='<tr class="menu_grid_row">';
             html += '<td id="Menu_Button_Save"    class="menu_grid_cell menuGridButton" onmouseup="MODULES.MENUS.mouseUpSave()">SAVE</br>LOAD</td>';
-            html += '<td id="Menu_Button_Options" class="menu_grid_cell menuGridButton" onmouseup="MODULES.MENUS.mouseUpOptions()">MENU</td>';
+            //html += '<td id="Menu_Button_Options" class="menu_grid_cell menuGridButton" onmouseup="MODULES.MENUS.mouseUpOptions()">MENU</td>';
             html += '<td id="Menu_Button_Undo"    class="menu_grid_cell menuGridButton" onmouseup="MODULES.MENUS.mouseUpUndo()">UNDO</td>';
             html += '<td id="Menu_Button_Redo"    class="menu_grid_cell menuGridButton" onmouseup="MODULES.MENUS.mouseUpRedo()">REDO</td>';
         html += '</tr>';
@@ -109,6 +109,12 @@ MODULES.MENUS = (function () {
         H_Log('click', 'clicked save menu');
         var $SavePopup = VIEW.openPopup();
         $SavePopup.append('This popup will contain options for loading a save slot, saving to a save slot, deleting a save, saving to a file, and loading a file');
+        ENGINE.addKeyPress('Save_Popup', function(e) {
+            if (e.keyCode === 27){
+                VIEW.closePopup();
+                ENGINE.removeKeyPress('Save_Popup');
+            }
+        });
     };
     PUBLIC_FNs.mouseUpUndo = function(){
         if( !HISTORY.can_undo() ) return;

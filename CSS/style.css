@@ -247,8 +247,8 @@ CELL LAYOUT
 #PopupContents {
 }
 .popup_container {
-    width: 500px;
-    height: 500px;
+    width: 480px;
+    height: 480px;
     border-radius: 10px;
     border: solid 3px #686868;
     background: #111;

@@ -13,7 +13,7 @@ var HAE_PROCESSOR = (function () {
     var PROCESSOR_FNs = {};
 
     PROCESSOR_FNs.PROCESS_SCENE = function(_string){
-        var sceneText = get_HAE().text[_string];
+        var sceneText = get_HAE().scenes[_string];
         if(!sceneText){
             console.error('Scene passed in that does not exist:', _string);
             return '';
