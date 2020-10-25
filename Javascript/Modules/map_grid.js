@@ -234,7 +234,7 @@ MODULES.MAP_GRID = function() {
         if( !getCurrentMap().grid[_y][_x] ) return; //no cell to click on
         if( getCurrentLocation()[0] == _y && getCurrentLocation()[1] == _x) return; //Clicking on the current cell should do nothing
 
-        H_Log('clicked on cell ' + _y + ', ' + _x + ' - which has the value of ' + getCurrentMap().grid[_y][_x]);
+        H_Log('MAP_GRID', 'clicked on cell ' + _y + ', ' + _x + ' - which has the value of ' + getCurrentMap().grid[_y][_x]);
 
         previousLocation = getCurrentLocation();
         STATE.GET_CELL_DATA('MAP_GRID').location = [_y, _x];

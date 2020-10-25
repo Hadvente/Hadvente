@@ -157,7 +157,7 @@ MODULES.ACTIONS = function () {
 
     function actionGridClick(_y, _x){
         if( !actionGrid[_y][_x] ) return; //no cell to click on
-        H_Log('clicked on action cell ' + _y + ', ' + _x + ' - which has the value of ', actionGrid[_y][_x]);
+        H_Log('ACTIONS', 'clicked on action cell ' + _y + ', ' + _x + ' - which has the value of ', actionGrid[_y][_x]);
 
         if( ActionTypeClickFns[ actionGrid[_y][_x].actionType ] ){
             ActionTypeClickFns[ actionGrid[_y][_x].actionType ]( actionGrid[_y][_x] );

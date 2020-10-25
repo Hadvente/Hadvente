@@ -8,7 +8,6 @@
 //to the story to get what belongs on the start menu (though I doubt I'm going to bother with a start menu)
 
 function startHADVENTE(){
-    H_Log('Welcome to the HTML Adventure Engine, or Hadvente! Loading Now...');
     
     get_HAE_GAME();
     if( !HAE_GAME ) return;
@@ -67,10 +66,10 @@ function checkUrlParms(){
     if( urlParmString.includes('autoload') ) autoload = true;
 }
 
-function H_Log(_log, _obj){
+function H_Log(_type, _log, _obj){
     if(!isLogging) return;
-    if(_obj) console.log(_log, _obj);
-    else console.log(_log);
+    if(_obj) console.log('TYPE: ' + _type + ' - ' + _log, _obj);
+    else console.log('TYPE: ' + _type + ' - ' + _log);
 }
 
 function H_Log_Active(){

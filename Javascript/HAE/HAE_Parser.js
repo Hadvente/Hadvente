@@ -14,10 +14,10 @@ var HAE_PARSER = (function () {
     var PARSER_FNs = {
         parseHAE(_str){
             var splitScene  = SPLIT_HAE(_str);
-            H_Log('split:', splitScene );
+            H_Log('HAE', 'split:', splitScene );
             testLogicCount(splitScene);
             var parsedScene = PARSE_HAE(splitScene);
-            H_Log('logic parse:', parsedScene );
+            H_Log('HAE', 'logic parse:', parsedScene );
             return parsedScene;
         }
     };

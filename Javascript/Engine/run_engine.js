@@ -31,9 +31,11 @@ This file loads and runs the engine
     //All event handlers that cause game state updates should call this
     //Inversely, it would be nice if nothing after initialization called this except the event handlers
     ENGINE.runGameUpdate = function( _no_history_update ){
-        H_Log('about to update game, making autosave');
+        H_Log('ENGINE', 'about to update game, making autosave');
 
         if( !_no_history_update) HISTORY.history_update();
+        
+        HISTORY.log_history();
 
         pre_scene_update_modules();
 
@@ -53,7 +55,7 @@ This file loads and runs the engine
 
     function pre_scene_update_modules(){
 
-        H_Log('game preprocessing modules');
+        H_Log('ENGINE', 'game preprocessing modules');
 
         _.each(MODULES, function(_module, _name){
             if(_module.optional_pre_scene_update) _module.optional_pre_scene_update();
@@ -62,7 +64,7 @@ This file loads and runs the engine
 
     function update_modules(){
 
-        H_Log('game updating modules');
+        H_Log('ENGINE', 'game updating modules');
 
         _.each(MODULES, function(_module, _name){
             _module.update_module();
@@ -71,7 +73,7 @@ This file loads and runs the engine
 
     function finished_draw_modules(){
 
-        H_Log('game finished drawing modules');
+        H_Log('ENGINE', 'game finished drawing modules');
 
         _.each(MODULES, function(_module, _name){
             _module.finished_draw();

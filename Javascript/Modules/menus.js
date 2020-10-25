@@ -109,21 +109,21 @@ MODULES.MENUS = (function () {
 
 
     PUBLIC_FNs.mouseUpSave = function(){
-        console.log('clicked save menu');
+        H_Log('click', 'clicked save menu');
     };
     PUBLIC_FNs.mouseUpUndo = function(){
         if( !HISTORY.can_undo() ) return;
-        console.log('clicked undo btn');
+        H_Log('click', 'clicked undo btn');
         HISTORY.undo();
     };
     PUBLIC_FNs.mouseUpRedo = function(){
         if( !HISTORY.can_redo() ) return;
-        console.log('clicked redo btn');
+        H_Log('click', 'clicked redo btn');
         HISTORY.redo();
     };
 
     PUBLIC_FNs.mouseUpOptions = function(){
-        console.log('clicked options menu');
+        H_Log('click', 'clicked options menu');
     };
 
     return PUBLIC_FNs; //Returns public functions into the variable

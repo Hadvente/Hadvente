@@ -25,7 +25,7 @@
     HISTORY.undo = function(){
         if( undo_history_count < (_.size(current_history) - 1) ){
             undo_history_count++;
-            STATE.LOAD_STATE( current_history[_.size(current_history) - 1 - undo_history_count], 'NO AUTO SAVE OR HISTORY' );
+            STATE.LOAD_STATE( _.deepClone( current_history[_.size(current_history) - 1 - undo_history_count] ), 'NO AUTO SAVE OR HISTORY' );
         }
     };
 
@@ -35,16 +35,14 @@
     HISTORY.redo = function(){
         if( 0 < undo_history_count ){
             undo_history_count--;
-            STATE.LOAD_STATE( current_history[_.size(current_history) - 1 - undo_history_count], 'NO AUTO SAVE OR HISTORY' );
+            STATE.LOAD_STATE(_.deepClone( current_history[_.size(current_history) - 1 - undo_history_count] ), 'NO AUTO SAVE OR HISTORY' );
         }
     };
 
     function remove_future_history(){
-        if(undo_history_count > 0){
-            //if you have a 5 element array and count of 1, then -1 removes the last element
-            current_history.splice( - undo_history_count );
-            undo_history_count = 0;
-        }
+        //if you have a 5 element array and count of 1, then -1 removes the last element
+        current_history.splice( - undo_history_count );
+        undo_history_count = 0;
     }
 
     function remove_old_history(){
@@ -54,9 +52,11 @@
     }
 
     HISTORY.history_update = function(){
-        remove_future_history();
-        current_history.push( _.deepClone( STATE.GET_STATE() ) );
+        if(undo_history_count > 0){
+            remove_future_history();
+        }
         remove_old_history();
+        current_history.push( _.deepClone( STATE.GET_STATE() ) );
         SAVES.auto_save();
     };
 
@@ -66,5 +66,14 @@
     };
     HISTORY.is_in_present = function(){
         return !undo_history_count;
+    };
+
+    HISTORY.log_history = function(){
+        if(H_Log_Active()){
+            var namesOfHist = _.map(current_history, function(_obj){return _obj.CURRENT_SCENE;});
+            H_Log('HISTORY', 'Logging history at beginning of update, post autosave:\n' +
+                'NAMES OF SCENES IN HISTORY:\n' + namesOfHist.join(', ') + '\ncurrent scene:',
+                _.deepClone(current_history[_.size(current_history) - 1 - undo_history_count]));
+        }
     };
 }).call();

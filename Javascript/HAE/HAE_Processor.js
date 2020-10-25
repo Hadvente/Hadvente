@@ -179,7 +179,7 @@ var HAE_PROCESSOR = (function () {
             }
             return '<p>' + _str + '</p>';
         });
-        H_Log('Text section became:', textSplit);
+        H_Log('HAE', 'Text section became:', textSplit);
         return textSplit.join('');
     });
 
