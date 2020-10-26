@@ -243,7 +243,7 @@ MODULES.ACTIONS = function () {
         if(!_action) return '';
 
         if(!_action.actionType){
-            console.error('Action was made without value, if you want to have an empty space in your action list, put <<[ACTION NONE]>> instead');
+            console.error('Action was made without value, if you want to have an empty space in your action list, put <[ACTION NONE]> instead');
             return '';
         }
 

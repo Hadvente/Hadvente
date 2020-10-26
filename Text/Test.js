@@ -64,16 +64,16 @@ HAE = {
 scenes:{
 
 START: `
-<<[DISABLE_CELLS]>>
+<[DISABLE_CELLS]>
 You wake up, unsure where you are. You look around and see a dark and destroyed living room.\
 Didn't you go to sleep in your own home? Where are you?
 
 Note: Use the map on the left to navigate.
 
 &larr;
-&lArr;<<[COMMENT this is pretty nice left arrow]]>>
+&lArr;<[COMMENT this is pretty nice left arrow]>>
 &rarr;
-&rArr;<<[COMMENT this is pretty nice right arrow]]>>
+&rArr;<[COMMENT this is pretty nice right arrow]>>
 \u2699 
 \u26ED
 \u26EF
@@ -82,19 +82,19 @@ Note: Use the map on the left to navigate.
 
 --START RNG--
 \
-<<[IF FN Random_10]>>This has a 10% chance of happening.
-<<[ELSEIF FN Random_50]>>This has a 45% chance of happening.
-<<[ELSEIF FN Random_50]>>This has a 22.5% chance of happening.
-<<[ELSE]>>This happens if nothing else happens (22.5%)
-<<[ENDIF]>>\
+<[IF FN Random_10]>This has a 10% chance of happening.
+<[ELSEIF FN Random_50]>This has a 45% chance of happening.
+<[ELSEIF FN Random_50]>This has a 22.5% chance of happening.
+<[ELSE]>This happens if nothing else happens (22.5%)
+<[ENDIF]>\
 --RNG ended--
-<<[ACTION CONTINUE]>>
+<[ACTION CONTINUE]>
 `,
 
 BedroomA:`
 The room is also messy and destroyed, just like all the others.
 You see a pink bed in one corner, with a large wardrobe in the other.
-<<[GOTO Look In Wardrobe||get_nothing]>>
+<[GOTO Look In Wardrobe||get_nothing]>
 `,
 Kitchen:`
 Wow, it's a kitchen?
@@ -104,28 +104,28 @@ The room is blue dah ba dee dah ba die.
 `,
 Piano:`
 The piano doesn't even have strings?
-<<[ACTION GOTO Play Piano||piano_playing_1||Pls play]>>
+<[ACTION GOTO Play Piano||piano_playing_1||Pls play]>
 `,
 Dining:`
 The dining table was broke in half god as my witness.\
-<<[IF FN has_screwdriver]>>
+<[IF FN has_screwdriver]>
 You wonder what you can do with your screwdriver...
-<<[ELSE]>>
+<[ELSE]>
 There is a screwdriver sitting on the table.
-<<[GOTO Pickup Screwdriver||get_screwdriver]>>
-<<[ENDIF]>>
+<[GOTO Pickup Screwdriver||get_screwdriver]>
+<[ENDIF]>
 `,
 Art:`
 Art
-<<[GOTO art||ART]>>
+<[GOTO art||ART]>
 `,
 ART:`
 ART
-<<[GOTO Art||art]>>
+<[GOTO Art||art]>
 `,
 art:`
 art
-<<[GOTO ART||Art]>>
+<[GOTO ART||Art]>
 `,
 Bath:`
 It's a bathroom.
@@ -133,33 +133,33 @@ It's a bathroom.
 Foyer:`
 The door! If only you could open it.
 
-<<[IF FN has_screwdriver]>>
+<[IF FN has_screwdriver]>
 Wait a second! the door handle has screw holes!
-<<[GOTO Unscrew Lock||THE_END]>>
-<<[ENDIF]>>
+<[GOTO Unscrew Lock||THE_END]>
+<[ENDIF]>
 `,
 Living:`
 Back in the living room! Still dark. Still destroyed.
 `,
 piano_playing_1:`
-<<[DISABLE_CELLS]>>\
-<<[ACTION CONTINUE]>>\
+<[DISABLE_CELLS]>\
+<[ACTION CONTINUE]>\
 Wow, You played the piano! :)
 `,
 get_nothing:`
-<<[DISABLE_CELLS]>>
+<[DISABLE_CELLS]>
 There is nothing but dust in here.
-<<[ACTION CONTINUE]>>
+<[ACTION CONTINUE]>
 `,
 get_screwdriver: `
-<<[DISABLE_CELLS]>>\
-<<[ACTION CONTINUE]>>\
-<<[// FN pickup_screwdriver]>>\
-<<[SET screwdriver = true]>>\
+<[DISABLE_CELLS]>\
+<[ACTION CONTINUE]>\
+<[// FN pickup_screwdriver]>\
+<[SET screwdriver = true]>\
 You pick up the screwdriver and look at it. Maybe you can open something with it...
 `,
 THE_END: `
-<<[DISABLE_CELLS]>>
+<[DISABLE_CELLS]>
 You take your screwdriver and unscrew the door handle and lock.
 You did it! You can open the door!
 FREEDOM!!!
@@ -172,21 +172,22 @@ THE END
 //I have no idea if I will implement this visual novel system, but it could be fun.
 
 var VN = {
-    Layout: 'VN', //I must implement the custom layout system to add a Visual Novel system
-    Cells: {VN:{LOCATION: 'VN'}, VN_DIALOG:{LOCATION: 'VN_DIALOG'}} //I must add the location tag to the cells themselves for this to work
+    Layout: 'VN',
+    VN_BG:{LOCATION: 'VN_BG'},
+    VN_DIALOG:{LOCATION: 'VN_DIALOG'}
 };
-VN.Cells.VN.Backgrounds = {
-    'snow': 'Backgrounds/snowy_field.jpg' //all images are in the Images subfolder
+VN.VN_BG.Backgrounds = {
+    'snow': 'Backgrounds/snowy_field.jpg'
 };
-VN.Cells.VN.Characters = {
+VN.VN_BG.Characters = {
     'Kyle':{Name: 'Kyle', Images:{'default': 'Characters/Kyle_smile.jpg', 'surprised': 'Characters/Kyle_surprised.jpg'}},
     'Sarah':{Name: 'Sarah', Images:{'default': 'Characters/Sarah_smile.jpg', 'surprised': 'Characters/Sarah_surprised.jpg'}}
 };
 VN.scenes = {
-    'START':`
+    START:`
         <[BG snow]>
         
-        Fun fact: in the visual novel format, anything outside of a command is just a comment.
+        Note: In the visual novel format, anything outside of a command is just a comment.
         
         <[CHAR Kyle]>
 
@@ -211,5 +212,10 @@ VN.scenes = {
         <[D Kyle || Oh no, Sarah's DEAD!]>
 
         <[FADE]>
+    `,
+    DioScene:`
+        <[LABEL Start]>
+        <[D Dio || Wha- ]>
+        <[JUMP Start]>
     `
 };

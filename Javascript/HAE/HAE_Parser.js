@@ -26,7 +26,7 @@ var HAE_PARSER = (function () {
     //And then convert that array into a nested representation of the scene to help process IF logic and text/commands (PARSE_HAE)
     var SPLIT_HAE = function(_string){
         var current_list = [];
-        var split = _string.split(/<<\[|]>>/g);
+        var split = _string.split(/<\[|]>|<<|>>/g);
         _.each(split, function(_msg, _ind){
             if( (_ind%2) === 0 ){
                 //even indices are text

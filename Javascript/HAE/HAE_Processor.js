@@ -145,7 +145,7 @@ var HAE_PROCESSOR = (function () {
         }
         else{
             if(spaceSplit[1] !== '='){
-                console.error('Need to have = sign inbetween variable name and value, ie <<[SET money = 5]>>');
+                console.error('Need to have = sign inbetween variable name and value, ie <<SET money = 5>>');
             }
             STATE.GET_GAME_DATA()[spaceSplit[0]] = spaceSplit[2];
         }
