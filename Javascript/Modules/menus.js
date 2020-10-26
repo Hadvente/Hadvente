@@ -103,19 +103,10 @@ MODULES.MENUS = (function () {
         }
     };
 
+    function getHtmlForPopupHeader(_popup_header, _popup_name){
+        return '<div id="PopupHeader"><div id="PopupName">' + _popup_header + '</div><div id="ClosePopup" class="buttonBorder" onmouseup="VIEW.closePopup(\'' + _popup_name + '\');">X</div></div>';
+    }
 
-
-    PUBLIC_FNs.mouseUpSave = function(){
-        H_Log('click', 'clicked save menu');
-        var $SavePopup = VIEW.openPopup();
-        $SavePopup.append('This popup will contain options for loading a save slot, saving to a save slot, deleting a save, saving to a file, and loading a file');
-        ENGINE.addKeyPress('Save_Popup', function(e) {
-            if (e.keyCode === 27){
-                VIEW.closePopup();
-                ENGINE.removeKeyPress('Save_Popup');
-            }
-        });
-    };
     PUBLIC_FNs.mouseUpUndo = function(){
         if( !HISTORY.can_undo() ) return;
         H_Log('click', 'clicked undo btn');
@@ -126,6 +117,69 @@ MODULES.MENUS = (function () {
         H_Log('click', 'clicked redo btn');
         HISTORY.redo();
     };
+
+
+    PUBLIC_FNs.mouseUpSave = function(){
+        H_Log('click', 'clicked save menu');
+        var $SavePopup = VIEW.openPopup();
+        ENGINE.addKeyPress('Save_Popup', function(e) {
+            if (e.keyCode === 27){
+                VIEW.closePopup('Save_Popup');
+            }
+        });
+        $SavePopup.append(getHtmlForPopupHeader('Save and Load', 'Save_Popup'));
+        $SavePopup.append('<div id="SavePopupContents" class="remaining_space_of_popup">If these words are visible, the save popup has failed</div>');
+        var $Contents = $SavePopup.find('#SavePopupContents');
+
+        createContentsOfSavePopup($Contents);
+        addEventHandlersForSavePopup($Contents);
+    };
+    function createContentsOfSavePopup(_$Contents){
+        console.log('recreating contents of save popup');
+        _$Contents.empty();
+        _$Contents.append('<div id="SaveSlotRowsContainer"><div id="SaveSlotRowsScrollbar"><hr class="solidDivider"></div></div><div id="FileSaveLoadButtons"></div>');
+        //add bottom save load file buttons
+        var $FileSaveLoadBtns = $('#FileSaveLoadButtons');
+        $FileSaveLoadBtns.append('<div id="SaveFileButton" class="saveLoadFileButton buttonBorder savePopupButton">Save to File</div><div id="LoadFileButton" class="saveLoadFileButton buttonBorder savePopupButton">Load From File</div>');
+        //add file rows
+        var $SlotRows = $('#SaveSlotRowsScrollbar');
+
+        var savesList = SAVES.getAllSaveInfo();
+        _.each(savesList, function(){
+            var html = '<div class="saveSlotRow">';
+
+            //create save row here
+
+            html += '</div>';
+            $SlotRows.append(html);
+            $SlotRows.append('<hr class="solidDivider">');
+        });
+        if( _.size(savesList) < 6 ){
+            $SlotRows.append('<div class="saveSlotRow"><div id="NewSaveButton" class="buttonBorder savePopupButton">New Save</div></div><hr class="solidDivider">');
+        }
+    }
+
+    function addEventHandlersForSavePopup(_$Contents){
+        _$Contents.on('mouseup', '.deleteSaveButton', function(_event){
+            var currentElem = _event.target;
+            console.log(currentElem);
+            createContentsOfSavePopup(_$Contents);
+        });
+        _$Contents.on('mouseup', '.loadSaveButton', function(_event){
+            var currentElem = _event.target;
+            createContentsOfSavePopup(_$Contents);
+        });
+
+        _$Contents.on('mouseup', '#NewSaveButton', function(_event){
+            createContentsOfSavePopup(_$Contents);
+        });
+        _$Contents.on('mouseup', '#SaveFileButton', function(_event){
+            createContentsOfSavePopup(_$Contents);
+        });
+        _$Contents.on('mouseup', '#LoadFileButton', function(_event){
+            createContentsOfSavePopup(_$Contents);
+        });
+    }
 
     PUBLIC_FNs.mouseUpOptions = function(){
         H_Log('click', 'clicked options menu');

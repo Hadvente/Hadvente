@@ -174,7 +174,7 @@ The GUI is designed in what are called "CELLS", which show each individual aspec
         return $('#PopupContents');
     };
 
-    VIEW.closePopup = function(){
+    VIEW.closePopup = function( _popup_name ){
         if( !isPopupOpen ){
             H_Error('Someone has called closePopup when the popup is already closed!');
             return;
@@ -182,6 +182,9 @@ The GUI is designed in what are called "CELLS", which show each individual aspec
         $('#PopupContainer').empty();
         $('#PopupContainer').addClass('popup_hidden');
         isPopupOpen = false;
+        if( _popup_name ){
+            ENGINE.removeKeyPress( _popup_name );
+        }
     };
 
 }).call();

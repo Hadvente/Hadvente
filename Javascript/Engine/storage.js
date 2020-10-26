@@ -107,5 +107,12 @@
             console.error('no avaiable storage type');
         }
     };
+
+    STORAGE.createSettings = function(){
+
+    };
+    STORAGE.getSettings = function(){
+        
+    };
 }).call();
 

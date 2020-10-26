@@ -15,6 +15,7 @@
 
     SAVES.initializeSaveSystem = function(){
         STORAGE.initialize_storage();
+        var settings = STORAGE.getSettings();
     };
 
     SAVES.auto_save = function(){
@@ -105,6 +106,9 @@
      */
 
     SAVES.open_save_file = function(){
-        //I think I would like save files to be loaded into a slot, not directly loaded
+    };
+
+    SAVES.getAllSaveInfo = function(){
+        return [1,2,3,4,5];
     };
 }).call();
