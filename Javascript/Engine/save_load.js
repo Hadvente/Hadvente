@@ -27,10 +27,10 @@
 
         currentSave.META_DATA.save_time = Date.now();
 
-        STORAGE.saveData('SAVE_SLOT_AUTO', currentSave);
+        STORAGE.saveData('AUTO', currentSave);
     };
 
-    SAVES.save_to_slot = function( _slot_index ){
+    SAVES.save_to_slot = function( _slot_key ){
         var currentSave = HISTORY.get_present_state();
     };
 
@@ -46,7 +46,7 @@
         //this deletes the save cookie
     };
 
-    SAVES.deleteSaveSlot = function( _slot_index ){
+    SAVES.deleteSaveSlot = function( _slot_key ){
         //this deletes the save cookie for this slot
     };
 
@@ -62,25 +62,22 @@
 
      */
 
-    SAVES.load_save_file = function(_load_index){
-        var currentSave = SAVES.get_save_file(_load_index);
+    SAVES.load_save_file = function(_load_key){
+        var currentSave = SAVES.get_save_file(_load_key);
         if( currentSave ){
             STATE.LOAD_STATE( currentSave );
         }
     };
 
-    SAVES.get_save_file = function(_load_index){
-        if(_load_index == 'AUTO'){
-            return STORAGE.getData( 'SAVE_SLOT_AUTO' );
+    SAVES.get_save_file = function(_load_key){
+        if( !_load_key ){
         }
-        else{
-            //load index should be a number that represents the save slot
-            return STORAGE.getData( 'SAVE_SLOT_' + ( _load_index || 0 ) );
-        }
+        //load index should be a number that represents the save slot
+        return STORAGE.getData( _load_key );
     };
 
-    SAVES.has_save_file = function(_load_index){
-        return !!SAVES.get_save_file(_load_index);
+    SAVES.has_save_file = function(_load_key){
+        return !!SAVES.get_save_file( _load_key );
     };
 
     /*
@@ -109,6 +106,6 @@
     };
 
     SAVES.getAllSaveInfo = function(){
-        return [1,2,3,4,5];
+        return [{save_key:1},{save_key:2},{save_key:3},{save_key:4},{save_key:5}];
     };
 }).call();

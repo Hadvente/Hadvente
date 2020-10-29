@@ -5,6 +5,7 @@
 (function(){
     STORAGE.initialize_storage = function(){
         check_has_local_storage();
+        STORAGE.initSettings();
     };
 
     /////////
@@ -70,9 +71,16 @@
 
     //This section grabs, loads, and saves cookies, save files, and any other way a save_load can happen
 
-    STORAGE.saveData = function( _key, _item ){
+    STORAGE.saveData = function( _key, _obj, _description_obj ){
+        if( !_.isObject(_obj) ){
+            H_Error('STORAGE.saveData can only save objects, passed in non-object for ' + _key, _obj);
+        }
+        // if( !_description ){
+        //     H_Error('We can not keep the save sorted in a list without an object that describes the save', _key);
+        // }
+        
         if(use_local_storage){
-            var savedItem = _.isObject(_item)? JSON.stringify( _item ) : _item;
+            var savedItem = JSON.stringify( _obj );
             localStorage.setItem(_key, '' + savedItem);
         }
         else if(use_indexed_db){
@@ -86,7 +94,8 @@
     STORAGE.getData = function( _key ){
         if(use_local_storage){
             var saveData = localStorage.getItem( _key );
-            return JSON.parse( saveData );
+            if(saveData) return JSON.parse( saveData );
+            return null;
         }
         else if(use_indexed_db){
             console.error('indexedDB is unimplemented');
@@ -108,11 +117,38 @@
         }
     };
 
-    STORAGE.createSettings = function(){
-
+    var ALL_SETTINGS;
+    STORAGE.initSettings = function(){
+        ALL_SETTINGS = STORAGE.getData( 'SETTINGS' );
+        if( !ALL_SETTINGS ){
+            ALL_SETTINGS = { Settings: {}, AutoSaves: {}, Saves: {} };
+            STORAGE.saveSettings(ALL_SETTINGS);
+        }
     };
     STORAGE.getSettings = function(){
-        
+        return ALL_SETTINGS.Settings;
     };
+    STORAGE.saveSettings = function( _settings ){
+        ALL_SETTINGS.Settings = _settings;
+        STORAGE.saveData( 'SETTINGS', ALL_SETTINGS );
+    };
+
+
+    function updateSaveInSettings(){
+    }
+    function addSaveToSettings(){
+    }
+    function removeSaveFromSettings(){
+
+    }
+
+    STORAGE.getAllSaveInfo = function(){
+        var allAutoSaves = ALL_SETTINGS.AutoSaves;
+        var allSaves = ALL_SETTINGS.Saves;
+        var sortedAuto  = _.sortBy(allAutoSaves, function(_obj) { return _obj.order; });
+        var sortedSaves = _.sortBy(allSaves,     function(_obj) { return _obj.order; });
+        return [].concat(sortedAuto, sortedSaves);
+    };
+
 }).call();
 

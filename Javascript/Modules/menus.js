@@ -145,10 +145,13 @@ MODULES.MENUS = (function () {
         var $SlotRows = $('#SaveSlotRowsScrollbar');
 
         var savesList = SAVES.getAllSaveInfo();
-        _.each(savesList, function(){
-            var html = '<div class="saveSlotRow">';
+        _.each(savesList, function(_save_info){
+            var html = '<div class="saveSlotRow" savekey="' + _save_info.save_key + '">';
 
             //create save row here
+            html += '<div class="loadSaveButton buttonBorder savePopupButton">Load</div>';
+            html += '<div class="saveInfo">Save Info Here</div>';
+            html += '<div class="deleteSaveButton buttonBorder savePopupButton">Delete</div>';
 
             html += '</div>';
             $SlotRows.append(html);
@@ -162,22 +165,22 @@ MODULES.MENUS = (function () {
     function addEventHandlersForSavePopup(_$Contents){
         _$Contents.on('mouseup', '.deleteSaveButton', function(_event){
             var currentElem = _event.target;
-            console.log(currentElem);
+            var saveKey = currentElem.parentElement.getAttribute('savekey');
+            console.log('got save key for delete' + saveKey);
             createContentsOfSavePopup(_$Contents);
         });
         _$Contents.on('mouseup', '.loadSaveButton', function(_event){
             var currentElem = _event.target;
-            createContentsOfSavePopup(_$Contents);
+            var saveKey = currentElem.parentElement.getAttribute('savekey');
+            console.log('got save key for load' + saveKey);
         });
 
         _$Contents.on('mouseup', '#NewSaveButton', function(_event){
             createContentsOfSavePopup(_$Contents);
         });
         _$Contents.on('mouseup', '#SaveFileButton', function(_event){
-            createContentsOfSavePopup(_$Contents);
         });
         _$Contents.on('mouseup', '#LoadFileButton', function(_event){
-            createContentsOfSavePopup(_$Contents);
         });
     }
 

@@ -329,10 +329,10 @@ CELL LAYOUT
 .saveSlotRow {
     height: 40px;
     margin-left: 5px;
-    width: 410px;
+    width: 415px;
 }
 #NewSaveButton {
-    width: 100%;
+    width: 408px;
 }
 
 /* Save File/Load File buttons */
@@ -350,6 +350,20 @@ CELL LAYOUT
     position: absolute;
     right: 2%;
     width:  46%;
+}
+
+.saveInfo {
+    width: 240px;
+    height: 40px;
+    display: inline-block;
+}
+.loadSaveButton{
+    width: 80px;
+    display: inline-block;
+}
+.deleteSaveButton{
+    width: 80px;
+    display: inline-block;
 }
 
 /*
