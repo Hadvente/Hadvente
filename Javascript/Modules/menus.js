@@ -144,7 +144,7 @@ MODULES.MENUS = (function () {
         //add file rows
         var $SlotRows = $('#SaveSlotRowsScrollbar');
 
-        var savesList = SAVES.getAllSaveInfo();
+        var savesList = STORAGE.getAllSaveInfo();
         _.each(savesList, function(_save_info){
             var html = '<div class="saveSlotRow" savekey="' + _save_info.save_key + '">';
 

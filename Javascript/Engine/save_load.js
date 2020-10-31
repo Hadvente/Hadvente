@@ -104,8 +104,4 @@
 
     SAVES.open_save_file = function(){
     };
-
-    SAVES.getAllSaveInfo = function(){
-        return [{save_key:1},{save_key:2},{save_key:3},{save_key:4},{save_key:5}];
-    };
 }).call();
