@@ -71,6 +71,23 @@
         return( _.last( current_history ) );
     };
 
+    HISTORY.restartGamePopup = function(){
+        var PopUpId = 'Restart_Popup';
+        var $RestartPopup = VIEW.openPopup(PopUpId, 'Restart Game', 'small_popup');
+        ENGINE.addKeyPress(PopUpId, function(e) {
+            if (e.keyCode === 27){
+                VIEW.closePopup(PopUpId);
+            }
+        });
+        $RestartPopup.html('<div style="margin-top: 10px;">Are you sure you want to restart?</br>All unsaved data will be lost.</div><div id="RestartGame" class="buttonBorder">RESTART</div>');
+
+        $RestartPopup.on('mouseup', '#RestartGame', function(_event){
+            STATE.initializeGameState();
+            STATE.LOAD_STATE( STATE.GET_STATE(), 'NO AUTOSAVE' );
+            VIEW.closePopup(PopUpId);
+        });
+    };
+
     HISTORY.log_history = function(){
         if(H_Log_Active()){
             var namesOfHist = _.map(current_history, function(_obj){return _obj.CURRENT_SCENE;});

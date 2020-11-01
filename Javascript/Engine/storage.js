@@ -2,7 +2,8 @@
 
 //save_load_history calls functions in this file to deal with putting the save data somewhere
 
-(function(){
+var STORAGE_FN = (function(){
+    var STORAGE = {};
     STORAGE.initialize_storage = function(){
         check_has_local_storage();
         STORAGE.initSettings();
@@ -217,5 +218,6 @@
         }
     };
 
-}).call();
+    return STORAGE;
+});
 

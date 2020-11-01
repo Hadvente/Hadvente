@@ -121,21 +121,7 @@ MODULES.MENUS = (function () {
     };
 
     PUBLIC_FNs.mouseUpRestart = function(){
-        H_Log('click', 'clicked save menu');
-        var PopUpId = 'Restart_Popup';
-        var $RestartPopup = VIEW.openPopup(PopUpId, 'Restart Game', 'small_popup');
-        ENGINE.addKeyPress(PopUpId, function(e) {
-            if (e.keyCode === 27){
-                VIEW.closePopup(PopUpId);
-            }
-        });
-        $RestartPopup.html('<div style="margin-top: 10px;">Are you sure you want to restart?</br>All unsaved data will be lost.</div><div id="RestartGame" class="buttonBorder">RESTART</div>');
-
-        $RestartPopup.on('mouseup', '#RestartGame', function(_event){
-            STATE.initializeGameState();
-            STATE.LOAD_STATE( STATE.GET_STATE(), 'NO AUTOSAVE' );
-            VIEW.closePopup(PopUpId);
-        });
+        HISTORY.restartGamePopup();
     };
     PUBLIC_FNs.mouseUpOptions = function(){
         H_Log('click', 'clicked options menu');

@@ -1,7 +1,7 @@
 /*jshint esversion: 6 */ 
 
 (function(){
-    //var STORAGE; //The storage system should not be touched by anything but the save system
+    var STORAGE; //The storage system should not be touched by anything but the save system
     /*
 
      .oooooo..o       .o.       oooooo     oooo oooooooooooo 
@@ -15,7 +15,7 @@
     */
 
     SAVES.initializeSaveSystem = function(){
-        //STORAGE = STORAGE_FN(); //rename file in storage.js to STORAGE_FN, make it be a function that returns an object
+        STORAGE = STORAGE_FN();
         STORAGE.initialize_storage();
         var settings = STORAGE.getSettings();
     };
