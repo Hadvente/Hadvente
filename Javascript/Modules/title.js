@@ -1,6 +1,6 @@
 /*jshint esversion: 6 */ 
 
-MODULES.EXAMPLE = (function () {
+MODULES.TITLE = (function () {
     
     var PUBLIC_FNs = {};
 

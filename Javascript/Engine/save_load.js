@@ -179,7 +179,6 @@
     };
 
     function createContentsOfSavePopup(_$Contents){
-        console.log('recreating contents of save popup');
         _$Contents.empty();
         _$Contents.append('<div id="SaveSlotRowsContainer"><div id="SaveSlotRowsScrollbar"></div></div><div id="FileSaveLoadButtons"></div>');
         //add bottom save load file buttons
@@ -217,21 +216,13 @@
         _$Contents.on('mouseup', '.deleteSaveButton', function(_event){
             var currentElem = _event.target;
             var saveKey = currentElem.parentElement.getAttribute('savekey');
-            console.log('got save key for delete' + saveKey);
-
-            //delete the save then refresh the popup
             SAVES.delete_save_file(saveKey);
-
             createContentsOfSavePopup(_$Contents);
         });
         _$Contents.on('mouseup', '.loadSaveButton', function(_event){
             var currentElem = _event.target;
             var saveKey = currentElem.parentElement.getAttribute('savekey');
-            console.log('got save key for load' + saveKey);
-
-            //load the save and close the popup
             SAVES.load_save_file(saveKey);
-
             VIEW.closePopup(PopupId);
         });
 

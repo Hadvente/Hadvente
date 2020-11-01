@@ -1,15 +1,25 @@
 /*jshint esversion: 6 */ 
 
 HAE = {
-    title: 'HADVENTE Test',
+    Layout: '2_Columns',
+    //2_Columns is the default layout
+    //It comes with 4 predefined cells:
+    //Title, Menus, Dialog, and Actions
+    //If you do not have these 4 cell files, your game will not load
+    //Beyond this, there are about 10 separate cell columns on the left side below menu
+    //Other Layouts I might want to add would be 3_Columns and VN
+
+    title: 'The Test Game',
+    Author: 'Caleb Holloway',
     cells:{
         //HAS_RIGHT_COLUMN : 'HAS_RIGHT_COLUMN', //this tells the GUI to draw a third column to the right of the text, in case you want lots of cells
 
         MENUS    : 'Menu',
+        TITLE    : 'Title',
         DIALOG   : 'Dialog',
         ACTIONS  : 'Actions',
-        //UNUSED_1 : 'Top_Left',
-        //UNUSED_2 : 'Middle_Left',
+        UNUSED_1 : 'Top_Left',
+        UNUSED_2 : 'Middle_Left',
         MAP_GRID : 'Bottom_Left'
     },
     actions:{
@@ -65,7 +75,7 @@ scenes:{
 
 START: `
 <[DISABLE_CELLS]>
-You wake up, unsure where you are. You look around and see a dark and destroyed living room.\
+You wake up, unsure where you are. You look around and see a dark and destroyed living room. \
 Didn't you go to sleep in your own home? Where are you?
 
 Note: Use the map on the left to navigate.

@@ -260,7 +260,7 @@ MODULES.MAP_GRID = function() {
 
      */
     MAP_GRID_FNs.finished_draw = function(){
-        STATE.GET_CELL_DATA('MAP_GRID').previousLocation = getCurrentLocation();
+        STATE.GET_CELL_DATA('MAP_GRID').previousLocation = getCurrentLocation(); //This prevents errors when the next scene is in the same location
         newMapGrid = false;
     };
     

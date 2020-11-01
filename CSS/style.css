@@ -150,28 +150,33 @@ CELL LAYOUT
 #Left_Col_Cell_Menus{
     position: absolute;
     top: 0%;
-    height: 9%;
+    height: 12%;
 }
 #Left_Col_Cell_Top{
     position: absolute;
-    top: 10%;
-    height: 29%;
+    top: 13%;
+    height: 30%;
 }
 #Left_Col_Cell_Middle{
     position: absolute;
-    top: 40%;
+    top: 44%;
     height: 30%;
 }
 #Left_Col_Cell_Bottom{
     position: absolute;
-    top: 71%;
-    height: 29%;
+    top: 75%;
+    height: 25%;
 }
 
-#Center_Col_Cell_Dialog {
+#Center_Col_Cell_Title {
     position: absolute;
     top: 0%;
-    height: 74%;
+    height: 5.5%;
+}
+#Center_Col_Cell_Dialog {
+    position: absolute;
+    top: 6.5%;
+    height: 67.5%;
 }
 #Center_Col_Cell_Actions {
     /* position: absolute;
