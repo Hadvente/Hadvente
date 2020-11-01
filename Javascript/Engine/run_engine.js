@@ -25,8 +25,6 @@ This file loads and runs the engine
 
         initKeyPresses();
 
-        if( autoload ) SAVES.load_save_file('AUTO');
-
         _.delay(ENGINE.runGameUpdate, 50);
     };
 

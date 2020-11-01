@@ -20,5 +20,26 @@ _.mixin({
         });
 
         return newObject;
+    },
+    timeToString: function(_date){
+        return '' + monthNames[_date.getMonth()] + ' ' + _date.getDate() + getDaySuffix(_date.getDate()) +
+                        ' ' + _date.getHours() + ':' + _date.getMinutes() + ':' + _date.getSeconds();
+    },
+    timeToStringForFile: function(_date){
+        return '' + monthNames[_date.getMonth()] + '_' + _date.getDate() + getDaySuffix(_date.getDate()) +
+                        '_' + _date.getHours() + 'h' + _date.getMinutes() + 'm' + _date.getSeconds() + 's';
     }
 });
+//these 2 are used by timeToString
+var monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun','Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+function getDaySuffix(_day){
+    if (_day > 10 && _day < 14){
+        return 'th';
+    }
+    switch (_day % 10) {
+        case 1:  return "st";
+        case 2:  return "nd";
+        case 3:  return "rd";
+        default: return "th";
+    }
+}

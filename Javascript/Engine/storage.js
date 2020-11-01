@@ -8,6 +8,10 @@
         STORAGE.initSettings();
     };
 
+    STORAGE.canNotSave = function(){
+        return !use_local_storage && !use_indexed_db;
+    };
+
     /////////
     //TESTS//
     /////////
@@ -97,12 +101,12 @@
 
             save_description.save_key = _save_key;
             save_description.name = save_description.name || (_save_key + ' - ' + saveIndex);
-            save_description.save_creation_date = new Date().getTime();
-            save_description.updated_save_date = save_description.save_creation_date;
-            save_description.updated_save_date = new Date().getTime();
+            save_description.save_creation_date = Date.now();
             if(_save_key.includes('AUTO') ) save_description.AutoSave = true;
         }
         else if( !save_description.AutoSave ) H_Error('How did I _update_ a non-autosave? There is no system for that.');
+        
+        save_description.updated_save_date = Date.now();
 
         //put save info inside settings
         if(save_description.AutoSave){
@@ -186,6 +190,7 @@
     };
 
     STORAGE.deleteData = function( _save_key ){
+        removeSaveFromSettings( _save_key );
         if(use_local_storage){
             localStorage.removeItem( _save_key );
         }

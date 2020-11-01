@@ -67,6 +67,9 @@
     HISTORY.is_in_present = function(){
         return !undo_history_count;
     };
+    HISTORY.get_currently_viewed_state = function(){
+        return( _.last( current_history ) );
+    };
 
     HISTORY.log_history = function(){
         if(H_Log_Active()){

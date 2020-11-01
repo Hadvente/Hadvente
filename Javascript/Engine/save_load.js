@@ -1,6 +1,7 @@
 /*jshint esversion: 6 */ 
 
 (function(){
+    //var STORAGE; //The storage system should not be touched by anything but the save system
     /*
 
      .oooooo..o       .o.       oooooo     oooo oooooooooooo 
@@ -14,10 +15,12 @@
     */
 
     SAVES.initializeSaveSystem = function(){
+        //STORAGE = STORAGE_FN(); //rename file in storage.js to STORAGE_FN, make it be a function that returns an object
         STORAGE.initialize_storage();
         var settings = STORAGE.getSettings();
     };
 
+    //Auto_
     SAVES.auto_save = function(){
         if( !HISTORY.is_in_present() ) return; //Do not autosave if you are not in the present!
 
@@ -26,28 +29,22 @@
         if( !currentSave.META_DATA.scene_count ) return; //Do no make an autosave on the start screen
 
         currentSave.META_DATA.save_time = Date.now();
-
         STORAGE.saveData('AUTO', currentSave);
     };
 
-    SAVES.save_to_slot = function( _slot_key ){
-        var currentSave = HISTORY.get_present_state();
-    };
-
-    SAVES.save_to_file = function(){
-        var currentSave = HISTORY.get_present_state();
+    SAVES.make_new_save_slot = function(){
+        var currentSave = HISTORY.get_currently_viewed_state();
+        currentSave.META_DATA.save_time = Date.now();
+        STORAGE.saveData('NEW SAVE ' + Math.random().toFixed(5), currentSave); //obviously, this is not a good way to get the save name
     };
 
     ////////////////
     //DELETE SAVES//
     ////////////////
 
-    SAVES.deleteAutoSave = function(){
-        //this deletes the save cookie
-    };
-
-    SAVES.deleteSaveSlot = function( _slot_key ){
+    SAVES.delete_save_file = function( _save_key ){
         //this deletes the save cookie for this slot
+        STORAGE.deleteData( _save_key );
     };
 
     /*
@@ -62,23 +59,17 @@
 
      */
 
-    SAVES.load_save_file = function(_load_key){
-        var currentSave = SAVES.get_save_file(_load_key);
+    SAVES.load_save_file = function(_save_key){
+        var currentSave = STORAGE.getData( _save_key );
         if( currentSave ){
             STATE.LOAD_STATE( currentSave );
         }
+        //Question, should loading a save clear history, or should pressing undo put you back into the previous save?
     };
 
-    SAVES.get_save_file = function(_load_key){
-        if( !_load_key ){
-        }
-        //load index should be a number that represents the save slot
-        return STORAGE.getData( _load_key );
-    };
-
-    SAVES.has_save_file = function(_load_key){
-        return !!SAVES.get_save_file( _load_key );
-    };
+    // SAVES.get_save_file = function(_save_key){
+    //     return STORAGE.getData( _save_key );
+    // };
 
     /*
 
@@ -102,6 +93,63 @@
 
      */
 
-    SAVES.open_save_file = function(){
+
+    SAVES.save_to_file = function(){
+        var currentSave = HISTORY.get_currently_viewed_state();
+
+        currentSave = JSON.stringify( currentSave, null, 4 ); //null, 4 is done to make the file human readable
+        
+        //convert save into file
+        var saveFile = new Blob([currentSave], { type: 'application/json' });
+        
+        //make save name
+        var fileName = 'SaveFile_' + _.timeToStringForFile(new Date());
+        
+        //create and save file
+        var url = window.URL.createObjectURL(saveFile);
+        $(document.body).append('<a id="fileDump" href="' + url + '" download="' + fileName + '"></a>');
+        var $fileDump = $('#fileDump');
+        $fileDump[0].click();
+        _.delay(function(){
+            window.URL.revokeObjectURL(url);
+            $fileDump.remove();
+        }, 500); //delay just to make sure the click has started. Once it has started, the revoke does not block the download.
+    };
+    SAVES.open_save_file = function(_callback){
+        //If the load file object already does not already exist, we need to remake it
+        //There is no way to capture the "closed file dialog" event, which means we need the change function
+        //to fire on the OLD #LoadFile if it already exists 
+        if( !$('#LoadFile')[0] ){
+
+            $(document.body).append(`<div id="LoadFileContainer" class="popup_hidden">
+                <input type="file" name="Choose Save File" id="LoadFile" accept=".json"></input>
+            </div>`);
+
+            $('#LoadFileContainer').on('change', '#LoadFile', function(_event) {
+                var file = (_event.target && _event.target.files && _event.target.files[0]) ? _event.target.files[0] : null;
+                if(!file) return _callback && _callback();
+                var reader = new FileReader();
+                reader.readAsText(file);
+                reader.onerror = function() {
+                    H_Error('could not read file');
+                };
+                reader.onload = function(_event) {
+                    var imported_json = _event.target.result;
+                    try{
+                        var parsedFile = JSON.parse(imported_json);
+                        H_Log('SAVES', 'parsed loaded file', imported_json);
+                        STATE.LOAD_STATE( parsedFile );
+                        $('#LoadFileContainer').remove();
+                    }
+                    catch(_err){
+                        H_Error('Failure while loading file: ' + _err.stack);
+                    }
+                    return _callback && _callback();
+                };
+            });
+        }
+
+
+        $('#LoadFile')[0].click();
     };
 }).call();

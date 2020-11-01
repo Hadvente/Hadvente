@@ -356,6 +356,7 @@ CELL LAYOUT
     width: 240px;
     height: 40px;
     display: inline-block;
+    font-size: 14px;
 }
 .loadSaveButton{
     width: 80px;
