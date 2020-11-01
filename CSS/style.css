@@ -266,6 +266,13 @@ CELL LAYOUT
     background: #111;
 }
 
+#PopupContents.small_popup {
+    height: 200px;
+}
+.remaining_space_of_popup.small_popup {
+    height: 145px;
+}
+
 #PopupHeader {
     margin-top: 5px;
     margin-bottom: 15px;
@@ -365,6 +372,10 @@ CELL LAYOUT
 .deleteSaveButton{
     width: 80px;
     display: inline-block;
+}
+
+#RestartGame{
+    margin: 15px;
 }
 
 /*

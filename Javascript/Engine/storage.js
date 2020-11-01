@@ -65,6 +65,8 @@
     var saveIndex = 0;
     var ALL_SETTINGS;
     STORAGE.initSettings = function(){
+        deleteSettingsForURL();
+
         ALL_SETTINGS = STORAGE.getData( 'SETTINGS' );
         if( !ALL_SETTINGS ){
             ALL_SETTINGS = { Settings: {}, AutoSaves: {}, Saves: {} };
@@ -87,7 +89,20 @@
             console.error('indexedDB is unimplemented');
         }
         else{
-            console.error('no avaiable storage type');
+            console.error('no available storage type');
+        }
+    }
+    function deleteSettingsForURL(){
+        if(URLS.deleteSettings){
+            if(use_local_storage){
+                localStorage.removeItem( 'SETTINGS' );
+            }
+            else if(use_indexed_db){
+                console.error('indexedDB is unimplemented');
+            }
+            else{
+                console.error('no available storage type');
+            }
         }
     }
 
@@ -171,7 +186,7 @@
             console.error('indexedDB is unimplemented');
         }
         else{
-            console.error('no avaiable storage type');
+            console.error('no available storage type');
         }
     };
 
@@ -185,7 +200,7 @@
             console.error('indexedDB is unimplemented');
         }
         else{
-            console.error('no avaiable storage type');
+            console.error('no available storage type');
         }
     };
 
@@ -198,7 +213,7 @@
             console.error('indexedDB is unimplemented');
         }
         else{
-            console.error('no avaiable storage type');
+            console.error('no available storage type');
         }
     };
 

@@ -58,22 +58,24 @@ function get_HAE(){
     return HAE_GAME;
 }
 
-var isLogging = false;
 var autoload = false;
+var URLS = {};
 function checkUrlParms(){
     var urlParmString = window.location.search;
-    if( urlParmString.includes('log') ) isLogging = true;
-    if( urlParmString.includes('autoload') ) autoload = true;
+    if( urlParmString.includes('log') ) URLS.isLogging = true;
+    if( urlParmString.includes('autoload') ) URLS.autoload = true;
+    //it could make sense to always autoload save, since the
+    //user should click restart if they want to go back to the beginning
 }
 
 function H_Log(_type, _log, _obj){
-    if(!isLogging) return;
+    if(!URLS.isLogging) return;
     if(_obj) console.log('TYPE: ' + _type + ' - ' + _log, _obj);
     else console.log('TYPE: ' + _type + ' - ' + _log);
 }
 
 function H_Log_Active(){
-    return isLogging;
+    return URLS.isLogging;
 }
 
 function H_Error(_log, _obj){

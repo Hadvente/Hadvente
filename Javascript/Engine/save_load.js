@@ -152,4 +152,98 @@
 
         $('#LoadFile')[0].click();
     };
+
+    /*
+
+    ooooooooo.     .oooooo.   ooooooooo.   ooooo     ooo ooooooooo.   
+    `888   `Y88.  d8P'  `Y8b  `888   `Y88. `888'     `8' `888   `Y88. 
+     888   .d88' 888      888  888   .d88'  888       8   888   .d88' 
+     888ooo88P'  888      888  888ooo88P'   888       8   888ooo88P'  
+     888         888      888  888          888       8   888         
+     888         `88b    d88'  888          `88.    .8'   888         
+    o888o         `Y8bood8P'  o888o           `YbodP'    o888o        
+
+     */
+
+    SAVES.createPopup = function(){
+        var PopupId = PopupId;
+        var $SavePopup = VIEW.openPopup(PopupId, 'Save and Load');
+        ENGINE.addKeyPress(PopupId, function(e) {
+            if (e.keyCode === 27){
+                VIEW.closePopup(PopupId);
+            }
+        });
+
+        createContentsOfSavePopup($SavePopup);
+        addEventHandlersForSavePopup($SavePopup);
+    };
+
+    function createContentsOfSavePopup(_$Contents){
+        console.log('recreating contents of save popup');
+        _$Contents.empty();
+        _$Contents.append('<div id="SaveSlotRowsContainer"><div id="SaveSlotRowsScrollbar"></div></div><div id="FileSaveLoadButtons"></div>');
+        //add bottom save load file buttons
+        var $FileSaveLoadBtns = $('#FileSaveLoadButtons');
+        $FileSaveLoadBtns.append('<div id="SaveFileButton" class="saveLoadFileButton buttonBorder savePopupButton">Save to File</div><div id="LoadFileButton" class="saveLoadFileButton buttonBorder savePopupButton">Load From File</div>');
+        //add file rows
+        var $SlotRows = $('#SaveSlotRowsScrollbar');
+
+        if( STORAGE.canNotSave() ){
+            $SlotRows.append('<div class="saveSlotRow saveInfo">No form of local storage available, saves will not persist.</div>');
+        }
+        $SlotRows.append('<hr class="solidDivider">');
+
+        var savesList = STORAGE.getAllSaveInfo();
+        _.each(savesList, function(_save_info){
+            var html = '<div class="saveSlotRow" savekey="' + _save_info.save_key + '">';
+
+            var time = new Date(_save_info.updated_save_date);
+            var timestamp = _.timeToString(time);
+            //create save row here
+            html += '<div class="loadSaveButton buttonBorder savePopupButton">Load</div>';
+            html += '<div class="saveInfo">' + _save_info.name + '<br>' + timestamp + '</div>';
+            html += '<div class="deleteSaveButton buttonBorder savePopupButton">Delete</div>';
+
+            html += '</div>';
+            $SlotRows.append(html);
+            $SlotRows.append('<hr class="solidDivider">');
+        });
+        if( _.size(savesList) < 6 ){
+            $SlotRows.append('<div class="saveSlotRow"><div id="NewSaveButton" class="buttonBorder savePopupButton">New Save</div></div><hr class="solidDivider">');
+        }
+    }
+
+    function addEventHandlersForSavePopup(_$Contents){
+        _$Contents.on('mouseup', '.deleteSaveButton', function(_event){
+            var currentElem = _event.target;
+            var saveKey = currentElem.parentElement.getAttribute('savekey');
+            console.log('got save key for delete' + saveKey);
+
+            //delete the save then refresh the popup
+            SAVES.delete_save_file(saveKey);
+
+            createContentsOfSavePopup(_$Contents);
+        });
+        _$Contents.on('mouseup', '.loadSaveButton', function(_event){
+            var currentElem = _event.target;
+            var saveKey = currentElem.parentElement.getAttribute('savekey');
+            console.log('got save key for load' + saveKey);
+
+            //load the save and close the popup
+            SAVES.load_save_file(saveKey);
+
+            VIEW.closePopup(PopupId);
+        });
+
+        _$Contents.on('mouseup', '#NewSaveButton', function(_event){
+            SAVES.make_new_save_slot();
+            createContentsOfSavePopup(_$Contents);
+        });
+        _$Contents.on('mouseup', '#SaveFileButton', function(_event){
+            SAVES.save_to_file();
+        });
+        _$Contents.on('mouseup', '#LoadFileButton', function(_event){
+            SAVES.open_save_file(function(){ VIEW.closePopup(PopupId); });
+        });
+    }
 }).call();

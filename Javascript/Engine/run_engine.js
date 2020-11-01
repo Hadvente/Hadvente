@@ -25,6 +25,8 @@ This file loads and runs the engine
 
         initKeyPresses();
 
+        if( autoload ) SAVES.load_save_file('AUTO'); //we may want this to be permanent since the RESTART button exists
+
         _.delay(ENGINE.runGameUpdate, 50);
     };
 

@@ -55,6 +55,7 @@ MODULES.MENUS = (function () {
         html +='<tr class="menu_grid_row">';
             html += '<td id="Menu_Button_Save"    class="menu_grid_cell menuGridButton" onmouseup="MODULES.MENUS.mouseUpSave()">SAVE</br>LOAD</td>';
             //html += '<td id="Menu_Button_Options" class="menu_grid_cell menuGridButton" onmouseup="MODULES.MENUS.mouseUpOptions()">MENU</td>';
+            html += '<td id="Menu_Button_Restart" class="menu_grid_cell menuGridButton" onmouseup="MODULES.MENUS.mouseUpRestart()">RESTART</td>';
             html += '<td id="Menu_Button_Undo"    class="menu_grid_cell menuGridButton" onmouseup="MODULES.MENUS.mouseUpUndo()">UNDO</td>';
             html += '<td id="Menu_Button_Redo"    class="menu_grid_cell menuGridButton" onmouseup="MODULES.MENUS.mouseUpRedo()">REDO</td>';
         html += '</tr>';
@@ -103,10 +104,6 @@ MODULES.MENUS = (function () {
         }
     };
 
-    function getHtmlForPopupHeader(_popup_header, _popup_name){
-        return '<div id="PopupHeader"><div id="PopupName">' + _popup_header + '</div><div id="ClosePopup" class="buttonBorder" onmouseup="VIEW.closePopup(\'' + _popup_name + '\');">X</div></div>';
-    }
-
     PUBLIC_FNs.mouseUpUndo = function(){
         if( !HISTORY.can_undo() ) return;
         H_Log('click', 'clicked undo btn');
@@ -120,89 +117,26 @@ MODULES.MENUS = (function () {
 
 
     PUBLIC_FNs.mouseUpSave = function(){
+        SAVES.createPopup();
+    };
+
+    PUBLIC_FNs.mouseUpRestart = function(){
         H_Log('click', 'clicked save menu');
-        var $SavePopup = VIEW.openPopup();
-        ENGINE.addKeyPress('Save_Popup', function(e) {
+        var PopUpId = 'Restart_Popup';
+        var $RestartPopup = VIEW.openPopup(PopUpId, 'Restart Game', 'small_popup');
+        ENGINE.addKeyPress(PopUpId, function(e) {
             if (e.keyCode === 27){
-                VIEW.closePopup('Save_Popup');
+                VIEW.closePopup(PopUpId);
             }
         });
-        $SavePopup.append(getHtmlForPopupHeader('Save and Load', 'Save_Popup'));
-        $SavePopup.append('<div id="SavePopupContents" class="remaining_space_of_popup">If these words are visible, the save popup has failed</div>');
-        var $Contents = $SavePopup.find('#SavePopupContents');
+        $RestartPopup.html('<div style="margin-top: 10px;">Are you sure you want to restart?</br>All unsaved data will be lost.</div><div id="RestartGame" class="buttonBorder">RESTART</div>');
 
-        createContentsOfSavePopup($Contents);
-        addEventHandlersForSavePopup($Contents);
+        $RestartPopup.on('mouseup', '#RestartGame', function(_event){
+            STATE.initializeGameState();
+            STATE.LOAD_STATE( STATE.GET_STATE(), 'NO AUTOSAVE' );
+            VIEW.closePopup(PopUpId);
+        });
     };
-    function createContentsOfSavePopup(_$Contents){
-        console.log('recreating contents of save popup');
-        _$Contents.empty();
-        _$Contents.append('<div id="SaveSlotRowsContainer"><div id="SaveSlotRowsScrollbar"></div></div><div id="FileSaveLoadButtons"></div>');
-        //add bottom save load file buttons
-        var $FileSaveLoadBtns = $('#FileSaveLoadButtons');
-        $FileSaveLoadBtns.append('<div id="SaveFileButton" class="saveLoadFileButton buttonBorder savePopupButton">Save to File</div><div id="LoadFileButton" class="saveLoadFileButton buttonBorder savePopupButton">Load From File</div>');
-        //add file rows
-        var $SlotRows = $('#SaveSlotRowsScrollbar');
-
-        if( STORAGE.canNotSave() ){
-            $SlotRows.append('<div class="saveSlotRow saveInfo">No form of local storage available, saves will not persist.</div>');
-        }
-        $SlotRows.append('<hr class="solidDivider">');
-
-        var savesList = STORAGE.getAllSaveInfo();
-        _.each(savesList, function(_save_info){
-            var html = '<div class="saveSlotRow" savekey="' + _save_info.save_key + '">';
-
-            var time = new Date(_save_info.updated_save_date);
-            var timestamp = _.timeToString(time);
-            //create save row here
-            html += '<div class="loadSaveButton buttonBorder savePopupButton">Load</div>';
-            html += '<div class="saveInfo">' + _save_info.name + '<br>' + timestamp + '</div>';
-            html += '<div class="deleteSaveButton buttonBorder savePopupButton">Delete</div>';
-
-            html += '</div>';
-            $SlotRows.append(html);
-            $SlotRows.append('<hr class="solidDivider">');
-        });
-        if( _.size(savesList) < 6 ){
-            $SlotRows.append('<div class="saveSlotRow"><div id="NewSaveButton" class="buttonBorder savePopupButton">New Save</div></div><hr class="solidDivider">');
-        }
-    }
-
-    function addEventHandlersForSavePopup(_$Contents){
-        _$Contents.on('mouseup', '.deleteSaveButton', function(_event){
-            var currentElem = _event.target;
-            var saveKey = currentElem.parentElement.getAttribute('savekey');
-            console.log('got save key for delete' + saveKey);
-
-            //delete the save then refresh the popup
-            SAVES.delete_save_file(saveKey);
-
-            createContentsOfSavePopup(_$Contents);
-        });
-        _$Contents.on('mouseup', '.loadSaveButton', function(_event){
-            var currentElem = _event.target;
-            var saveKey = currentElem.parentElement.getAttribute('savekey');
-            console.log('got save key for load' + saveKey);
-
-            //load the save and close the popup
-            SAVES.load_save_file(saveKey);
-
-            VIEW.closePopup('Save_Popup');
-        });
-
-        _$Contents.on('mouseup', '#NewSaveButton', function(_event){
-            SAVES.make_new_save_slot();
-            createContentsOfSavePopup(_$Contents);
-        });
-        _$Contents.on('mouseup', '#SaveFileButton', function(_event){
-            SAVES.save_to_file();
-        });
-        _$Contents.on('mouseup', '#LoadFileButton', function(_event){
-            SAVES.open_save_file(function(){ VIEW.closePopup('Save_Popup'); });
-        });
-    }
-
     PUBLIC_FNs.mouseUpOptions = function(){
         H_Log('click', 'clicked options menu');
     };

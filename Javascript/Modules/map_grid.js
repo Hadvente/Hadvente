@@ -17,7 +17,6 @@ MODULES.MAP_GRID = function() {
      */
     var newMapGrid = false;
     var mapIsDisabled = false;
-    var previousLocation;
     MAP_GRID_FNs.initialize = function(){
         if( !get_HAE().cells.MAP_GRID ) return; //there is no NAV
         if( !get_HAE().maps ){
@@ -48,7 +47,6 @@ MODULES.MAP_GRID = function() {
 
         STATE.GET_CELL_DATA('MAP_GRID').map_name = get_HAE().maps.starting_map;
         STATE.GET_CELL_DATA('MAP_GRID').location = getCurrentMap().start;
-
         newMapGrid = true;
     };
     /*
@@ -65,6 +63,9 @@ MODULES.MAP_GRID = function() {
     MAP_GRID_FNs.restart_module = function(){
         //This is called when the game_state is modified by the save system
         //Anything that must be modified when a save is loaded should happen here
+        STATE.GET_CELL_DATA('MAP_GRID').map_name = STATE.GET_CELL_DATA('MAP_GRID').map_name || get_HAE().maps.starting_map;
+        STATE.GET_CELL_DATA('MAP_GRID').location = STATE.GET_CELL_DATA('MAP_GRID').location || getCurrentMap().start;
+        newMapGrid = true;
     };
     /*
 
@@ -181,8 +182,12 @@ MODULES.MAP_GRID = function() {
         if(!newGrid && !newLocation) return;
 
         //Initialize cells
-        ////This part is inside Update because we want ot eventually rework this to handle changing grid sizes
-        if( !$Cells ){ // || newGrid
+        if( newGrid ){
+
+            //first, reset the map to have the correct map
+            $Nav.empty().append(getMapGridHtml());
+
+            //next, add all the click functions
             $Cells = {};
             _.times(getCurrentMap().grid_size[0], function(_y){
                 _.times(getCurrentMap().grid_size[1], function(_x){
@@ -192,10 +197,8 @@ MODULES.MAP_GRID = function() {
                     });
                 });
             });
-        }
 
-        //Initialize cell
-        if( newGrid ){
+            //then add all the click functions and classes
             _.times(getCurrentMap().grid_size[0], function(_y){
                 _.times(getCurrentMap().grid_size[1], function(_x){
                     if(newGrid[_y][_x]){
@@ -214,6 +217,7 @@ MODULES.MAP_GRID = function() {
             });
         }
 
+        var previousLocation = getPreviousLocation();
         if( previousLocation){
             if(!$Cells['Grid_'+ previousLocation[0] + '_'+ previousLocation[1]].hasClass('map_grid_cell_current') ){
                 console.error('Grid missing class it expected to have?');
@@ -236,7 +240,7 @@ MODULES.MAP_GRID = function() {
 
         H_Log('MAP_GRID', 'clicked on cell ' + _y + ', ' + _x + ' - which has the value of ' + getCurrentMap().grid[_y][_x]);
 
-        previousLocation = getCurrentLocation();
+        STATE.GET_CELL_DATA('MAP_GRID').previousLocation = getCurrentLocation();
         STATE.GET_CELL_DATA('MAP_GRID').location = [_y, _x];
 
         var newLocationID = getLocationID();
@@ -256,7 +260,7 @@ MODULES.MAP_GRID = function() {
 
      */
     MAP_GRID_FNs.finished_draw = function(){
-        previousLocation = STATE.GET_CELL_DATA('MAP_GRID').location;
+        STATE.GET_CELL_DATA('MAP_GRID').previousLocation = getCurrentLocation();
         newMapGrid = false;
     };
     
@@ -278,6 +282,9 @@ MODULES.MAP_GRID = function() {
     function getCurrentLocation(){
         return STATE.GET_CELL_DATA('MAP_GRID').location;
     }
+    function getPreviousLocation(){
+        return STATE.GET_CELL_DATA('MAP_GRID').previousLocation;
+    }
     function getNewGrid(){
         //if grid has not changed, we do not want to update the location on the screen
         if( !newMapGrid ) return;
@@ -285,6 +292,7 @@ MODULES.MAP_GRID = function() {
     }
     function getNewLocation(){
         //If our location hasn't changed, we do not want to update the location in the html
+        var previousLocation = getPreviousLocation();
         if(previousLocation && previousLocation[0] == getCurrentLocation()[0] && previousLocation[1] == getCurrentLocation()[1]) return;
         return getCurrentLocation();
     }

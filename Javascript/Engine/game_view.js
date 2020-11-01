@@ -166,15 +166,24 @@ The GUI is designed in what are called "CELLS", which show each individual aspec
     }
 
     var isPopupOpen = false;
-    VIEW.openPopup = function(_class_list){
+    VIEW.openPopup = function(_popup_id, _popup_header, _class_list){
         if( isPopupOpen ) VIEW.closePopup(); //this is valid if you want to replace a popup
-        $('#PopupContainer').append(`<div id="PopupContentsContainer"><div id="PopupContents" class="${_class_list || 'popup_container'}"></div></div>`);
+        $('#PopupContainer').append(`<div id="PopupContentsContainer"><div id="PopupContents" class="${_class_list || ''} popup_container"></div></div>`);
         $('#PopupContainer').removeClass('popup_hidden');
         isPopupOpen = true;
-        return $('#PopupContents');
+
+        var $Contents = $('#PopupContents');
+        if(_popup_header || _popup_id){
+            if( !_popup_header ) H_Error('Need Popup Header if you pass in a Popup Name to openPopup');
+            if( !_popup_header ) H_Error('Need Popup Header if you pass in a Popup Name to openPopup');
+            $Contents.append('<div id="PopupHeader"><div id="PopupName">' + _popup_header + '</div><div id="ClosePopup" class="buttonBorder" onmouseup="VIEW.closePopup(\'' + _popup_id + '\');">X</div></div>');
+            $Contents.append('<div id="' + _popup_id + 'Contents" class="' + (_class_list || '') + ' remaining_space_of_popup">If these words are visible, the popup has no contents</div>');
+            $Contents = $Contents.find('#' + _popup_id + 'Contents');
+        }
+        return $Contents;
     };
 
-    VIEW.closePopup = function( _popup_name ){
+    VIEW.closePopup = function( _popup_id ){
         if( !isPopupOpen ){
             H_Error('Someone has called closePopup when the popup is already closed!');
             return;
@@ -182,8 +191,8 @@ The GUI is designed in what are called "CELLS", which show each individual aspec
         $('#PopupContainer').empty();
         $('#PopupContainer').addClass('popup_hidden');
         isPopupOpen = false;
-        if( _popup_name ){
-            ENGINE.removeKeyPress( _popup_name );
+        if( _popup_id ){
+            ENGINE.removeKeyPress( _popup_id );
         }
     };
 
