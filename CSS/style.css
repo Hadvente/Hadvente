@@ -172,6 +172,7 @@ CELL LAYOUT
     position: absolute;
     top: 0%;
     height: 5.5%;
+    width: 100%;
 }
 #Center_Col_Cell_Dialog {
     position: absolute;
@@ -517,6 +518,16 @@ Action Buttons
     background: #444;
     border: solid 3px #444;
     color: #888;
+}
+
+.titleDiv {
+
+}
+#TitleContainer{
+    float: left;
+}
+#AuthorContainer{
+    float: right;
 }
 
 /*

@@ -10,7 +10,7 @@ HAE = {
     //Other Layouts I might want to add would be 3_Columns and VN
 
     title: 'The Test Game',
-    Author: 'Caleb Holloway',
+    author: 'Caleb Holloway',
     cells:{
         //HAS_RIGHT_COLUMN : 'HAS_RIGHT_COLUMN', //this tells the GUI to draw a third column to the right of the text, in case you want lots of cells
 
