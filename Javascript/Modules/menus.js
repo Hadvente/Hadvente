@@ -56,8 +56,8 @@ MODULES.MENUS = (function () {
             html += '<td colspan="2" id="Menu_Button_Undo"    class="menu_grid_cell menuGridButton" onmouseup="MODULES.MENUS.mouseUpUndo()">UNDO</td>';
             html += '<td colspan="2" id="Menu_Button_Redo"    class="menu_grid_cell menuGridButton" onmouseup="MODULES.MENUS.mouseUpRedo()">REDO</td>';
             html += '<td colspan="2" id="Menu_Button_Restart" class="menu_grid_cell menuGridButton" onmouseup="MODULES.MENUS.mouseUpRestart()">RESTART</td>';
-        html += '</tr>';
-        html +='<tr class="menu_grid_row">';
+        //html += '</tr>';
+        //html +='<tr class="menu_grid_row">';
             html += '<td colspan="3" id="Menu_Button_Options" class="menu_grid_cell menuGridButton" onmouseup="MODULES.MENUS.mouseUpOptions()">OPTIONS</td>';
             html += '<td colspan="3" id="Menu_Button_Save"    class="menu_grid_cell menuGridButton" onmouseup="MODULES.MENUS.mouseUpSave()">SAVE & LOAD</td>';
         html += '</tr>';

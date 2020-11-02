@@ -37,7 +37,7 @@ The GUI is designed in what are called "CELLS", which show each individual aspec
     //and the game can pick one, define a new one, or if no choice is made it will go to a default
     var cellDefinitions = [
         [
-            {html: '<div id="Left_Col_Cell_Menus" class=""></div>'},
+            {html: '<div id="Left_Col_Cell_Title" class=""></div>'},
 
             {html: '<div id="Left_Col_Cell_Top" class="cellContainer"></div>'},
             {html: '<div id="Left_Col_Cell_Middle" class="cellContainer"></div>'},
@@ -47,7 +47,7 @@ The GUI is designed in what are called "CELLS", which show each individual aspec
             {html: '<div id="Left_Col_Cell_Bottom_BIG" class="cellContainer"></div>'}
         ],
         [
-            {html: '<div id="Center_Col_Cell_Title"></div>'},
+            {html: '<div id="Center_Col_Cell_Menus"></div>'},
             {html: '<div id="Center_Col_Cell_Dialog" class="cellContainer"></div>'},
             {html: '<div id="Center_Col_Cell_Actions" class="cellContainer"></div>'},
         ],
@@ -96,8 +96,8 @@ The GUI is designed in what are called "CELLS", which show each individual aspec
     var $Cell = {};
     function setEachCellSelector(){
         //These are all REQUIRED
-        $Cell.Menu         = $('#Left_Col_Cell_Menus');
-        $Cell.Title        = $('#Center_Col_Cell_Title');
+        $Cell.Title        = $('#Left_Col_Cell_Title');
+        $Cell.Menu         = $('#Center_Col_Cell_Menus');
         $Cell.Dialog       = $('#Center_Col_Cell_Dialog');
         $Cell.Actions      = $('#Center_Col_Cell_Actions');
 

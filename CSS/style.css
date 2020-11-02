@@ -147,20 +147,21 @@ CELL LAYOUT
 }
 
 
-#Left_Col_Cell_Menus{
+#Left_Col_Cell_Title{
     position: absolute;
     top: 0%;
-    height: 12%;
+    height: 7%;
+    width: 100%;
 }
 #Left_Col_Cell_Top{
     position: absolute;
-    top: 13%;
-    height: 30%;
+    top: 7.5%;
+    height: 32.5%;
 }
 #Left_Col_Cell_Middle{
     position: absolute;
-    top: 44%;
-    height: 30%;
+    top: 41%;
+    height: 33%;
 }
 #Left_Col_Cell_Bottom{
     position: absolute;
@@ -168,16 +169,16 @@ CELL LAYOUT
     height: 25%;
 }
 
-#Center_Col_Cell_Title {
+#Center_Col_Cell_Menus {
     position: absolute;
     top: 0%;
-    height: 5.5%;
+    height: 7%;
     width: 100%;
 }
 #Center_Col_Cell_Dialog {
     position: absolute;
-    top: 6.5%;
-    height: 67.5%;
+    top: 7.5%;
+    height: 66.5%;
 }
 #Center_Col_Cell_Actions {
     /* position: absolute;
@@ -527,7 +528,9 @@ Action Buttons
     float: left;
 }
 #AuthorContainer{
-    float: right;
+    position: absolute;
+    right: 0;
+    bottom: 0;
 }
 
 /*

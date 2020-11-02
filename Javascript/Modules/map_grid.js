@@ -15,8 +15,7 @@ MODULES.MAP_GRID = function() {
     o888o o8o        `8  o888o     o888o     
 
      */
-    var newMapGrid = false;
-    var mapIsDisabled = false;
+    var newMapGrid = false; //If this is used for anything other than HTML, it needs to become part of the State
     MAP_GRID_FNs.initialize = function(){
         if( !get_HAE().cells.MAP_GRID ) return; //there is no NAV
         if( !get_HAE().maps ){
@@ -178,8 +177,6 @@ MODULES.MAP_GRID = function() {
         
         //At this point we should check if anything has changed, because there is no reason to redraw if we have no map change
         var newGrid = getNewGrid();
-        var newLocation = getNewLocation();
-        if(!newGrid && !newLocation) return;
 
         //Initialize cells
         if( newGrid ){
@@ -217,20 +214,13 @@ MODULES.MAP_GRID = function() {
             });
         }
 
-        var previousLocation = getPreviousLocation();
-        if( previousLocation){
-            if(!$Cells['Grid_'+ previousLocation[0] + '_'+ previousLocation[1]].hasClass('map_grid_cell_current') ){
-                console.error('Grid missing class it expected to have?');
+        //We want to remove map_grid_cell_current from everything to avoid confusing logic about what was previously highlighted
+        _.each( $Cells, function( _$cell ){
+            if( _$cell.hasClass('map_grid_cell_current') ){
+                _$cell.removeClass('map_grid_cell_current');
             }
-            $Cells['Grid_'+ previousLocation[0] + '_'+ previousLocation[1]].removeClass('map_grid_cell_current');
-        }
-        if(!$Cells['Grid_'+ newLocation[0] + '_'+ newLocation[1]]){
-            console.error('Grid does not have the cell of the new location! Why? Did things initialize out of order?', newLocation);
-        }
-        if( $Cells['Grid_'+ newLocation[0] + '_'+ newLocation[1]].hasClass('map_grid_cell_current') )  {
-            console.error('Grid has class it was not expected to have?');
-        }
-        $Cells['Grid_'+ newLocation[0] + '_'+ newLocation[1]].addClass('map_grid_cell_current');
+        });
+        $Cells['Grid_'+ getCurrentLocation()[0] + '_'+ getCurrentLocation()[1]].addClass('map_grid_cell_current');
     };
 
     function mapGridClick(_y, _x){
@@ -286,15 +276,9 @@ MODULES.MAP_GRID = function() {
         return STATE.GET_CELL_DATA('MAP_GRID').previousLocation;
     }
     function getNewGrid(){
-        //if grid has not changed, we do not want to update the location on the screen
+        //if grid has not changed, we do not want to redraw the map
         if( !newMapGrid ) return;
         return getCurrentMap().grid;
-    }
-    function getNewLocation(){
-        //If our location hasn't changed, we do not want to update the location in the html
-        var previousLocation = getPreviousLocation();
-        if(previousLocation && previousLocation[0] == getCurrentLocation()[0] && previousLocation[1] == getCurrentLocation()[1]) return;
-        return getCurrentLocation();
     }
     function getLocationID(){
         var y = getCurrentLocation()[0];
