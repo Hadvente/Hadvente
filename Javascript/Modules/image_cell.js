@@ -1,8 +1,6 @@
 /*jshint esversion: 6 */ 
 
-//This explicitly does not handle inventory, it only shows it in a cell
-
-MODULES.INVENTORY_VIEWER = (function () {
+MODULES.IMAGE_CELL = (function () {
     
     var PUBLIC_FNs = {};
 
@@ -17,8 +15,15 @@ MODULES.INVENTORY_VIEWER = (function () {
     o888o o8o        `8  o888o     o888o     
 
      */
-    PUBLIC_FNs.initialize = function(){}; PUBLIC_FNs.restart_module = function(){};
-    PUBLIC_FNs.update_module = function(){}; PUBLIC_FNs.finished_draw = function(){};
+    PUBLIC_FNs.initialize = function(){
+        HAE_PROCESSOR.ADD_TYPE(['IMAGE_CELL', 'IMG_CELL'], function(_value){
+            STATE.GET_CELL_DATA('IMAGE_CELL').IMAGE = _value.trim();
+        });
+    };
+
+    PUBLIC_FNs.restart_module = function(){};
+    PUBLIC_FNs.update_module = function(){};
+    PUBLIC_FNs.finished_draw = function(){STATE.GET_CELL_DATA('IMAGE_CELL').IMAGE = '';};
 
     /*
     
@@ -31,21 +36,14 @@ MODULES.INVENTORY_VIEWER = (function () {
     o888o   o888o     o888o     o8o        o888o o888ooooood8 
     
      */
-
-    //PUBLIC_FNs.NO_HTML = true; //If this is true, then the functions init_HTML and update_HTML don't need to exist
     
-    var $Ul = {};
+    var $Img = {};
     PUBLIC_FNs.init_HTML = function(_$Cell){
-        if( !get_HAE().cells.INVENTORY_VIEWER ) return;
-        _$Cell[ get_HAE().cells.INVENTORY_VIEWER ].append(`<div id="InventoryContainer" class="inventory_list large_font">
-            <section>
-                <h3 class="inventory_margin">Inventory</h3>
-                <ul id="InventoryList" class="inventory_margin">
-                </ul>
-            </section>
+        if( !get_HAE().cells.IMAGE_CELL ) return;
+        _$Cell[ get_HAE().cells.IMAGE_CELL ].append(`<div id="ImageContainer">
         </div>`);
 
-        $Ul = $('#InventoryList');
+        $Img = $('#ImageContainer');
     };
 
     /*
@@ -60,12 +58,10 @@ MODULES.INVENTORY_VIEWER = (function () {
 
      */
     PUBLIC_FNs.update_HTML = function(){
-        if( !get_HAE().cells.INVENTORY_VIEWER ) return;
-        $Ul.empty();
-        var inventory = STATE.GET_GAME_DATA().INV || {};
-        _.each(inventory, function(_value, _item){
-            $Ul.append('<li>' + _value + '</li>');
-        });
+        if( !get_HAE().cells.IMAGE_CELL ) return;
+        $Img.empty();
+        if( !STATE.GET_CELL_DATA('IMAGE_CELL').IMAGE ) return;
+        $Img.append('<img class="image_cell_img" src="Images/' + STATE.GET_CELL_DATA('IMAGE_CELL').IMAGE + '.jpg">');
     };
 
     return PUBLIC_FNs; //Returns public functions into the variable

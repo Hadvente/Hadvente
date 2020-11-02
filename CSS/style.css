@@ -544,6 +544,17 @@ Action Buttons
     margin-block-end: 0.2em;
 }
 
+#ImageContainer {
+    width: 100%;
+    height: 100%;
+}
+.image_cell_img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+}
+
 /*
     This is magic code that forces the cell to always size as if it has content.
     Otherwise, I'd have to size manually in JS.

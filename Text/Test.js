@@ -14,13 +14,15 @@ HAE = {
     cells:{
         //HAS_RIGHT_COLUMN : 'HAS_RIGHT_COLUMN', //this tells the GUI to draw a third column to the right of the text, in case you want lots of cells
 
+        IMAGE_CELL       : 'Top_Left',
+        INVENTORY_VIEWER : 'Middle_Left',
+        MAP_GRID         : 'Bottom_Left',
+        //these 4 should all become mandatory and uneditable, a static part of the 2_Columns layout.
+        //If someone wants to change them, they should make a new layout, possibly a duplicated clone of 2_Columns.
         MENUS    : 'Menu',
         TITLE    : 'Title',
         DIALOG   : 'Dialog',
         ACTIONS  : 'Actions',
-        INVENTORY_VIEWER : 'Top_Left',
-        UNUSED_2 : 'Middle_Left',
-        MAP_GRID : 'Bottom_Left'
     },
     actions:{
         grid_size: [3, 3],
@@ -127,8 +129,10 @@ Note: Use the map on the left to navigate.
 FirstScene:`
 `,
 BedroomA:`
-The room is also messy and destroyed, just like all the others.
-You see a pink bed in one corner, with a large wardrobe in the other.
+<[IMG_CELL bedroomA]>\
+The room is messy and destroyed, just like all the others. You can even see the wallpaper peeling off all around you.
+On the wall to the left of the door is an uncovered bed. When you peek around the bed, you see a small space heater resting on the floor.
+At the other end of the bedroom, you can see an unopened wardrobe you could search for items to help you escape.
 <[GOTO Look In Wardrobe||get_nothing]>
 `,
 Kitchen:`
@@ -141,11 +145,11 @@ There is a knife sitting on the table.
 <[ENDIF]>
 `,
 BedroomB:`
-The room is blue dah ba dee dah ba die.
+This bedroom has lots of blue decorations and furniture in it, all covered in dust.\
 <[IF FN has_brick]>
 You wonder what you can do with your brick...
 <[ELSE]>
-There is a brick sitting on the bedroom floor.
+There is a brick sitting on the bedroom floor in one corner.
 <[GOTO Pickup Brick||get_brick]>
 <[ENDIF]>
 `,
