@@ -1,5 +1,11 @@
 /*jshint esversion: 6 */ 
 
+/*
+Future note: I will probably want to split up initializing a module for the engine and initializing the module for a specific state
+Right now, I'm essentially treating initialize as for the engine and restart_module for the state, but that's not very clear.
+At the very least, they should be renamed.
+ */
+
 MODULES.EXAMPLE = (function () {
     
     var PUBLIC_FNs = {};

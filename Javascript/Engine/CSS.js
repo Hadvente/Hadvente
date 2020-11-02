@@ -1,5 +1,13 @@
 /*jshint esversion: 6 */ 
 
+/* This file is an idea I had for making the entire system self-compilable
+It would be really cool if someone working on their game could take their copy of the game, add ?compile to the url,
+and on load, the game would output a single html file containing their game
+This would require that every portion of the game is part of a function object prototype. We could even read in
+their HAE Story before export and figure out which cells and layouts are unused. Both Underscore and JQuery would
+need to also be put inside prototypes, which would be at the very top of the exported HTML file, except for
+the HAE that is not processed until onload (future idea)*/
+
 CSS = (function(){
 var styles = `
 /*Begin adding CSS*/

@@ -9,7 +9,7 @@ HAE = {
     //Beyond this, there are about 10 separate cell columns on the left side below menu
     //Other Layouts I might want to add would be 3_Columns and VN
 
-    title: 'The Test Game',
+    title: 'Escape The House',
     author: 'Caleb Holloway',
     cells:{
         //HAS_RIGHT_COLUMN : 'HAS_RIGHT_COLUMN', //this tells the GUI to draw a third column to the right of the text, in case you want lots of cells
@@ -18,7 +18,7 @@ HAE = {
         TITLE    : 'Title',
         DIALOG   : 'Dialog',
         ACTIONS  : 'Actions',
-        UNUSED_1 : 'Top_Left',
+        INVENTORY_VIEWER : 'Top_Left',
         UNUSED_2 : 'Middle_Left',
         MAP_GRID : 'Bottom_Left'
     },
@@ -61,14 +61,36 @@ HAE = {
             Random_10(_GAME_DATA, _GAME_STATE, _HAE){
                 return Math.random() < 0.1;
             },
+
             has_screwdriver(_GAME_DATA, _GAME_STATE, _HAE){
-                return !!_GAME_DATA.screwdriver;
+                return !!_GAME_DATA.INV.screwdriver;
+            },
+            has_tape(_GAME_DATA, _GAME_STATE, _HAE){
+                return !!_GAME_DATA.INV.tape;
+            },
+            has_knife(_GAME_DATA, _GAME_STATE, _HAE){
+                return !!_GAME_DATA.INV.knife;
+            },
+            has_brick(_GAME_DATA, _GAME_STATE, _HAE){
+                return !!_GAME_DATA.INV.brick;
             }
         },
         set: {
+            init_system(_GAME_DATA, _GAME_STATE){
+                _GAME_DATA.INV = {};
+            },
             pickup_screwdriver(_GAME_DATA, _GAME_STATE, _HAE){
-                _GAME_DATA.screwdriver = true;
-            }
+                _GAME_DATA.INV.screwdriver = 'Screwdriver';
+            },
+            pickup_tape(_GAME_DATA, _GAME_STATE, _HAE){
+                _GAME_DATA.INV.tape = 'Roll of Tape';
+            },
+            pickup_knife(_GAME_DATA, _GAME_STATE, _HAE){
+                _GAME_DATA.INV.knife = 'Chef\'s Knife';
+            },
+            pickup_brick(_GAME_DATA, _GAME_STATE, _HAE){
+                _GAME_DATA.INV.brick = 'Brick';
+            },
         }
     },
 scenes:{
@@ -98,9 +120,12 @@ Note: Use the map on the left to navigate.
 <[ELSE]>This happens if nothing else happens (22.5%)
 <[ENDIF]>\
 --RNG ended--
+<[FN init_system]>\
 <[ACTION CONTINUE]>
 `,
 
+FirstScene:`
+`,
 BedroomA:`
 The room is also messy and destroyed, just like all the others.
 You see a pink bed in one corner, with a large wardrobe in the other.
@@ -108,9 +133,21 @@ You see a pink bed in one corner, with a large wardrobe in the other.
 `,
 Kitchen:`
 Wow, it's a kitchen?
+<[IF FN has_knife]>
+You wonder what you can do with your knife...
+<[ELSE]>
+There is a knife sitting on the table.
+<[GOTO Pickup Knife||get_knife]>
+<[ENDIF]>
 `,
 BedroomB:`
 The room is blue dah ba dee dah ba die.
+<[IF FN has_brick]>
+You wonder what you can do with your brick...
+<[ELSE]>
+There is a brick sitting on the bedroom floor.
+<[GOTO Pickup Brick||get_brick]>
+<[ENDIF]>
 `,
 Piano:`
 The piano doesn't even have strings?
@@ -126,16 +163,13 @@ There is a screwdriver sitting on the table.
 <[ENDIF]>
 `,
 Art:`
-Art
-<[GOTO art||ART]>
-`,
-ART:`
-ART
-<[GOTO Art||art]>
-`,
-art:`
-art
-<[GOTO ART||Art]>
+You see a setup for painting in here.
+<[IF FN has_tape]>
+You wonder what you can do with your tape...
+<[ELSE]>
+There is a roll of tape sitting on the floor by the canvas.
+<[GOTO Pickup Tape||get_tape]>
+<[ENDIF]>
 `,
 Bath:`
 It's a bathroom.
@@ -164,9 +198,26 @@ There is nothing but dust in here.
 get_screwdriver: `
 <[DISABLE_CELLS]>\
 <[ACTION CONTINUE]>\
-<[// FN pickup_screwdriver]>\
-<[SET screwdriver = true]>\
+<[FN pickup_screwdriver]>\
 You pick up the screwdriver and look at it. Maybe you can open something with it...
+`,
+get_tape: `
+<[DISABLE_CELLS]>\
+<[ACTION CONTINUE]>\
+<[FN pickup_tape]>\
+You pick up the tape and look at it...
+`,
+get_knife: `
+<[DISABLE_CELLS]>\
+<[ACTION CONTINUE]>\
+<[FN pickup_knife]>\
+You pick up the knife and look at it...
+`,
+get_brick: `
+<[DISABLE_CELLS]>\
+<[ACTION CONTINUE]>\
+<[FN pickup_brick]>\
+You pick up the brick and look at it...
 `,
 THE_END: `
 <[DISABLE_CELLS]>

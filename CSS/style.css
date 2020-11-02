@@ -131,18 +131,19 @@ CELL LAYOUT
     width:  24%;
     height: 98%;
 }
+
 #LeftColumn_2Columns {
     position:absolute;
-    left:   1.67%;
+    left:   1%;
     top:    1%;
-    width:  32%;
+    width:  33%;
     height: 98%;
 }
 #MiddleColumn_2Columns {
     position:absolute;
-    left:   35.33%;
+    left:   35%;
     top:    1%;
-    width:  63%;
+    width:  64%;
     height: 98%;
 }
 
@@ -531,6 +532,16 @@ Action Buttons
     position: absolute;
     right: 0;
     bottom: 0;
+}
+
+.inventory_list {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+}
+.inventory_margin {
+    margin-block-start: 0.5em;
+    margin-block-end: 0.2em;
 }
 
 /*

@@ -37,7 +37,7 @@ The GUI is designed in what are called "CELLS", which show each individual aspec
     //and the game can pick one, define a new one, or if no choice is made it will go to a default
     var cellDefinitions = [
         [
-            {html: '<div id="Left_Col_Cell_Title" class=""></div>'},
+            {html: '<div id="Left_Col_Cell_Title"></div>'},
 
             {html: '<div id="Left_Col_Cell_Top" class="cellContainer"></div>'},
             {html: '<div id="Left_Col_Cell_Middle" class="cellContainer"></div>'},
