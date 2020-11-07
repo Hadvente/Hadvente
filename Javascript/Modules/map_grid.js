@@ -17,7 +17,7 @@ MODULES.MAP_GRID = function() {
      */
     var newMapGrid = false; //If this is used for anything other than HTML, it needs to become part of the State
     MAP_GRID_FNs.initialize = function(){
-        if( !get_HAE().cells.MAP_GRID ) return; //there is no NAV
+        if( !getCellLocation('MAP_GRID') ) return; //there is no NAV
         if( !get_HAE().MAP_GRID ){
             console.error('If you have a NAV cell, you need a maps key');
             return;
@@ -78,7 +78,7 @@ MODULES.MAP_GRID = function() {
 
      */
     MAP_GRID_FNs.update_module = function(_map_id){
-        if( !get_HAE().cells.MAP_GRID ) return;
+        if( !getCellLocation('MAP_GRID') ) return;
         //Not used yet, but could be an action attached to a scene that sends you to a new map grid
     };
 
@@ -95,7 +95,7 @@ MODULES.MAP_GRID = function() {
     */
     //these public functions should not be public like this. They should instead be passed in as command and action types
     MAP_GRID_FNs.forceLocationScene = function(){
-        if( !get_HAE().cells.MAP_GRID ){
+        if( !getCellLocation('MAP_GRID') ){
             console.error('Your HAE Script tried to force a MAP_GRID location scene when it does not have the MAP_GRID cell!');
             return;
         }
@@ -103,7 +103,7 @@ MODULES.MAP_GRID = function() {
         return HAE_SCENE.SET_NEW_SCENE(newScene);
     };
     MAP_GRID_FNs.changeMapGrid = function(_map_id){
-        if( !get_HAE().cells.MAP_GRID ) return;
+        if( !getCellLocation('MAP_GRID') ) return;
         //Not called yet, but could be an action attached to a scene that sends you to a new map grid
     };
 
@@ -120,8 +120,8 @@ MODULES.MAP_GRID = function() {
      */
     var $Nav;
     MAP_GRID_FNs.init_HTML = function(_$Cell){
-        if( !get_HAE().cells.MAP_GRID ) return;
-        _$Cell[ get_HAE().cells.MAP_GRID ].append('<div id="NavigationMenu" class="sectionContainer small_font"></div>');
+        if( !getCellLocation('MAP_GRID') ) return;
+        _$Cell[ getCellLocation('MAP_GRID') ].append('<div id="NavigationMenu" class="sectionContainer small_font"></div>');
         $Nav = $('#NavigationMenu');
         //there are 3 aspects to Nav
         //The grid, which shows parts of the map that can be clicked and navigated
@@ -163,7 +163,7 @@ MODULES.MAP_GRID = function() {
      */
     var $Cells;
     MAP_GRID_FNs.update_HTML = function(){
-        if( !get_HAE().cells.MAP_GRID ) return;
+        if( !getCellLocation('MAP_GRID') ) return;
         
         if( STATE.GET_SCENE_DATA().SCENE_LOCKED ){
             if( !$Nav.hasClass('mapDisabled') ){

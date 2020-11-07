@@ -57,6 +57,20 @@ function get_HAE_GAME(){
 function get_HAE(){
     return HAE_GAME;
 }
+//I am temporarily putting this here while I design a system for HAE helper functions
+function getCellLocation( _module_name ){
+    if( !get_HAE()[_module_name] ){
+        return '';
+    }
+    if( get_HAE()[_module_name].CELL === undefined ){
+        H_Error('The module ' + _module_name + ' is missing a CELL value. If you want to temporarily hide the cell, use "NONE", "HIDDEN", or null.');
+        return '';
+    }
+    if( get_HAE()[_module_name].CELL == 'NONE' || get_HAE()[_module_name].CELL == 'HIDDEN' || get_HAE()[_module_name].CELL === null ){
+        return '';
+    }
+    return get_HAE()[_module_name].CELL;
+}
 
 var autoload = false;
 var URLS = {};

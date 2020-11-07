@@ -58,8 +58,8 @@ MODULES.DIALOG = function () {
      */ 
     var $Dialog;
     DIALOG_FNs.init_HTML = function(_$Cell){
-        if( !get_HAE().cells.DIALOG ) return;
-        _$Cell[ get_HAE().cells.DIALOG ].append(`<div id="MainDialogContainer">
+        if( !getCellLocation('DIALOG') ) return;
+        _$Cell[ getCellLocation('DIALOG') ].append(`<div id="MainDialogContainer">
             <div id="MainDialogScrollbar">
                 <div id="MainDialogTextHolder" class="standard_font">
                 </div>
@@ -79,7 +79,7 @@ MODULES.DIALOG = function () {
 
      */
     DIALOG_FNs.update_HTML = function(){
-        if( !get_HAE().cells.DIALOG ) return;
+        if( !getCellLocation('DIALOG') ) return;
         if( HAE_SCENE.hasNewDialog() ){
             $Dialog.html( HAE_SCENE.getDialog() );
         }

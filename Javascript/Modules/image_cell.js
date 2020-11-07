@@ -39,8 +39,8 @@ MODULES.IMAGE_CELL = (function () {
     
     var $Img = {};
     PUBLIC_FNs.init_HTML = function(_$Cell){
-        if( !get_HAE().cells.IMAGE_CELL ) return;
-        _$Cell[ get_HAE().cells.IMAGE_CELL ].append(`<div id="ImageContainer">
+        if( !getCellLocation('IMAGE_CELL') ) return;
+        _$Cell[ getCellLocation('IMAGE_CELL') ].append(`<div id="ImageContainer">
         </div>`);
 
         $Img = $('#ImageContainer');
@@ -58,7 +58,7 @@ MODULES.IMAGE_CELL = (function () {
 
      */
     PUBLIC_FNs.update_HTML = function(){
-        if( !get_HAE().cells.IMAGE_CELL ) return;
+        if( !getCellLocation('IMAGE_CELL') ) return;
         $Img.empty();
         if( !STATE.GET_CELL_DATA('IMAGE_CELL').IMAGE ) return;
         $Img.append('<img class="image_cell_img" src="Images/' + STATE.GET_CELL_DATA('IMAGE_CELL').IMAGE + '.jpg">');

@@ -49,7 +49,7 @@ MODULES.MENUS = (function () {
     var $Undo, $Redo;
     PUBLIC_FNs.init_HTML = function(_$Cell){
         //This is called during the initial draw, but before the first update event is fired
-        if( !get_HAE().cells.MENUS ) return;
+        if( !getCellLocation('MENUS') ) return;
 
         var html = '<table class="gridContainer">';
         html +='<tr class="menu_grid_row">';
@@ -63,7 +63,7 @@ MODULES.MENUS = (function () {
         html += '</tr>';
         html +='</table>';
 
-        _$Cell[ get_HAE().cells.MENUS ].append('<div id="MenusMenu" class="sectionContainer small_font">' + html + '</div>');
+        _$Cell[ getCellLocation('MENUS') ].append('<div id="MenusMenu" class="sectionContainer small_font">' + html + '</div>');
         $Undo    = $('#Menu_Button_Undo');
         $Redo    = $('#Menu_Button_Redo');
     };

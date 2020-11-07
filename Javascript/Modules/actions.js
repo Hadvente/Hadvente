@@ -89,8 +89,8 @@ MODULES.ACTIONS = function () {
 
     var $Actions = {};
     ACTION_FNs.init_HTML = function(_$Cell){
-        if( !get_HAE().cells.ACTIONS ) return;
-        _$Cell[ get_HAE().cells.ACTIONS ].append('<div id="ActionsMenu" class="sectionContainer small_font">' + getActionsGridHtml() + '</div>');
+        if( !getCellLocation('ACTIONS') ) return;
+        _$Cell[ getCellLocation('ACTIONS') ].append('<div id="ActionsMenu" class="sectionContainer small_font">' + getActionsGridHtml() + '</div>');
         
         _.times(actionGridSize[0], function(_y){
             _.times(actionGridSize[1], function(_x){
@@ -130,7 +130,7 @@ MODULES.ACTIONS = function () {
 
      */
     ACTION_FNs.update_HTML = function(){
-        if( !get_HAE().cells.ACTIONS ) return;
+        if( !getCellLocation('ACTIONS') ) return;
         //Every time the screen is updated, we want to redraw all the action cells
         //Even if the actions didn't update, since it should update 99% of the time,
         //The added protection against not redrawing is just wasted code complexity

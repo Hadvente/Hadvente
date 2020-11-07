@@ -36,8 +36,8 @@ MODULES.INVENTORY_VIEWER = (function () {
     
     var $Ul = {};
     PUBLIC_FNs.init_HTML = function(_$Cell){
-        if( !get_HAE().cells.INVENTORY_VIEWER ) return;
-        _$Cell[ get_HAE().cells.INVENTORY_VIEWER ].append(`<div id="InventoryContainer" class="inventory_list large_font">
+        if( !getCellLocation('INVENTORY_VIEWER') ) return;
+        _$Cell[ getCellLocation('INVENTORY_VIEWER') ].append(`<div id="InventoryContainer" class="inventory_list large_font">
             <section>
                 <h3 class="inventory_margin">Inventory</h3>
                 <ul id="InventoryList" class="inventory_margin">
@@ -60,7 +60,7 @@ MODULES.INVENTORY_VIEWER = (function () {
 
      */
     PUBLIC_FNs.update_HTML = function(){
-        if( !get_HAE().cells.INVENTORY_VIEWER ) return;
+        if( !getCellLocation('INVENTORY_VIEWER') ) return;
         $Ul.empty();
         var inventory = STATE.GET_GAME_DATA().INV || {};
         _.each(inventory, function(_value, _item){
