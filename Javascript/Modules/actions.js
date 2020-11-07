@@ -19,7 +19,7 @@ MODULES.ACTIONS = function () {
     var actionGrid = [];
     var maxActions;
     ACTION_FNs.initialize = function(){
-        actionGridSize = (get_HAE().actions && get_HAE().actions.grid_size) || [3, 3];
+        actionGridSize = (get_HAE().ACTIONS && get_HAE().ACTIONS.grid_size) || [3, 3];
         maxActions = actionGridSize[0] * actionGridSize[1];
 
         _.times(actionGridSize[0], function(_y){

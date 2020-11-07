@@ -119,7 +119,14 @@ The GUI is designed in what are called "CELLS", which show each individual aspec
     }
 
     function deleteUnusedCells(){
-        var usedCells = _.invert(get_HAE().cells);
+        var usedCells = {};
+        _.each(MODULES, function( _module, _module_name ){
+            if( get_HAE()[_module_name] ){
+                if( get_HAE()[_module_name].CELL ){
+                    usedCells[get_HAE()[_module_name].CELL] = _module_name;
+                }
+            }
+        });
         _.each($Cell, function(_$div, _location_name){
             if( !usedCells[_location_name] ){
                 _$div.remove();

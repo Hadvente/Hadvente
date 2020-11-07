@@ -11,6 +11,8 @@ HAE = {
 
     title: 'Escape The House',
     author: 'Caleb Holloway',
+
+    //This needs to be deleted, but first I want to replace any code referencing it
     cells:{
         //HAS_RIGHT_COLUMN : 'HAS_RIGHT_COLUMN', //this tells the GUI to draw a third column to the right of the text, in case you want lots of cells
 
@@ -24,9 +26,8 @@ HAE = {
         DIALOG   : 'Dialog',
         ACTIONS  : 'Actions',
     },
-    actions:{
-        grid_size: [3, 3],
-    },
+
+    //These are the 3 cells I've defined and used in this test game
     IMAGE_CELL: {
         CELL: 'Top_Left'
     },
@@ -48,6 +49,14 @@ HAE = {
             ],
         }
     },
+
+    //these 4 should all become mandatory and uneditable, a static part of the 2_Columns layout.
+    //If someone wants to change them, they should make a new layout, possibly a duplicated clone of 2_Columns.
+    MENUS  :{CELL:'Menu'},
+    TITLE  :{CELL:'Title'},
+    DIALOG :{CELL:'Dialog'},
+    ACTIONS:{CELL: 'Actions', grid_size: [3, 3]},
+
     //NOTE: You cannot put spaces in your key names, that will break the system.
     //NOTE 2: All functions inside "functions" will be moved into FN at load time
     //CLARIFICATION: THIS MEANS "FN" IS AN ILLEGAL KEY
