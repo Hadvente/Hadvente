@@ -17,8 +17,8 @@ The GUI is designed in what are called "CELLS", which show each individual aspec
     // }
 
     VIEW.initializeGameHtml = function(){
-        $("body").append('<div id="GameWindow_2Columns"></div>');
-        $gameScreenDiv = $('#GameWindow_2Columns');
+        $("body").append('<div id="GameWindow_3Columns"></div>');
+        $gameScreenDiv = $('#GameWindow_3Columns');
 
         //Make the cells
         createCells();
@@ -44,14 +44,22 @@ The GUI is designed in what are called "CELLS", which show each individual aspec
             {html: '<div id="Center_Col_Cell_Menus"></div>'},
             {html: '<div id="Center_Col_Cell_Dialog" class="cellContainer"></div>'},
             {html: '<div id="Center_Col_Cell_Actions" class="cellContainer"></div>'},
-        ]
+        ],
+        [
+            {html: '<div id="Right_Col_Cell_Top" class="cellContainer"></div>'},
+            {html: '<div id="Right_Col_Cell_Middle" class="cellContainer"></div>'},
+            {html: '<div id="Right_Col_Cell_Bottom" class="cellContainer"></div>'},
+
+            {html: '<div id="Right_Col_Cell_Top_BIG" class="cellContainer"></div>'},
+            {html: '<div id="Right_Col_Cell_Bottom_BIG" class="cellContainer"></div>'}
+        ] 
     ];
 
 
     function createCells(){
         _.each(cellDefinitions, function(_columns, _col){
             var currentY = 0;
-            var colHtml = '<div id="' + ((_col == 0)? 'LeftColumn_2Columns': 'MiddleColumn_2Columns') + '">';
+            var colHtml = '<div id="' + ((_col == 0)? 'LeftColumn_3Columns': (_col == 1)? 'MiddleColumn_3Columns' : 'RightColumn_3Columns') + '">';
             _.each(_columns, function(_arr, _not_first_row){
                 colHtml += _arr.html;
             });
