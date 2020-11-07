@@ -34,7 +34,7 @@ MODULES.MAP_GRID = function() {
         }
 
         if(MODULES.ACTIONS){
-            MODULES.ACTIONS.ADD_TYPE(['CONTINUE', 'LOCATION'], function(_values, _type){
+            MODULES.ACTIONS.ADD_TYPE(['CONTINUE', 'LOCATION', 'LOC_CONTINUE'], function(_values, _type){
                 return {
                     text: 'Continue',
                     tooltip: 'Finish scene'
@@ -99,8 +99,7 @@ MODULES.MAP_GRID = function() {
             console.error('Your HAE Script tried to force a MAP_GRID location scene when it does not have the MAP_GRID cell!');
             return;
         }
-        var newLocationID = getLocationID();
-        var newScene = getLocationScene(newLocationID);
+        var newScene = getSceneForCurrentLocation();
         return HAE_SCENE.SET_NEW_SCENE(newScene);
     };
     MAP_GRID_FNs.changeMapGrid = function(_map_id){
@@ -233,8 +232,7 @@ MODULES.MAP_GRID = function() {
         STATE.GET_CELL_DATA('MAP_GRID').previousLocation = getCurrentLocation();
         STATE.GET_CELL_DATA('MAP_GRID').location = [_y, _x];
 
-        var newLocationID = getLocationID();
-        var newScene = getLocationScene(newLocationID);
+        var newScene = getSceneForCurrentLocation();
         return HAE_SCENE.SET_NEW_SCENE(newScene);
     }
 
@@ -280,65 +278,25 @@ MODULES.MAP_GRID = function() {
         if( !newMapGrid ) return;
         return getCurrentMap().grid;
     }
-    function getLocationID(){
+    function getNameForCurrentLocation(){
         var y = getCurrentLocation()[0];
         var x = getCurrentLocation()[1];
-        var loc = getCurrentMap().grid[y][x];
-        return _.isObject(loc)? loc.ID : loc;
+        return getNameForLocation(y, x);
     }
-    function getCurrentLocationScenes(_location_ID){
-        if( !getCurrentMap().locations ){
-            console.error('Why dont you have a locations key for figuring out what scenes belong to a location?');
-            return '';
-        }
-        if( !getCurrentMap().locations[ _location_ID ] ){
-            console.error('locations is missing a location!' + _location_ID, getCurrentMap().locations);
-            return '';
-        }
-        if( !getCurrentMap().locations[ _location_ID ].scenes ){
-            console.error('locations is missing the scenes key!' + _location_ID, getCurrentMap().locations);
-            return '';
-        }
-        return getCurrentMap().locations[ _location_ID ].scenes;
+    function getSceneForCurrentLocation(){
+        var y = getCurrentLocation()[0];
+        var x = getCurrentLocation()[1];
+        return getSceneForLocation(y, x);
     }
     function getNameForLocation(_y, _x){
         if( !getCurrentMap().grid[_y][_x] ) return ''; //empty cell
-        if( _.isObject(getCurrentMap().grid[_y][_x]) ){
-            return getCurrentMap().grid[_y][_x].Name || getCurrentMap().grid[_y][_x].scene;
-        }
-        if( !getCurrentMap().locations ){
-            console.error('Why dont you have a locations key for figuring out what scenes belong to a location?');
-            return '';
-        }
-        if( !getCurrentMap().locations ){
-            console.error('Why dont you have a locations key for figuring out what scenes belong to a location?');
-            return '';
-        }
-        if( !getCurrentMap().locations[ getCurrentMap().grid[_y][_x] ] ){
-            console.error('Locations key missing specific location: ' + getCurrentMap().grid[_y][_x]);
-            return '';
-        }
-        if( !getCurrentMap().locations[ getCurrentMap().grid[_y][_x] ].Name ){
-            console.error('Locations key missing Name: ' + getCurrentMap().grid[_y][_x]);
-            return '';
-        }
-        return getCurrentMap().locations[ getCurrentMap().grid[_y][_x] ].Name;
+        if( !getCurrentMap().grid[_y][_x].includes('||') ) return getCurrentMap().grid[_y][_x];
+        return getCurrentMap().grid[_y][_x].split('||')[0];
     }
-    function getLocationScene(_location_ID){
-        var locScenesArr = getCurrentLocationScenes(_location_ID);
-        //need to filter the list for anything that doesn't pass requirements
-        locScenesArr = _.filter(locScenesArr, function(_LocScene){
-            if(_LocScene.requirements === true) return true;
-            if( _.isFunction(_LocScene.requirements) ){
-                return _LocScene.requirements( STATE.GET_GAME_DATA(), STATE.GET_STATE(), get_HAE() ); //Requirements gets handed the game state for calculating whether it's currently valid
-            }
-            console.error('The requirements for all scenes based on a location must be either true or a function', locScenesArr);
-        });
-        //locScenesArr is now an array of scenes, need to pick one at random weighed by probability
-        var randomElementIndex = Math.floor(Math.random() * locScenesArr.length);
-        var locScene = locScenesArr[randomElementIndex];
-        //The location_scenes is not complete, plus we will not reference it directly from the get_HAE()
-        return locScene.scene;
+    function getSceneForLocation(_y, _x){
+        if( !getCurrentMap().grid[_y][_x] ) return ''; //empty cell
+        if( !getCurrentMap().grid[_y][_x].includes('||') ) return getCurrentMap().grid[_y][_x];
+        return getCurrentMap().grid[_y][_x].split('||')[1];
     }
 
     //Returns public functions into the variable

@@ -34,22 +34,11 @@ HAE = {
             only_grid: true,
             start: [2, 1],
             grid:[
-                [ '',                     'BedroomA',             'Kitchen' ],
-                [ 'BedroomB',             'Piano',                'Dining'  ],
+                [ '',                     'Bedroom||BedroomA',    'Kitchen' ],
+                [ 'Bedroom||BedroomB',    'Piano',                'Dining'  ],
                 [ 'Art',                  'Living',               'Bath'    ],
                 [ '',                     'Foyer',                ''        ]
             ],
-            locations: {
-                BedroomA:   { Name: 'Bedroom', scenes: [{scene:'BedroomA',   requirements: true, weight: 100}] },
-                Kitchen:    { Name: 'Kitchen', scenes: [{scene:'Kitchen',    requirements: true, weight: 100}] },
-                BedroomB:   { Name: 'Bedroom', scenes: [{scene:'BedroomB',   requirements: true, weight: 100}] },
-                Piano:      { Name: 'Piano',   scenes: [{scene:'Piano',      requirements: true, weight: 100}] },
-                Dining:     { Name: 'Dining',  scenes: [{scene:'Dining',     requirements: true, weight: 100}] },
-                Art:        { Name: 'Art',     scenes: [{scene:'Art',        requirements: true, weight: 100}] },
-                Bath:       { Name: 'Bath',    scenes: [{scene:'Bath',       requirements: true, weight: 100}] },
-                Foyer:      { Name: 'Foyer',   scenes: [{scene:'Foyer',      requirements: true, weight: 100}] },
-                Living:     { Name: 'Living',  scenes: [{scene:'Living',     requirements: true, weight: 100}] },
-            },
         }
     },
     //NOTE: You cannot put spaces in your key names, that will break the system.
