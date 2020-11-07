@@ -18,17 +18,17 @@ MODULES.MAP_GRID = function() {
     var newMapGrid = false; //If this is used for anything other than HTML, it needs to become part of the State
     MAP_GRID_FNs.initialize = function(){
         if( !get_HAE().cells.MAP_GRID ) return; //there is no NAV
-        if( !get_HAE().maps ){
+        if( !get_HAE().MAP_GRID ){
             console.error('If you have a NAV cell, you need a maps key');
             return;
         }
-        if( !get_HAE().maps.starting_map ){
+        if( !get_HAE().MAP_GRID.starting_map ){
             console.error('If you have a NAV cell, you need a starting_map key inside maps');
             //maybe this will change because of procedurally generated maps?
             //or maybe starting_map can be a function
             return;
         }
-        if( !get_HAE().maps[ get_HAE().maps.starting_map ] ){
+        if( !get_HAE().MAP_GRID[ get_HAE().MAP_GRID.starting_map ] ){
             console.error('The starting_map does not exist');
             return;
         }
@@ -44,7 +44,7 @@ MODULES.MAP_GRID = function() {
             });
         }
 
-        STATE.GET_CELL_DATA('MAP_GRID').map_name = get_HAE().maps.starting_map;
+        STATE.GET_CELL_DATA('MAP_GRID').map_name = get_HAE().MAP_GRID.starting_map;
         STATE.GET_CELL_DATA('MAP_GRID').location = getCurrentMap().start;
         newMapGrid = true;
     };
@@ -62,7 +62,7 @@ MODULES.MAP_GRID = function() {
     MAP_GRID_FNs.restart_module = function(){
         //This is called when the game_state is modified by the save system
         //Anything that must be modified when a save is loaded should happen here
-        STATE.GET_CELL_DATA('MAP_GRID').map_name = STATE.GET_CELL_DATA('MAP_GRID').map_name || get_HAE().maps.starting_map;
+        STATE.GET_CELL_DATA('MAP_GRID').map_name = STATE.GET_CELL_DATA('MAP_GRID').map_name || get_HAE().MAP_GRID.starting_map;
         STATE.GET_CELL_DATA('MAP_GRID').location = STATE.GET_CELL_DATA('MAP_GRID').location || getCurrentMap().start;
         newMapGrid = true;
     };
@@ -265,7 +265,7 @@ MODULES.MAP_GRID = function() {
 
      */
     function getCurrentMap(){
-        return get_HAE().maps[ STATE.GET_CELL_DATA('MAP_GRID').map_name ];
+        return get_HAE().MAP_GRID[ STATE.GET_CELL_DATA('MAP_GRID').map_name ];
     }
     function getCurrentLocation(){
         return STATE.GET_CELL_DATA('MAP_GRID').location;

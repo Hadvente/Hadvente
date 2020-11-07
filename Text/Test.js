@@ -27,7 +27,14 @@ HAE = {
     actions:{
         grid_size: [3, 3],
     },
-    maps:{
+    IMAGE_CELL: {
+        CELL: 'Top_Left'
+    },
+    INVENTORY_VIEWER: {
+        CELL: 'Middle_Left' //If you want to hide a cell, set CELL: to 'NONE', otherwise you will get an error
+    },
+    MAP_GRID:{
+        CELL: 'Bottom_Left',
         starting_map: 'abandoned_home',
         abandoned_home: {
             grid_size: [4, 3],
