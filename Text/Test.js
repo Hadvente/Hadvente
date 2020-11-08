@@ -1,7 +1,7 @@
 /*jshint esversion: 6 */ 
 
 HAE = {
-    Layout: '2_Columns',
+    Layout: '2_COLUMNS',
     //2_Columns is the default layout
     //It comes with 4 predefined cells:
     //Title, Menus, Dialog, and Actions

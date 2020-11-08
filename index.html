@@ -20,6 +20,7 @@
         window.ENGINE  = {}; //all the functions that start up and run the engine itself
         window.VIEW    = {}; //This contains all the functions for drawing in the DOM
 
+        window.LAYOUTS = {}; //This contains all objects that define a layout that the modules use
         window.MODULES = {}; //This contains all objects that define a module. MAP_GRID, PARTY, etc.
 
         window.HISTORY = {}; //This contains all functions that run the history engine
@@ -57,6 +58,10 @@
     <script src="Javascript/HAE/HAE_Parser.js"></script>
     <script src="Javascript/HAE/HAE_Builder.js"></script>
 
+    <!-- Layouts that represent the styling and cell locations in the GUI -->
+    <script src="Javascript/Layouts/2_Columns.js"></script>
+    <script src="Javascript/Layouts/3_Columns.js"></script>
+    
     <!-- Modules that represent each cell of the GUI -->
     <script src="Javascript/Modules/title.js"></script>
     <script src="Javascript/Modules/menus.js"></script>
@@ -65,6 +70,8 @@
     <script src="Javascript/Modules/map_grid.js"></script>
     <script src="Javascript/Modules/inventory_viewer.js"></script>
     <script src="Javascript/Modules/image_cell.js"></script>
+
+
 
     <!-- ------------- ------------- ------------- -->
     <!-- ------------- ------------- ------------- -->

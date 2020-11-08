@@ -7,116 +7,74 @@ The GUI is designed in what are called "CELLS", which show each individual aspec
 */
 
 (function(){
-    //
-    //This is a local variable, no one else can use it
-    var $gameScreenDiv;
-
-    //No one clears the screen right now, you do not need to do that to open a new save file
-    // function clearGameView(){
-    //     $gameScreenDiv.empty();
-    // }
 
     VIEW.initializeGameHtml = function(){
-        $("body").append('<div id="GameWindow_2Columns"></div>');
-        $gameScreenDiv = $('#GameWindow_2Columns');
-
-        //Make the cells
-        createCells();
-        initAllCells();
+        var $Body      = initBody();
+        var Layout     = getLayout();
+        var $Container = initContainer($Body,  Layout);
+        var $Cells     = initCells($Container, Layout);
+        deleteUnusedCells($Cells);
+        initCellHtml($Cells);
         initPopup();
     };
 
-    //I want to look into ways this can be more customizable and defined by a game
-    //possibly have standard definitions stored away
-    //and the game can pick one, define a new one, or if no choice is made it will go to a default
-    var cellDefinitions = [
-        [
-            {html: '<div id="Left_Col_Cell_Title"></div>'},
-
-            {html: '<div id="Left_Col_Cell_Top" class="cellContainer"></div>'},
-            {html: '<div id="Left_Col_Cell_Middle" class="cellContainer"></div>'},
-            {html: '<div id="Left_Col_Cell_Bottom" class="cellContainer"></div>'},
-
-            {html: '<div id="Left_Col_Cell_Top_BIG" class="cellContainer"></div>'},
-            {html: '<div id="Left_Col_Cell_Bottom_BIG" class="cellContainer"></div>'}
-        ],
-        [
-            {html: '<div id="Center_Col_Cell_Menus"></div>'},
-            {html: '<div id="Center_Col_Cell_Dialog" class="cellContainer"></div>'},
-            {html: '<div id="Center_Col_Cell_Actions" class="cellContainer"></div>'},
-        ]
-    ];
-
-
-    function createCells(){
-        _.each(cellDefinitions, function(_columns, _col){
-            var currentY = 0;
-            var colHtml = '<div id="' + ((_col == 0)? 'LeftColumn_2Columns': 'MiddleColumn_2Columns') + '">';
-            _.each(_columns, function(_arr, _not_first_row){
-                colHtml += _arr.html;
-            });
-            colHtml += '</div>';
-            $gameScreenDiv.append(colHtml);
-        });
+    function initBody(){
+        return  $('body'); //right now, I do not do anything to the body before appending the layout container
     }
 
-
-    function initAllCells(){
-        setEachCellSelector();
-        deleteUnusedCells();
-        initCellHtml();
+    function getLayout(){
+        var Layout;
+        if( get_HAE().Layout ){
+            Layout = LAYOUTS[ get_HAE().Layout ];
+            if( !Layout ){
+                H_Error('Layout is invalid, you must have a layout file that matches the layout in the HAE.');
+            }
+        }
+        else{
+            Layout = LAYOUTS['2_COLUMNS']; //If a layout is undefined, we default to 2_COLUMNS
+            if( !Layout ){
+                H_Error('Need to provide a Layout. 2_COLUMNS Layout is missing, so we can not pick a default.');
+            }
+        }
+        if( _.isFunction(Layout) ){
+            Layout = Layout();
+        }
+        if(!Layout || !Layout.initializeLayout || !Layout.initializeContainer || !Layout.initializeCells){
+            H_Error('Layout must either be an object or function that returns an object containing the 3 functions initializeLayout, initializeContainer, and initializeCells');
+        }
+        initLayout(Layout);
+        return Layout;
     }
 
-    var $Cell = {};
-    function setEachCellSelector(){
-        //These are all REQUIRED
-        $Cell.Title        = $('#Left_Col_Cell_Title');
-        $Cell.Menu         = $('#Center_Col_Cell_Menus');
-        $Cell.Dialog       = $('#Center_Col_Cell_Dialog');
-        $Cell.Actions      = $('#Center_Col_Cell_Actions');
-
-        //Left Column
-        $Cell.Top_Left     = $('#Left_Col_Cell_Top');
-        $Cell.Middle_Left  = $('#Left_Col_Cell_Middle');
-        $Cell.Bottom_Left  = $('#Left_Col_Cell_Bottom');
-
-        //Right Column
-        $Cell.Top_Right    = $('#Right_Col_Cell_Top');
-        $Cell.Middle_Right = $('#Right_Col_Cell_Middle');
-        $Cell.Bottom_Right = $('#Right_Col_Cell_Bottom');
-
-        //Big Cells
-        $Cell.Top_Left_BIG     = $('#Left_Col_Cell_Top_BIG');
-        $Cell.Bottom_Left_BIG  = $('#Left_Col_Cell_Bottom_BIG');
-        $Cell.Top_Right_BIG    = $('#Right_Col_Cell_Top_BIG');
-        $Cell.Bottom_Right_BIG = $('#Right_Col_Cell_Bottom_BIG');
+    function initLayout( _layout ){
+        _layout.initializeLayout();
+    }
+    function initContainer( _$Body, _layout ){
+        return _layout.initializeContainer(_$Body);
+    }
+    function initCells( _$Container, _layout ){
+        return _layout.initializeCells(_$Container);
     }
 
-    function deleteUnusedCells(){
+    function deleteUnusedCells(_$Cells){
+        if( URLS.debug_cells ) return;
         var usedCells = {};
         _.each(MODULES, function( _module, _module_name ){
-            if( get_HAE()[_module_name] ){
-                if( get_HAE()[_module_name].CELL ){
-                    usedCells[get_HAE()[_module_name].CELL] = _module_name;
-                }
+            if( getCellLocation(_module_name) ){
+                usedCells[ getCellLocation(_module_name) ] = _module_name;
             }
         });
-        _.each($Cell, function(_$div, _location_name){
+        _.each(_$Cells, function(_$div, _location_name){
             if( !usedCells[_location_name] ){
                 _$div.remove();
             }
         });
     }
 
-    function initCellHtml(){
+    function initCellHtml(_$Cells){
         _.each(MODULES, function(_module, _name){
             if(_module.NO_HTML) return;
-            if(_module.init_HTML){
-                _module.init_HTML($Cell);
-            }
-            else{
-                console.error('Why does this module not have an init_HTML? ' + _name);
-            }
+            _module.init_HTML(_$Cells);
         });
     }
 
@@ -134,12 +92,7 @@ The GUI is designed in what are called "CELLS", which show each individual aspec
     VIEW.updateScreen = function(){
         _.each(MODULES, function(_module, _name){
             if(_module.NO_HTML) return;
-            if(_module.update_HTML){
-                _module.update_HTML();
-            }
-            else{
-                console.error('Why does this module not have an update_HTML? ' + _name);
-            }
+            _module.update_HTML();
         });
     };
 
