@@ -1,6 +1,6 @@
 /*jshint esversion: 6 */ 
 
-HAE = {
+var TextGame = {
     Layout: '2_COLUMNS',
     //2_Columns is the default layout
     //It comes with 4 predefined cells:
@@ -227,14 +227,15 @@ THE END
 //I have no idea if I will implement this visual novel system, but it could be fun.
 
 var VN = {
-    Layout: 'VN',
-    VN_BG:{LOCATION: 'VN_BG'},
-    VN_DIALOG:{LOCATION: 'VN_DIALOG'}
+    Layout: 'Visual_Novel',
+    VN_BG:{CELL: 'VN_BG'},
+    VN_CHAR:{CELL: 'VN_CHAR'},
+    VN_DIALOG:{CELL: 'VN_DIALOG'}
 };
 VN.VN_BG.Backgrounds = {
     'snow': 'Backgrounds/snowy_field.jpg'
 };
-VN.VN_BG.Characters = {
+VN.VN_CHAR.Characters = {
     'Kyle':{Name: 'Kyle', Images:{'default': 'Characters/Kyle_smile.jpg', 'surprised': 'Characters/Kyle_surprised.jpg'}},
     'Sarah':{Name: 'Sarah', Images:{'default': 'Characters/Sarah_smile.jpg', 'surprised': 'Characters/Sarah_surprised.jpg'}}
 };
@@ -274,3 +275,6 @@ VN.scenes = {
         <[JUMP Start]>
     `
 };
+
+//HAE = VN;
+HAE = TextGame;

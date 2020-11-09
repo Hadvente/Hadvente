@@ -1,13 +1,8 @@
 /*jshint esversion: 6 */ 
 
-/*
-dialog.js
-draws the current scene's html in a dialog box
-*/
-
-MODULES.DIALOG = function () {
+MODULES.VN_DIALOG = function () {
     
-    var DIALOG_FNs = {};
+    var VN_DIALOG_FNs = {};
 
     /*
     
@@ -20,7 +15,7 @@ MODULES.DIALOG = function () {
     o888o o8o        `8  o888o     o888o     
 
      */
-    DIALOG_FNs.initialize = function(){};
+    VN_DIALOG_FNs.initialize = function(){};
     /*
         
     ooooooooo.   oooooooooooo  .oooooo..o ooooooooooooo       .o.       ooooooooo.   ooooooooooooo 
@@ -32,7 +27,7 @@ MODULES.DIALOG = function () {
     o888o  o888o o888ooooood8 8""88888P'      o888o     o88o     o8888o o888o  o888o     o888o     
 
      */
-    DIALOG_FNs.restart_module = function(){};
+    VN_DIALOG_FNs.restart_module = function(){};
     /*
 
     ooooo     ooo ooooooooo.   oooooooooo.         .o.       ooooooooooooo oooooooooooo 
@@ -44,7 +39,7 @@ MODULES.DIALOG = function () {
        `YbodP'    o888o        o888bood8P'   o88o     o8888o     o888o     o888ooooood8 
 
     */
-    DIALOG_FNs.update_module = function(){};
+    VN_DIALOG_FNs.update_module = function(){};
     /*
     
     ooooo   ooooo ooooooooooooo ooo        ooooo ooooo        
@@ -57,9 +52,9 @@ MODULES.DIALOG = function () {
     
      */ 
     var $Dialog;
-    DIALOG_FNs.init_HTML = function(_$Cell){
-        if( !getCellLocation('DIALOG') ) return;
-        _$Cell[ getCellLocation('DIALOG') ].append(`<div id="MainDialogContainer">
+    VN_DIALOG_FNs.init_HTML = function(_$Cell){
+        if( !getCellLocation('VN_DIALOG') ) return;
+        _$Cell[ getCellLocation('VN_DIALOG') ].append(`<div id="MainDialogContainer">
             <div id="MainDialogScrollbar">
                 <div id="MainDialogTextHolder" class="standard_font">
                 </div>
@@ -78,8 +73,8 @@ MODULES.DIALOG = function () {
     o888bood8P'   o888o  o888o o88o     o8888o       `8'      `8'       
 
      */
-    DIALOG_FNs.update_HTML = function(){
-        if( !getCellLocation('DIALOG') ) return;
+    VN_DIALOG_FNs.update_HTML = function(){
+        if( !getCellLocation('VN_DIALOG') ) return;
         if( HAE_SCENE.hasNewDialog() ){
             $Dialog.html( HAE_SCENE.getDialog() );
         }
@@ -95,20 +90,8 @@ MODULES.DIALOG = function () {
     o888o         `Y8bood8P'  8""88888P'      o888o        o888bood8P'   o888o  o888o o88o     o8888o    `8'      `8'         
 
      */
-    DIALOG_FNs.finished_draw = function(){};
-
-
-    //Add processors here for specific HTML Commands
-
-    HAE_PROCESSOR.ADD_TYPE(['IMAGE', 'IMG'], function(_value){
-        var html = '<img src="' + _value + '.jpg">';
-        return html;
-    });
-
-    //Add new system for <{Inline Commands}>, which work differently.
-    //Alternatively, Inline Commands could have their own processor
-    //It could also make sense to have IMG/IMAGE be an inline command since all it does it make html
+    VN_DIALOG_FNs.finished_draw = function(){};
 
     //Returns public functions into the variable
-    return DIALOG_FNs;
+    return VN_DIALOG_FNs;
 };

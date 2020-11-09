@@ -3,6 +3,9 @@ body {
     color: #eee;
     font-size: 64px; /* This is purposefully giant - we don't want anyone to not define their font size*/
 }
+body.debug_outline * {
+   outline: 1px solid red;
+}
 p {
     margin-block-start: 0.5em;
     margin-block-end: 0.5em;

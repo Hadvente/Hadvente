@@ -79,6 +79,9 @@ function checkUrlParms(){
     if( urlParmString.includes('log') ) URLS.isLogging = true;
     if( urlParmString.includes('autoload') ) URLS.autoload = true;
     if( urlParmString.includes('debug_cells') ) URLS.debug_cells = true;
+    if(urlParmString.includes('outline')){
+        $('body').addClass('debug_outline');
+    }
     //it could make sense to always autoload save, since the
     //user should click restart if they want to go back to the beginning
 }

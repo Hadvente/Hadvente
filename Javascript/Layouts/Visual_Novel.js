@@ -1,9 +1,9 @@
 /*jshint esversion: 6 */ 
 
-LAYOUTS['2_COLUMNS'] = (function(){
+LAYOUTS.Visual_Novel = (function(){
 
     var PUBLIC_FNs = {};
-    
+
     PUBLIC_FNs.initializeLayout = function(){
 
     };

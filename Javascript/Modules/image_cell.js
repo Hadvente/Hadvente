@@ -16,6 +16,7 @@ MODULES.IMAGE_CELL = (function () {
 
      */
     PUBLIC_FNs.initialize = function(){
+        if( !getCellLocation('IMAGE_CELL') ) return;
         HAE_PROCESSOR.ADD_TYPE(['IMAGE_CELL', 'IMG_CELL'], function(_value){
             STATE.GET_CELL_DATA('IMAGE_CELL').IMAGE = _value.trim();
         });
@@ -23,7 +24,10 @@ MODULES.IMAGE_CELL = (function () {
 
     PUBLIC_FNs.restart_module = function(){};
     PUBLIC_FNs.update_module = function(){};
-    PUBLIC_FNs.finished_draw = function(){STATE.GET_CELL_DATA('IMAGE_CELL').IMAGE = '';};
+    PUBLIC_FNs.finished_draw = function(){
+        if( !getCellLocation('IMAGE_CELL') ) return;
+        STATE.GET_CELL_DATA('IMAGE_CELL').IMAGE = '';
+    };
 
     /*
     

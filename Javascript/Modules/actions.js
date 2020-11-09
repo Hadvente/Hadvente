@@ -19,6 +19,7 @@ MODULES.ACTIONS = function () {
     var actionGrid = [];
     var maxActions;
     ACTION_FNs.initialize = function(){
+        if( !getCellLocation('ACTIONS') ) return;
         actionGridSize = (get_HAE().ACTIONS && get_HAE().ACTIONS.grid_size) || [3, 3];
         maxActions = actionGridSize[0] * actionGridSize[1];
 
@@ -30,22 +31,7 @@ MODULES.ACTIONS = function () {
             actionGrid.push(newRow);
         });
     };
-
-    /*
-        
-    ooooooooo.   oooooooooooo  .oooooo..o ooooooooooooo       .o.       ooooooooo.   ooooooooooooo 
-    `888   `Y88. `888'     `8 d8P'    `Y8 8'   888   `8      .888.      `888   `Y88. 8'   888   `8 
-     888   .d88'  888         Y88bo.           888          .8"888.      888   .d88'      888      
-     888ooo88P'   888oooo8     `"Y8888o.       888         .8' `888.     888ooo88P'       888      
-     888`88b.     888    "         `"Y88b      888        .88ooo8888.    888`88b.         888      
-     888  `88b.   888       o oo     .d8P      888       .8'     `888.   888  `88b.       888      
-    o888o  o888o o888ooooood8 8""88888P'      o888o     o88o     o8888o o888o  o888o     o888o     
-
-     */
-    ACTION_FNs.restart_module = function(){
-        //This is called when the game_state is modified by the save system
-        //Anything that must be modified when a save is loaded should happen here
-    };
+    ACTION_FNs.restart_module = function(){};
     /*
 
     ooooo     ooo ooooooooo.   oooooooooo.         .o.       ooooooooooooo oooooooooooo 
@@ -58,6 +44,7 @@ MODULES.ACTIONS = function () {
 
      */
     ACTION_FNs.update_module = function(){
+        if( !getCellLocation('ACTIONS') ) return;
         //this is the main function that gets called each time an update event is called
         var actionsList = STATE.GET_SCENE_DATA().ACTIONS || [];
 
@@ -167,20 +154,7 @@ MODULES.ACTIONS = function () {
         }
     }
 
-    /*
-
-    ooooooooo.     .oooooo.    .oooooo..o ooooooooooooo    oooooooooo.   ooooooooo.         .o.    oooooo   oooooo     oooo 
-    `888   `Y88.  d8P'  `Y8b  d8P'    `Y8 8'   888   `8    `888'   `Y8b  `888   `Y88.      .888.    `888.    `888.     .8'  
-     888   .d88' 888      888 Y88bo.           888          888      888  888   .d88'     .8"888.    `888.   .8888.   .8'   
-     888ooo88P'  888      888  `"Y8888o.       888          888      888  888ooo88P'     .8' `888.    `888  .8'`888. .8'    
-     888         888      888      `"Y88b      888          888      888  888`88b.      .88ooo8888.    `888.8'  `888.8'     
-     888         `88b    d88' oo     .d8P      888          888     d88'  888  `88b.   .8'     `888.    `888'    `888'      
-    o888o         `Y8bood8P'  8""88888P'      o888o        o888bood8P'   o888o  o888o o88o     o8888o    `8'      `8'         
-
-     */
-    ACTION_FNs.finished_draw = function(){
-        //does nothing for now. Can't clear actionsList because clicking the action actually references the list!
-    };
+    ACTION_FNs.finished_draw = function(){};
 
     /*
 
