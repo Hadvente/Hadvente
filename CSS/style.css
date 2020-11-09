@@ -570,10 +570,12 @@ td:after {
 
 /*Everything after this belongs to the VN Layout. It should be moved to a new file*/
 #GameWindow_VN {
-    min-width: min(170.3vh, 95.8vw);
-    min-height: min(95.8vh, 53.9vw);
-    width: min(170.3vh, 95.8vw);
-    height: min(95.8vh, 53.9vw);
+    width: 100%;
+    height: 100%;
+    min-width: min(174.222vh, 98vw);
+    min-height: min(98vh, 55.125vw);
+    width: min(174.222vh, 98vw);
+    height: min(98vh, 55.125vw);
     margin: 0.2% auto;
     margin-bottom: 0px;
     border: 3px solid gray;
@@ -591,7 +593,7 @@ td:after {
     overflow: hidden;
 }
 #Container_VN .menu_button_disabled{
-    opacity: 0;
+    opacity: 50%;
 }
 
 #Body_VN{
@@ -610,17 +612,17 @@ td:after {
 #VN_Cell_Dialog{
     position: absolute;
     top: 75%;
-    left: 3%;
-    right: 3%;
+    left: 2%;
+    right: 2%;
     bottom: 3%;
-    width: 94%;
+    width: 96%;
 
     border: 3px solid gray;
     border-radius: 10px;
     box-sizing: border-box; /*These properties make the border be inside the box instead of outside*/
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
-    background-color: rgba(11, 11, 11, 0.25);
+    background-color: rgba(11, 11, 11, 0.75);
 }
 
 #Header_VN{
@@ -643,6 +645,7 @@ td:after {
     opacity: 0%;
     position:relative;
     height: 100%;
+    text-shadow: 0 0 3px #000, 0 0 3px #000, 0 0 3px #000, 0 0 3px #000;
 }
 #Header_VN:hover #VN_Cell_Title{
     opacity: 100%;
