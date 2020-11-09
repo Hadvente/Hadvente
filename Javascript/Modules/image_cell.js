@@ -41,7 +41,7 @@ MODULES.IMAGE_CELL = (function () {
     
      */
     
-    var $Img = {};
+    var $Img;
     PUBLIC_FNs.init_HTML = function(_$Cell){
         if( !getCellLocation('IMAGE_CELL') ) return;
         _$Cell[ getCellLocation('IMAGE_CELL') ].append(`<div id="ImageContainer">

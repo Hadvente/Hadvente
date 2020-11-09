@@ -227,20 +227,28 @@ THE END
 //I have no idea if I will implement this visual novel system, but it could be fun.
 
 var VN = {
+    title: 'Snowball Fight',
+    author: 'Caleb Holloway',
     Layout: 'Visual_Novel',
-    VN_BG:{CELL: 'VN_BG'},
-    VN_CHAR:{CELL: 'VN_CHAR'},
-    VN_DIALOG:{CELL: 'VN_DIALOG'}
+    MENUS:    {CELL: 'Menus'},
+    TITLE:    {CELL: 'Title'},
+    VN_BG:    {CELL: 'BG'},
+    VN_CHAR:  {CELL: 'Char'},
+    VN_DIALOG:{CELL: 'Dialog'},
 };
 VN.VN_BG.Backgrounds = {
-    'snow': 'Backgrounds/snowy_field.jpg'
+    'snow': 'park_winter.jpg'
 };
 VN.VN_CHAR.Characters = {
-    'Kyle':{Name: 'Kyle', Images:{'default': 'Characters/Kyle_smile.jpg', 'surprised': 'Characters/Kyle_surprised.jpg'}},
-    'Sarah':{Name: 'Sarah', Images:{'default': 'Characters/Sarah_smile.jpg', 'surprised': 'Characters/Sarah_surprised.jpg'}}
+    'Kyle':{Name: 'Kyle', Images:{'default': 'Kyle_smile.jpg', 'surprised': 'Kyle_surprised.jpg'}},
+    'Sarah':{Name: 'Sarah', Images:{'default': 'Sarah_smile.jpg', 'surprised': 'Sarah_surprised.jpg'}}
 };
 VN.scenes = {
     START:`
+<[BG snow]>\
+You look as the snow falls around you.
+    `,
+    SNOW:`
         <[BG snow]>
         
         Note: In the visual novel format, anything outside of a command is just a comment.
@@ -276,5 +284,5 @@ VN.scenes = {
     `
 };
 
-//HAE = VN;
-HAE = TextGame;
+//HAE = TextGame;
+HAE = VN;

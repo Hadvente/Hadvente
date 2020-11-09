@@ -567,3 +567,93 @@ Action Buttons
 td:after {
   content: "\00A0";
 }
+
+/*Everything after this belongs to the VN Layout. It should be moved to a new file*/
+#GameWindow_VN {
+    min-width: min(170.3vh, 95.8vw);
+    min-height: min(95.8vh, 53.9vw);
+    width: min(170.3vh, 95.8vw);
+    height: min(95.8vh, 53.9vw);
+    margin: 0.2% auto;
+    margin-bottom: 0px;
+    border: 3px solid gray;
+    border-radius: 10px;
+    position:absolute;
+    top: 0; bottom: 0; left: 0; right: 0;
+    font-size: 0.36vw; /* This exists in case the browser can't handle a min inside the font-size */
+    font-size: min(0.4vw, 0.71vh); /* This is purposefully small - forcing every cell to pick a font size, using em */
+}
+
+#Container_VN {
+    position: relative;
+    width:100%;
+    height:100%;
+    overflow: hidden;
+}
+#Container_VN .menu_button_disabled{
+    opacity: 0;
+}
+
+#Body_VN{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+#VN_Cell_BG{
+    
+}
+#VN_Cell_Char{
+    
+}
+#VN_Cell_Dialog{
+    position: absolute;
+    top: 75%;
+    left: 3%;
+    right: 3%;
+    bottom: 3%;
+    width: 94%;
+
+    border: 3px solid gray;
+    border-radius: 10px;
+    box-sizing: border-box; /*These properties make the border be inside the box instead of outside*/
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    background-color: rgba(11, 11, 11, 0.25);
+}
+
+#Header_VN{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 7%;
+    opacity: 25%;
+    transition: opacity 0.2s;
+}
+#Header_VN:hover {
+    opacity:100%;
+}
+#VN_Cell_Title{
+    float: left;
+    width: 45%;
+    padding-top: 5px;
+    padding-left: 5px;
+    opacity: 0%;
+    position:relative;
+    height: 100%;
+}
+#Header_VN:hover #VN_Cell_Title{
+    opacity: 100%;
+}
+#VN_Cell_Title #AuthorContainer{
+    left: 7px;
+}
+#VN_Cell_Menus{
+    float:right;
+    width: 45%;
+    padding-top: 5px;
+    padding-right: 5px;
+}
+

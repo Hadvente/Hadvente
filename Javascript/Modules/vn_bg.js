@@ -18,6 +18,9 @@ MODULES.VN_BG = (function () {
     PUBLIC_FNs.initialize = function(){
         //This starts up the module. It is called before anything has been drawn.
         if( !getCellLocation('VN_BG') ) return;
+        HAE_PROCESSOR.ADD_TYPE(['BG'], function(_value){
+            STATE.GET_CELL_DATA('VN_BG').IMAGE = _value.trim();
+        });
     };
 
     /*
@@ -74,10 +77,14 @@ MODULES.VN_BG = (function () {
 
     //PUBLIC_FNs.NO_HTML = true; //If this is true, then the functions init_HTML and update_HTML don't need to exist
     
-    var $Elems = {};
+    var $Img;
     PUBLIC_FNs.init_HTML = function(_$Cell){
         //This is called during the initial draw, but before the first update event is fired
         if( !getCellLocation('VN_BG') ) return;
+        _$Cell[ getCellLocation('VN_BG') ].append(`<div id="ImageContainer">
+        </div>`);
+
+        $Img = $('#ImageContainer');
     };
 
     /*
@@ -94,6 +101,15 @@ MODULES.VN_BG = (function () {
     PUBLIC_FNs.update_HTML = function(){
         //This is the update event for the HTML, update the DOM in here
         if( !getCellLocation('VN_BG') ) return;
+        if( !getCellLocation('VN_BG') ) return;
+        $Img.empty();
+        if( !STATE.GET_CELL_DATA('VN_BG').IMAGE ) return;
+        var imagePath = get_HAE().VN_BG.Backgrounds[STATE.GET_CELL_DATA('VN_BG').IMAGE];
+        if( !imagePath ){
+            H_Error('Invalid Image name provided, ' + STATE.GET_CELL_DATA('VN_BG').IMAGE + ' is not valid.');
+            return;
+        }
+        $Img.append('<img class="image_cell_img" src="Images/BG/' + imagePath + '">');
     };
 
     /*
@@ -109,6 +125,7 @@ MODULES.VN_BG = (function () {
      */
     PUBLIC_FNs.finished_draw = function(){
         //This is called after the gui is drawn. If you need to do some post-draw cleanup, do it here.
+        STATE.GET_CELL_DATA('VN_BG').IMAGE = '';
     };
 
     return PUBLIC_FNs; //Returns public functions into the variable

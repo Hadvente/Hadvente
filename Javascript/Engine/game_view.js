@@ -8,6 +8,12 @@ The GUI is designed in what are called "CELLS", which show each individual aspec
 
 (function(){
 
+    /*
+    Idea for future: Title and Menus should maybe become something standard that all layouts have
+    Where they are on the top of the screen, with a button to make it scroll down into view
+    and so each layout must accomodate this button somehow.
+     */
+
     VIEW.initializeGameHtml = function(){
         var $Body      = initBody();
         var Layout     = getLayout();

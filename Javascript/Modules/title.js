@@ -36,7 +36,7 @@ MODULES.TITLE = (function () {
     var $Elems = {};
     PUBLIC_FNs.init_HTML = function(_$Cell){
         _$Cell.Title.append('<div id="TitleContainer" class="titleDiv giant_font"></div><div id="AuthorContainer" class="titleDiv small_font"></div>');
-        $('#TitleContainer').html(get_HAE().title || 'Text Adventure');
+        $('#TitleContainer').html(get_HAE().title || '');
         $('#AuthorContainer').html(get_HAE().author || '');
     };
 
