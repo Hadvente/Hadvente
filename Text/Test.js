@@ -284,5 +284,5 @@ You look as the snow falls around you.
     `
 };
 
-//HAE = TextGame;
-HAE = VN;
+HAE = TextGame;
+//HAE = VN;
